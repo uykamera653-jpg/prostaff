@@ -2,208 +2,281 @@
 <html lang="uz">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>PROSTAFF — Ishchi chaqirish</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>PROSTAFF — Kunlik ishchi buyurtma</title>
 <link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#111827" />
 <style>
   :root{
-    --bg:#0b1220; --card:#0f1c33; --ink:#e5e7eb; --muted:#94a3b8;
-    --brand:#22d3ee; --brand2:#60a5fa; --b:#1f2a44; --ok:#10b981; --warn:#f59e0b; --err:#ef4444; --r:14px; --sh:0 8px 30px rgb(0 0 0 /.35)
+    --bg:#0b1220; --bg2:#0f1a2f; --card:#0f1c33; --ink:#e5e7eb; --muted:#94a3b8;
+    --brand:#22d3ee; --brand2:#60a5fa; --b:#1f2a44; --r:20px; --sh:0 8px 30px rgb(0 0 0 / .35);
+    --ok:#22c55e; --err:#ef4444;
   }
-  *{box-sizing:border-box} body{margin:0;font-family:system-ui,Inter,Segoe UI,Roboto,sans-serif;background:linear-gradient(160deg,#0b1220,#0f1a2f);color:var(--ink)}
+  *{box-sizing:border-box} html,body{height:100%}
+  body{margin:0;font-family:system-ui,Inter,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(160deg,var(--bg) 0%, var(--bg2) 100%);color:var(--ink)}
   a{color:inherit;text-decoration:none}
-  header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,#0b1220,transparent)}
-  .bar{max-width:960px;margin:auto;padding:14px 16px;display:flex;align-items:center;gap:10px}
-  .back{font-size:20px}
-  .title{font-weight:900}
-  main{max-width:960px;margin:16px auto 110px;padding:0 16px}
-  .card{background:rgba(255,255,255,.04);border:1px solid var(--b);border-radius:18px;padding:16px;box-shadow:var(--sh)}
-  .muted{color:var(--muted);font-size:14px}
-  label{display:block;margin:12px 0 6px;color:var(--muted);font-size:13px}
-  input,select,textarea{
-    width:100%;border:1px solid var(--b);background:#0e1730;color:var(--ink);
-    padding:12px 12px;border-radius:12px;outline:none
+
+  header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,#0b1220,transparent);backdrop-filter:saturate(140%) blur(6px)}
+  .bar{max-width:960px;margin:auto;padding:14px 16px;display:flex;align-items:center;gap:12px}
+  .logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(145deg,#0ea5e9,#9333ea);display:grid;place-items:center;box-shadow:var(--sh)}
+  .logo b{color:white;font-weight:900}
+  .brand{font-weight:900;letter-spacing:.3px}
+  .chip{margin-left:12px;background:#083344;border:1px solid #145b6b;color:#67e8f9;border-radius:999px;padding:6px 10px;font-size:12px}
+
+  .wrap{max-width:960px;margin:18px auto 120px;padding:0 16px}
+  .panel{background:linear-gradient(180deg,rgba(15,28,51,.6),rgba(15,28,51,.35));border:1px solid #1f2a44;border-radius:24px;padding:18px;box-shadow:var(--sh)}
+  h1{margin:0 0 12px;font-weight:900}
+  .muted{color:var(--muted);margin:0 0 18px}
+
+  .grid{display:grid;gap:14px}
+  @media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
+
+  label{display:block;margin:10px 0 6px;font-weight:700}
+  select,input[type="text"],input[type="number"],textarea,input[type="time"]{
+    width:100%;padding:12px 14px;border-radius:14px;border:1px solid #1f2a44;background:rgba(255,255,255,.06);color:var(--ink);outline:none
   }
-  textarea{resize:vertical}
-  .row{display:grid;gap:12px}
-  @media(min-width:720px){.row{grid-template-columns:1fr 1fr}}
-  .qty{display:flex;gap:10px;align-items:center}
-  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 14px;border-radius:12px;border:1px solid var(--b);background:rgba(255,255,255,.06);font-weight:800}
-  .btn.brand{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#04121a;border-color:transparent}
-  .btn.warn{background:#3a2a05;border-color:#70490b;color:#fcd34d}
-  .row2{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-  .toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:#052e2b;border:1px solid #0b6b62;color:#a7f3d0;padding:10px 14px;border-radius:12px;display:none}
-  .offers{margin-top:14px;border:1px solid var(--b);border-radius:16px;background:#0c1530}
-  .offer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--b);padding:10px 12px}
-  .offer:first-child{border-top:none}
-  nav{position:fixed;left:0;right:0;bottom:0;background:rgba(11,18,32,.9);border-top:1px solid var(--b);backdrop-filter:blur(10px)}
+  textarea{min-height:110px;resize:vertical}
+  .row{display:flex;gap:12px}
+  .row>*{flex:1}
+  .counter{display:flex;align-items:center;gap:10px}
+  .btn,button{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    border-radius:14px;border:1px solid #1f2a44;background:rgba(255,255,255,.08);
+    color:var(--ink);padding:12px 16px;font-weight:800;cursor:pointer;transition:.15s transform ease
+  }
+  .btn:hover{transform:translateY(-1px)}
+  .btn.primary{background:linear-gradient(90deg,var(--brand),var(--brand2));border-color:transparent;color:#04121a}
+  .btn.gps{background:#0b2a3a;border-color:#164862}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px}
+
+  .preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .preview img{width:74px;height:74px;border-radius:12px;object-fit:cover;border:1px solid #1f2a44}
+
+  nav{position:fixed;left:0;right:0;bottom:0;background:rgba(11,18,32,.9);border-top:1px solid #1f2a44;backdrop-filter:blur(10px)}
   .tabs{max-width:960px;margin:auto;padding:8px 12px;display:flex;gap:10px;justify-content:space-around}
-  .tab{color:#94a3b8;background:rgba(255,255,255,.06);border:1px solid var(--b);padding:10px 14px;border-radius:999px;display:flex;gap:8px;align-items:center}
+  .tab{color:#94a3b8;background:rgba(255,255,255,.06);border:1px solid #1f2a44;padding:10px 14px;border-radius:999px;display:flex;gap:8px;align-items:center}
   .tab.active{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#001824;border-color:transparent;font-weight:900}
+
+  /* Modal */
+  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.5);display:grid;place-items:center;z-index:20}
+  .modal{width:min(92vw,520px);background:#0e1a31;border:1px solid #1f2a44;border-radius:22px;box-shadow:var(--sh);padding:18px}
+  .modal h3{margin:0 0 8px;font-size:22px}
+  .modal p{margin:0 0 16px;color:var(--muted)}
+  .modal .row{margin-top:6px}
+  .opt{flex:1;padding:16px;border-radius:16px;border:1px solid #1f2a44;background:rgba(255,255,255,.06);text-align:center;font-weight:900;cursor:pointer}
+  .opt:hover{transform:translateY(-1px)}
+  .opt.today{background:linear-gradient(90deg,#22c55e,#84cc16);color:#03140a;border-color:transparent}
+  .opt.tom{background:linear-gradient(90deg,#22d3ee,#60a5fa);color:#04121a;border-color:transparent}
 </style>
 </head>
 <body>
 <header>
   <div class="bar">
-    <a class="back" href="index.html">←</a>
-    <div class="title">Ishchi chaqirish</div>
+    <div class="logo"><b>P</b></div>
+    <div class="brand">PROSTAFF</div>
+    <span class="chip">Kunlik ishchi — buyurtma</span>
   </div>
 </header>
 
-<main>
-  <div class="card muted" style="margin-bottom:10px">
-    Xizmat turini tanlang → manzil, sana/vaqt, rasm(lar) → e’lon ketadi → faqat rozi bo‘lgan ishchilar taklif yuboradi → siz mosini tanlaysiz.
-  </div>
+<main class="wrap">
+  <section class="panel">
+    <h1>Buyurtma ma’lumotlari</h1>
+    <p class="muted">Avval kunni tanlang: bugunmi yoki ertagami. Keyin kerakli maydonlarni to‘ldiring.</p>
 
-  <form id="order" onsubmit="submitForm(event)" autocomplete="on" class="card">
-    <label>Xizmat turi *</label>
-    <select id="type" required>
-      <option>Tozalash</option><option>Remontdan keyin</option><option>Oyna/pol yuvish</option>
-      <option>Yuk ko‘tarish</option><option>Ko‘chirish (gazel+brigada)</option><option>Usta (elektrik/santexnik)</option>
-    </select>
-
-    <div class="row">
+    <!-- FORMS -->
+    <form id="form-today" class="grid" hidden>
       <div>
-        <label>Shahar *</label>
-        <select id="city" required>
-          <option>Toshkent</option><option>Namangan</option><option>Andijon</option><option>Farg‘ona</option>
-          <option>Qarshi</option><option>Buxoro</option>
+        <label>Xizmat turi *</label>
+        <select id="tService" required>
+          <option value="" selected disabled>Tanlang</option>
+          <option>Tozalash</option><option>Remont</option><option>Ko‘chirish</option><option>Usta</option><option>Bog‘ ishlar</option>
         </select>
       </div>
-      <div>
-        <label>Sana *</label>
-        <input type="date" id="date" required />
-      </div>
-    </div>
 
-    <div class="row">
       <div>
-        <label>Manzil (aniq joy) *</label>
-        <input type="text" id="addr" placeholder="Chilonzor-3, 12-uy..." required />
-      </div>
-      <div>
-        <label>Vaqt *</label>
-        <input type="time" id="time" required />
-      </div>
-    </div>
-
-    <div class="row">
-      <div>
-        <label>Necha soat</label>
-        <div class="qty">
-          <button class="btn" type="button" onclick="chg(-1)">–</button>
-          <input id="hours" type="number" value="2" min="1" max="12" />
-          <button class="btn" type="button" onclick="chg(1)">+</button>
+        <label>Necha kishi *</label>
+        <div class="row">
+          <input type="number" id="tPeople" min="1" value="1" required />
+          <div class="hint">Bugungi ish uchun zarur ishchilar soni</div>
         </div>
       </div>
+
+      <div style="grid-column:1/-1">
+        <label>Ish haqida batafsil *</label>
+        <textarea id="tDesc" placeholder="Masalan: 2 xonali uy general tozalash. Mebel ko‘p emas. Lift bor. Uy hayvoni yo‘q." required></textarea>
+      </div>
+
       <div>
         <label>Rasm(lar) (ixtiyoriy)</label>
-        <input type="file" id="photos" accept="image/*" multiple />
+        <input type="file" id="tImgs" accept="image/*" multiple />
+        <div id="tPrev" class="preview"></div>
+        <div class="hint">8 tagacha rasm yuklashingiz mumkin</div>
       </div>
-    </div>
 
-    <label>Qo‘shimcha izoh</label>
-    <textarea id="note" rows="3" placeholder="kv.m, orientir, kalit, lift yo‘q va hokazo"></textarea>
+      <div>
+        <label>Manzil (aniq joy) *</label>
+        <input id="tAddr" type="text" placeholder="Masalan: Chilonzor-3, 12-uy, 45-xon." required />
+        <div class="row" style="margin-top:8px">
+          <button type="button" class="btn gps" onclick="fillGPS('tGPS')">📍 GPS olish</button>
+          <input id="tGPS" type="text" placeholder="GPS: lat,lon" readonly />
+        </div>
+      </div>
 
-    <div class="row2">
-      <button class="btn" type="button" onclick="getGPS()">📍 GPS olish</button>
-      <button class="btn warn" type="button" onclick="viewOffers()">📬 Takliflar</button>
-      <button class="btn brand" type="submit">🔔 Buyurtma yuborish</button>
-    </div>
+      <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:10px;margin-top:6px">
+        <button type="button" class="btn" onclick="resetForms()">Bekor qilish</button>
+        <button class="btn primary" type="submit">E’lonni yuborish</button>
+      </div>
+    </form>
 
-    <div class="muted" style="margin-top:8px">GPS: <span id="gps">—</span></div>
+    <form id="form-tomorrow" class="grid" hidden>
+      <div>
+        <label>Xizmat turi *</label>
+        <select id="mService" required>
+          <option value="" selected disabled>Tanlang</option>
+          <option>Tozalash</option><option>Remont</option><option>Ko‘chirish</option><option>Usta</option><option>Bog‘ ishlar</option>
+        </select>
+      </div>
 
-    <div id="offersBox" class="offers" style="display:none;margin-top:12px">
-      <div style="padding:10px 12px"><b>Tushgan takliflar</b></div>
-      <div id="offers"></div>
-    </div>
-  </form>
+      <div>
+        <label>Necha kishi *</label>
+        <input type="number" id="mPeople" min="1" value="1" required />
+      </div>
+
+      <div>
+        <label>Soat nechida? *</label>
+        <input type="time" id="mTime" required />
+      </div>
+
+      <div style="grid-column:1/-1">
+        <label>Ish haqida batafsil *</label>
+        <textarea id="mDesc" placeholder="Masalan: Ertaga 09:00 da oshxona mebelini o‘rnatish. Kalit bor, lift ishlaydi." required></textarea>
+      </div>
+
+      <div>
+        <label>Rasm(lar) (ixtiyoriy)</label>
+        <input type="file" id="mImgs" accept="image/*" multiple />
+        <div id="mPrev" class="preview"></div>
+      </div>
+
+      <div>
+        <label>Manzil (aniq joy) *</label>
+        <input id="mAddr" type="text" placeholder="Mahalla / ko‘cha / uy / xona" required />
+        <div class="row" style="margin-top:8px">
+          <button type="button" class="btn gps" onclick="fillGPS('mGPS')">📍 GPS olish</button>
+          <input id="mGPS" type="text" placeholder="GPS: lat,lon" readonly />
+        </div>
+      </div>
+
+      <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:10px;margin-top:6px">
+        <button type="button" class="btn" onclick="resetForms()">Bekor qilish</button>
+        <button class="btn primary" type="submit">E’lonni yuborish</button>
+      </div>
+    </form>
+  </section>
 </main>
 
-<div id="toast" class="toast"></div>
-
+<!-- Bottom nav -->
 <nav>
   <div class="tabs">
     <a class="tab" href="index.html"><span>🏠</span><span>Home</span></a>
     <a class="tab active" href="workers.html"><span>👷</span><span>Ishchi</span></a>
     <a class="tab" href="firms.html"><span>🏢</span><span>Firmalar</span></a>
-    <a class="tab" href="#my"><span>📬</span><span>Takliflar</span></a>
   </div>
 </nav>
 
-<script>
-  const LS_KEY='prostaff_orders', OFFERS_KEY='prostaff_offers';
+<!-- KUN TANLASH MODALI -->
+<div id="dayModal" class="modal-back" hidden>
+  <div class="modal">
+    <h3>Qaysi kunga ishchi kerak?</h3>
+    <p>Bugungi ishlar zudlik bilan ko‘rib chiqiladi, ertangi ishlar esa belgilangan vaqtda bajariladi.</p>
+    <div class="row">
+      <div class="opt today" onclick="pickDay('today')">Bugungi</div>
+      <div class="opt tom" onclick="pickDay('tomorrow')">Ertangi</div>
+    </div>
+  </div>
+</div>
 
-  function toast(msg, ok=true){
-    const t=document.getElementById('toast');
-    t.textContent=msg;
-    t.style.background = ok ? '#052e2b' : '#3a0a0a';
-    t.style.borderColor = ok ? '#0b6b62' : '#7f1d1d';
-    t.style.color = ok ? '#a7f3d0' : '#fecaca';
-    t.style.display='block'; clearTimeout(window.__tt);
-    window.__tt=setTimeout(()=>t.style.display='none',2500);
+<script>
+  // ————— Modalni ko‘rsatish
+  const dayModal = document.getElementById('dayModal');
+  const fToday  = document.getElementById('form-today');
+  const fTom    = document.getElementById('form-tomorrow');
+
+  function showModal(){ dayModal.hidden = false; }
+  function hideModal(){ dayModal.hidden = true; }
+  function pickDay(k){
+    hideModal();
+    if(k==='today'){ fToday.hidden=false; fTom.hidden=true; }
+    else{ fTom.hidden=false; fToday.hidden=true; }
+    scrollTo({top:0,behavior:'smooth'});
   }
 
-  function chg(d){ const el=hours; el.value=Math.min(12,Math.max(1,(+el.value||1)+d)); }
+  // ————— Rasmlar preview
+  function bindPreview(inputId, prevId){
+    const input = document.getElementById(inputId);
+    const box   = document.getElementById(prevId);
+    input.addEventListener('change', ()=>{
+      box.innerHTML='';
+      [...input.files].slice(0,8).forEach(f=>{
+        const img=document.createElement('img');
+        img.src = URL.createObjectURL(f);
+        box.appendChild(img);
+      });
+    });
+  }
+  bindPreview('tImgs','tPrev');
+  bindPreview('mImgs','mPrev');
 
-  function getGPS(){
-    const el=gps;
-    if(!navigator.geolocation){ el.textContent='GPS yo‘q'; toast('Qurilmada GPS yo‘q',false); return; }
+  // ————— GPS olish
+  function fillGPS(fieldId){
+    const out = document.getElementById(fieldId);
+    if(!navigator.geolocation){ out.value='Geolokatsiya yo‘q'; return; }
     navigator.geolocation.getCurrentPosition(
-      p=>{ el.textContent=p.coords.latitude.toFixed(5)+', '+p.coords.longitude.toFixed(5); toast('GPS olindi'); },
-      _=>{ el.textContent='Ruxsat berilmadi'; toast('GPS uchun ruxsat berilmadi',false); },
-      {enableHighAccuracy:true,timeout:8000}
+      pos => { out.value = pos.coords.latitude.toFixed(6)+','+pos.coords.longitude.toFixed(6); },
+      err => { out.value = 'Ruxsat berilmadi'; }
     );
   }
 
-  function submitForm(e){
+  // ————— Form submit (mock)
+  fToday.addEventListener('submit', e=>{
     e.preventDefault();
-    if(!type.value || !city.value || !date.value || !addr.value || !time.value){
-      toast('Majburiy maydonlarni to‘ldiring',false); return;
-    }
-    const order = {
-      type:type.value, city:city.value, date:date.value, addr:addr.value, time:time.value,
-      hours:hours.value, note:note.value, gps:gps.textContent, at:new Date().toISOString()
+    const data = {
+      day:'today',
+      service:document.getElementById('tService').value,
+      people:+document.getElementById('tPeople').value,
+      desc:document.getElementById('tDesc').value,
+      addr:document.getElementById('tAddr').value,
+      gps:document.getElementById('tGPS').value,
+      images:[...document.getElementById('tImgs').files].map(f=>f.name)
     };
-    const all = JSON.parse(localStorage.getItem(LS_KEY)||'[]'); all.unshift(order);
-    localStorage.setItem(LS_KEY, JSON.stringify(all));
+    console.log('TODAY ORDER', data);
+    alert('Buyurtma qabul qilindi! (Bugun)\nEkranda “Tushgan takliflar” oynasi bo‘ladi.');
+    e.target.reset(); resetPreviews();
+    showModal();
+  });
 
-    // demo takliflar
-    const names=['Jasur','Umid','Dilshod','Aziza','Sardor','Bekzod'];
-    const offers = Array.from({length:Math.floor(Math.random()*3)+2}).map((_,i)=>({
-      id:'w'+(Date.now()+i), name:names[Math.floor(Math.random()*names.length)],
-      rating:(4+Math.random()).toFixed(1), price:(120+Math.floor(Math.random()*120))+' ming/soat',
-      eta:(4+Math.floor(Math.random()*10))+' daq'
-    }));
-    localStorage.setItem(OFFERS_KEY, JSON.stringify(offers));
-    toast('Buyurtma yuborildi! 2-10 daqiqada takliflar keladi.');
-    viewOffers();
-    document.getElementById('order').scrollIntoView({behavior:'smooth',block:'start'});
-  }
+  fTom.addEventListener('submit', e=>{
+    e.preventDefault();
+    const data = {
+      day:'tomorrow',
+      service:document.getElementById('mService').value,
+      people:+document.getElementById('mPeople').value,
+      time:document.getElementById('mTime').value,
+      desc:document.getElementById('mDesc').value,
+      addr:document.getElementById('mAddr').value,
+      gps:document.getElementById('mGPS').value,
+      images:[...document.getElementById('mImgs').files].map(f=>f.name)
+    };
+    console.log('TOMORROW ORDER', data);
+    alert('Buyurtma qabul qilindi! (Ertaga)');
+    e.target.reset(); resetPreviews();
+    showModal();
+  });
 
-  function viewOffers(){
-    const data = JSON.parse(localStorage.getItem(OFFERS_KEY)||'[]');
-    const box = document.getElementById('offersBox'), list=document.getElementById('offers');
-    if(!data.length){ toast('Hozircha taklif yo‘q',false); return; }
-    box.style.display='block'; list.innerHTML='';
-    data.forEach(of=>{
-      const d=document.createElement('div'); d.className='offer';
-      d.innerHTML=`<div><b>${of.name}</b> · ⭐ ${of.rating}<br><span style="color:#34d399">${of.price}</span> · ${of.eta}</div>
-                   <button class="btn brand" onclick="choose('${of.id}')">Tanlash</button>`;
-      list.appendChild(d);
-    });
-  }
+  function resetPreviews(){ document.getElementById('tPrev').innerHTML=''; document.getElementById('mPrev').innerHTML=''; }
+  function resetForms(){ fToday.reset(); fTom.reset(); resetPreviews(); showModal(); }
 
-  function choose(id){
-    const data = JSON.parse(localStorage.getItem(OFFERS_KEY)||'[]');
-    const of = data.find(x=>x.id===id); if(!of) return;
-    toast(of.name+' tanlandi. Bog‘lanish yuborildi!');
-    localStorage.removeItem(OFFERS_KEY);
-    document.getElementById('offers').innerHTML='';
-    document.getElementById('offersBox').style.display='none';
-  }
-
-  // Always-fresh SW
+  // ————— PWA SW versiya majburlab yangilash
   if ('serviceWorker' in navigator) {
     const v = Date.now();
     navigator.serviceWorker.getRegistrations()
@@ -211,6 +284,9 @@
       .then(() => navigator.serviceWorker.register('service-worker.js?v='+v,{scope:'./'}))
       .catch(()=>{});
   }
+
+  // Sahifa ochilganda kun tanlash
+  showModal();
 </script>
 </body>
-</html>
+  </html>
