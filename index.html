@@ -9,8 +9,8 @@
 <style>
   :root{
     --bg:#0b1220; --bg2:#0f1a2f; --card:#0f1c33; --ink:#e5e7eb; --muted:#94a3b8;
-    --brand:#22d3ee; --brand2:#60a5fa; --chip:#67e8f9; --ok:#10b981; --warn:#f59e0b; --err:#ef4444;
-    --b:#1e293b; --r:16px; --sh:0 8px 30px rgb(0 0 0 / .35);
+    --brand:#22d3ee; --brand2:#60a5fa; --b:#1f2a44; --r:18px; --sh:0 8px 30px rgb(0 0 0 / .35);
+    --ad:#0c1730; --adBorder:#23324f;
   }
   *{box-sizing:border-box} html,body{height:100%}
   body{margin:0;font-family:system-ui,Inter,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(160deg,var(--bg) 0%, var(--bg2) 100%);color:var(--ink)}
@@ -19,48 +19,66 @@
   /* top bar */
   header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,#0b1220,transparent);backdrop-filter:saturate(140%) blur(6px)}
   .bar{max-width:960px;margin:auto;padding:14px 16px;display:flex;align-items:center;gap:12px}
-  .logo{width:36px;height:36px;border-radius:12px;background:linear-gradient(145deg,#0ea5e9,#9333ea);display:grid;place-items:center;box-shadow:var(--sh)}
+  .logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(145deg,#0ea5e9,#9333ea);display:grid;place-items:center;box-shadow:var(--sh)}
   .logo b{color:white;font-weight:900}
   .brand{font-weight:900;letter-spacing:.3px}
+  .chip{margin-left:12px;background:#083344;border:1px solid #145b6b;color:#67e8f9;border-radius:999px;padding:6px 10px;font-size:12px}
   .slogan{margin-left:auto;color:var(--muted);font-size:13px;display:none}
   @media(min-width:640px){.slogan{display:block}}
 
-  /* hero */
-  .hero{max-width:960px;margin:18px auto;padding:0 16px}
+  /* content */
+  .wrap{max-width:960px;margin:18px auto 120px;padding:0 16px}
   .panel{
     background:linear-gradient(180deg,rgba(15,28,51,.6),rgba(15,28,51,.35));
     border:1px solid #1f2a44;border-radius:24px;padding:18px;box-shadow:var(--sh);
   }
-  .title{font-size:30px;font-weight:900;margin:0 0 8px}
-  .lead{margin:0 0 14px;color:var(--muted)}
-  .actions{display:flex;gap:12px;flex-wrap:wrap}
-  .btn{
-    background:#111827;border:1px solid #1f2a44;color:var(--ink);padding:10px 14px;border-radius:12px;
-    box-shadow:var(--sh);font-weight:800;display:inline-flex;align-items:center;gap:8px
-  }
-  .btn.brand{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#04121a;border-color:transparent}
-  .btn.brand:active{transform:translateY(1px)}
-  .btn.flat{background:rgba(255,255,255,.06)}
-  .pill-row{display:flex;gap:12px;overflow:auto;padding:12px 2px}
-  .pill{
-    white-space:nowrap;background:rgba(255,255,255,.06);border:1px solid #1f2a44;border-radius:999px;
-    padding:8px 12px;display:inline-flex;gap:8px;align-items:center;box-shadow:var(--sh)
-  }
+  .title{font-size:30px;font-weight:900;margin:0 0 10px}
+  .lead{margin:0 0 18px;color:var(--muted)}
 
-  /* section cards */
-  .grid{max-width:960px;margin:10px auto 110px;padding:0 16px;display:grid;gap:14px}
-  @media(min-width:720px){.grid{grid-template-columns:1fr 1fr}}
-  .tile{background:rgba(255,255,255,.04);border:1px solid #1f2a44;border-radius:18px;padding:16px;box-shadow:var(--sh)}
-  .tile h3{margin:0 0 6px;font-size:18px}
-  .tile p{margin:0 0 12px;color:var(--muted);font-size:14px}
+  /* two big buttons */
+  .grid2{display:grid;gap:14px}
+  @media(min-width:620px){.grid2{grid-template-columns:1fr 1fr}}
+  .big{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    padding:18px;border-radius:18px;font-weight:900;font-size:18px;
+    border:1px solid #1f2a44;background:rgba(255,255,255,.06);box-shadow:var(--sh);
+    transition:.15s transform ease;
+  }
+  .big:hover{transform:translateY(-1px)}
+  .big.brand{background:linear-gradient(90deg,var(--brand),var(--brand2));border-color:transparent;color:#04121a}
+  .big.flat{background:rgba(255,255,255,.08)}
+  .big span.i{font-size:22px}
+
+  /* AD banner */
+  .ad{
+    margin-top:18px;background:var(--ad);border:1px solid var(--adBorder);border-radius:24px;
+    padding:0;overflow:hidden;box-shadow:var(--sh)
+  }
+  .ad-head{
+    background:linear-gradient(180deg,rgba(255,255,255,.05),transparent);
+    padding:14px 18px;border-bottom:1px solid var(--adBorder);font-weight:800;letter-spacing:.2px
+  }
+  .ad-body{position:relative;height:140px;background:radial-gradient(1200px 400px at -10% 110%, #1c2a4e 0%, #0d152c 50%, #0b1220 100%)}
+  /* moving rainbow text */
+  .ticker{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    white-space:nowrap;font-size:22px;font-weight:900;letter-spacing:.3px;
+    -webkit-text-stroke:0.5px #000;
+    background:linear-gradient(90deg,#22d3ee,#34d399,#f59e0b,#f43f5e,#8b5cf6,#22d3ee);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:slide 18s linear infinite;
+    padding:0 10px;
+  }
+  @keyframes slide{
+    from{transform:translate(-100%, -50%)}
+    to{transform:translate(100%, -50%)}
+  }
 
   /* bottom nav */
   nav{position:fixed;left:0;right:0;bottom:0;background:rgba(11,18,32,.9);border-top:1px solid #1f2a44;backdrop-filter:blur(10px)}
   .tabs{max-width:960px;margin:auto;padding:8px 12px;display:flex;gap:10px;justify-content:space-around}
   .tab{color:#94a3b8;background:rgba(255,255,255,.06);border:1px solid #1f2a44;padding:10px 14px;border-radius:999px;display:flex;gap:8px;align-items:center}
   .tab.active{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#001824;border-color:transparent;font-weight:900}
-  .tab .i{font-size:18px}
-  .chip{margin-left:12px;background:#083344;border:1px solid #145b6b;color:#67e8f9;border-radius:999px;padding:6px 10px;font-size:12px}
 </style>
 </head>
 <body>
@@ -73,51 +91,36 @@
   </div>
 </header>
 
-<section class="hero">
-  <div class="panel">
+<main class="wrap">
+  <section class="panel">
     <h1 class="title">Tezkor xizmat kerakmi?</h1>
-    <p class="lead">Tozalash, ta’mirlash, ko‘chirish va boshqalar — yaqin atrofdagi ijrochilar sizga taklif yuboradi.</p>
-    <div class="actions">
-      <a class="btn brand" href="workers.html">🔔 Ishchi chaqirish</a>
-      <a class="btn flat" href="firms.html">🏢 Firmalarni ko‘rish</a>
+    <p class="lead">Faqat kerakli bo‘limni tanlang — qolganini biz soddalashtirdik.</p>
+
+    <div class="grid2">
+      <a class="big brand" href="workers.html"><span class="i">🔔</span> Kunlik ishchilar</a>
+      <a class="big flat" href="firms.html"><span class="i">🏢</span> Xizmat ko‘rsatish firmalari</a>
     </div>
-  </div>
 
-  <div class="pill-row" aria-label="kategoriyalar">
-    <span class="pill">🧹 Tozalash</span>
-    <span class="pill">🛠 Usta</span>
-    <span class="pill">🚚 Ko‘chirish</span>
-    <span class="pill">🌿 Bog‘</span>
-    <span class="pill">🍳 Oshxona</span>
-    <span class="pill">🧸 Bolalar</span>
-  </div>
-</section>
-
-<section class="grid">
-  <article class="tile">
-    <h3>Kunlik ishchilar</h3>
-    <p>GPS, sana/vaqt va izohni yuboring — yaqin ishchilar taklif qiladi.</p>
-    <a class="btn brand" href="workers.html">Buyurtma berish</a>
-  </article>
-
-  <article class="tile">
-    <h3>Xizmat ko‘rsatish firmalari</h3>
-    <p>Profil, narxlar, rasmlar va izohlar — tanlang va bog‘laning.</p>
-    <a class="btn flat" href="firms.html">Kirish</a>
-  </article>
-</section>
+    <!-- Reklama banneri -->
+    <div class="ad">
+      <div class="ad-head">Reklama</div>
+      <div class="ad-body">
+        <div class="ticker">★ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ★ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ★</div>
+      </div>
+    </div>
+  </section>
+</main>
 
 <nav>
   <div class="tabs">
-    <a class="tab active" href="index.html"><span class="i">🏠</span><span>Home</span></a>
-    <a class="tab" href="workers.html"><span class="i">👷</span><span>Ishchi</span></a>
-    <a class="tab" href="firms.html"><span class="i">🏢</span><span>Firmalar</span></a>
-    <a class="tab" href="workers.html#my"><span class="i">📬</span><span>Takliflar</span></a>
+    <a class="tab active" href="index.html"><span>🏠</span><span>Home</span></a>
+    <a class="tab" href="workers.html"><span>👷</span><span>Ishchi</span></a>
+    <a class="tab" href="firms.html"><span>🏢</span><span>Firmalar</span></a>
   </div>
 </nav>
 
 <script>
-  // Always-fresh SW (kesh yo‘q)
+  // Service worker — har safar yangilansin
   if ('serviceWorker' in navigator) {
     const v = Date.now();
     navigator.serviceWorker.getRegistrations()
