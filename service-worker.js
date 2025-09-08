@@ -1,29 +1,20 @@
-const CACHE_NAME = "prostaff-cache-v2";
-const PREFIX = "./"; // /prostaff/ ostida ekanimiz uchun nisbiy yo'l
-const URLS_TO_CACHE = [
-  `${PREFIX}`,
-  `${PREFIX}index.html`,
-  `${PREFIX}workers.html`,
-  `${PREFIX}firms.html`,
-  `${PREFIX}manifest.json`
-];
-
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(URLS_TO_CACHE))
-  );
+// service-worker.js — Always Fresh (keshsiz)
+self.addEventListener('install', (e) => {
+  self.skipWaiting(); // darhol ishga tush
 });
 
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    )
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    // Barcha eski keshlarni tozalaymiz
+    caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))))
   );
+  self.clients.claim();
 });
 
-self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    caches.match(event.request).then((res) => res || fetch(event.request))
+// Har doim tarmoqdan olib kel (no-store). Oflayn bo'lsa — keshdan borini berishga urinish.
+self.addEventListener('fetch', (e) => {
+  e.respondWith(
+    fetch(new Request(e.request, { cache: 'no-store' }))
+      .catch(() => caches.match(e.request))
   );
 });
