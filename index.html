@@ -6,62 +6,64 @@
   <title>PROSTAFF — Kunlik ishchilar</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="style.css" />
+  <meta name="theme-color" content="#0b1224" />
 </head>
 <body class="page page--home">
-  <!-- App bar -->
   <header class="topbar">
     <div class="brand">
       <span class="badge">P</span>
       <span class="brand__name">PROSTAFF</span>
     </div>
     <nav class="topbar__right">
-      <a class="pill" href="#" aria-label="Til">UZ</a>
-      <a class="pill" href="firms.html">Firmalar</a>
-      <a class="pill pill--ghost" href="#">Chiqish</a>
+      <div class="lang">
+        <button class="pill" data-lang="uz">UZ</button>
+        <button class="pill" data-lang="ru">RU</button>
+        <button class="pill" data-lang="en">EN</button>
+      </div>
+      <a class="pill" href="firms.html" data-i18n="nav.firms">Firmalar</a>
+      <a class="pill pill--ghost" href="#" data-i18n="nav.logout">Chiqish</a>
     </nav>
   </header>
 
-  <!-- Hero -->
   <section class="hero">
     <div class="hero__text">
-      <h1>Tezkor xizmat kerakmi?</h1>
-      <p>Tozalash, ta’mirlash, ko‘chirish va boshqalar — yaqin atrofdagi ijrochilar orqali.</p>
+      <h1 data-i18n="home.title">Tezkor xizmat kerakmi?</h1>
+      <p data-i18n="home.subtitle">Tozalash, ta’mirlash, ko‘chirish va boshqalar — yaqin atrofdagi ijrochilar orqali.</p>
     </div>
+
     <div class="hero__actions">
       <a class="card action action--primary" href="bugun.html">
         <div class="action__icon">⚡</div>
         <div class="action__txt">
-          <h3>Ishchi chaqirish</h3>
-          <p>Zudlik bilan ishchi kerakmi? Darhol buyurtma qoldiring.</p>
+          <h3 data-i18n="home.cards.today.title">Ishchi chaqirish</h3>
+          <p data-i18n="home.cards.today.desc">Zudlik bilan ishchi kerakmi? Darhol buyurtma qoldiring.</p>
         </div>
       </a>
 
       <a class="card action" href="firms.html">
         <div class="action__icon">🏢</div>
         <div class="action__txt">
-          <h3>Firmalarni ko‘rish</h3>
-          <p>Xizmat ko‘rsatuvchi tashkilotlar ro‘yxati va reytinglari.</p>
+          <h3 data-i18n="home.cards.firms.title">Firmalarni ko‘rish</h3>
+          <p data-i18n="home.cards.firms.desc">Xizmat ko‘rsatuvchi tashkilotlar ro‘yxati va reytinglari.</p>
         </div>
       </a>
     </div>
   </section>
 
-  <!-- Ad banner -->
   <section class="ad card">
     <div class="ad__inner">
-      <span class="rainbow-text">★ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ★</span>
+      <span class="rainbow-text" data-i18n="ad.msg">★ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ★</span>
       <span class="rainbow-text" aria-hidden="true">★ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ★</span>
     </div>
-    <small>Reklama joylash uchun: reklama@prostaff.uz</small>
+    <small data-i18n="ad.mail">Reklama joylash uchun: reklama@prostaff.uz</small>
   </section>
 
-  <!-- Bottom nav -->
   <footer class="tabbar">
-    <a class="tab tab--active" href="index.html">🏠<span>Home</span></a>
-    <a class="tab" href="bugun.html">👷<span>Ishchi</span></a>
-    <a class="tab" href="firms.html">🏬<span>Firmalar</span></a>
+    <a class="tab tab--active" href="index.html">🏠<span data-i18n="tabs.home">Home</span></a>
+    <a class="tab" href="bugun.html">👷<span data-i18n="tabs.worker">Ishchi</span></a>
+    <a class="tab" href="firms.html">🏬<span data-i18n="tabs.firms">Firmalar</span></a>
   </footer>
 
   <script src="app.js"></script>
 </body>
-</html>
+  </html>
