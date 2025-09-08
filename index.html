@@ -2,81 +2,48 @@
 <html lang="uz">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>PROSTAFF — Bosh sahifa</title>
-  <link rel="manifest" href="manifest.json" />
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#f59e0b">
   <style>
-    :root{
-      --brand:#f59e0b; /* sariq */
-      --ink:#111827;  /* qora */
-      --bg:#ffffff;   /* oq */
-      --muted:#6b7280;/* kulrang */
-      --card:#f9fafb; /* juda och kulrang */
-      --radius:14px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif;
-      background:var(--bg); color:var(--ink);
-    }
-    header{
-      position:sticky; top:0; z-index:10;
-      background:var(--bg); border-bottom:1px solid #eee;
-    }
-    .bar{max-width:880px; margin:auto; padding:14px 16px; display:flex; align-items:center; gap:10px}
-    .logo{font-weight:800; letter-spacing:.4px}
-    .chip{margin-left:auto; font-size:12px; padding:6px 10px; border-radius:999px; background:#fff0d6; color:#8a4b00}
-    main{max-width:880px; margin:22px auto 84px; padding:0 16px}
-    h1{margin:0 0 8px; font-size:28px}
-    p.lead{margin:0 0 18px; color:var(--muted)}
-    .grid{display:grid; gap:14px; grid-template-columns:1fr; }
-    @media(min-width:640px){ .grid{grid-template-columns:1fr 1fr} }
-
-    .tile{
-      background:var(--card); border:1px solid #eee; border-radius:var(--radius);
-      padding:18px; display:flex; align-items:center; gap:14px; cursor:pointer;
-      transition:transform .06s ease, box-shadow .06s ease;
-    }
-    .tile:active{transform:scale(.99)}
-    .emoji{font-size:28px; line-height:1}
-    .t-title{font-weight:700; font-size:18px}
-    .t-sub{color:var(--muted); font-size:13px; margin-top:2px}
-    .cta{
-      margin-top:18px; display:inline-block; background:var(--brand); color:#fff;
-      padding:12px 16px; border-radius:10px; text-decoration:none; font-weight:700;
-    }
-    /* Pastki navbar */
-    nav{
-      position:fixed; left:0; right:0; bottom:0; background:#fff; border-top:1px solid #eee;
-    }
-    .tabs{max-width:880px; margin:auto; display:flex; justify-content:space-around; padding:10px 8px}
-    .tab{display:flex; flex-direction:column; align-items:center; gap:6px; padding:6px 10px; color:var(--muted); text-decoration:none; font-size:12px}
-    .tab .i{font-size:22px}
-    .tab.active{color:var(--ink); font-weight:700}
-    .help{
-      margin-top:18px; background:#fffaf0; border:1px dashed #f6bf5b; color:#7a5010;
-      padding:14px; border-radius:12px; font-size:14px;
-    }
+    :root{--brand:#f59e0b;--ink:#111827;--bg:#fff;--muted:#6b7280;--card:#f9fafb;--radius:14px}
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,Segoe UI,Inter,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    header{position:sticky;top:0;background:#fff;border-bottom:1px solid #eee;z-index:10}
+    .bar{max-width:880px;margin:auto;padding:14px 16px;display:flex;align-items:center;gap:10px}
+    .logo{font-weight:900;letter-spacing:.4px}
+    .chip{margin-left:auto;background:#fff0d6;color:#8a4b00;border-radius:999px;padding:6px 10px;font-size:12px}
+    main{max-width:880px;margin:22px auto 84px;padding:0 16px}
+    h1{margin:0 0 8px;font-size:28px} .lead{margin:0 0 18px;color:var(--muted)}
+    .grid{display:grid;gap:14px} @media(min-width:640px){.grid{grid-template-columns:1fr 1fr}}
+    .tile{background:var(--card);border:1px solid #eee;border-radius:var(--radius);padding:18px;display:flex;gap:14px;align-items:center}
+    .emoji{font-size:28px} .t-title{font-weight:800;font-size:18px} .t-sub{color:var(--muted);font-size:13px}
+    .cta{margin-top:10px;display:inline-block;background:var(--brand);color:#fff;padding:10px 12px;border-radius:10px;font-weight:800;text-decoration:none}
+    nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #eee}
+    .tabs{max-width:880px;margin:auto;display:flex;justify-content:space-around;padding:10px 8px}
+    .tab{display:flex;flex-direction:column;align-items:center;gap:6px;color:#6b7280;text-decoration:none;font-size:12px}
+    .tab .i{font-size:22px} .tab.active{color:#111827;font-weight:800}
+    .help{margin-top:18px;background:#fffaf0;border:1px dashed #f6bf5b;color:#7a5010;padding:14px;border-radius:12px;font-size:14px}
   </style>
 </head>
 <body>
   <header>
     <div class="bar">
       <div class="logo">PROSTAFF</div>
-      <span class="chip">MVP</span>
+      <span class="chip">Always-Fresh</span>
     </div>
   </header>
 
   <main>
     <h1>Assalomu alaykum! 👋</h1>
-    <p class="lead">Kerakli bo‘limni tanlang. Har bir bo‘lim alohida oynada ochiladi.</p>
+    <p class="lead">Bo‘limni tanlang. Har bir bo‘lim alohida oyna sifatida ochiladi.</p>
 
     <div class="grid">
       <a class="tile" href="workers.html">
         <div class="emoji">👷‍♂️</div>
         <div>
           <div class="t-title">Kunlik ishchilar</div>
-          <div class="t-sub">Yuvish, ta’mirlash, yuk tashish va boshqalar</div>
+          <div class="t-sub">Yuvish, remontdan keyingi tozalash, yuk tashish...</div>
           <span class="cta">Buyurtma berish</span>
         </div>
       </a>
@@ -85,31 +52,34 @@
         <div class="emoji">🏢</div>
         <div>
           <div class="t-title">Xizmat ko‘rsatish firmalari</div>
-          <div class="t-sub">Profil, narxlar, suratlar va izohlar</div>
+          <div class="t-sub">Profil, narxlar, rasmlar, izohlar</div>
           <span class="cta">Firmalarni ko‘rish</span>
         </div>
       </a>
     </div>
 
     <div class="help">
-      <b>Qisqa qo‘llanma:</b> bo‘limni bosing → alohida oyna ochiladi → ma’lumotni kiriting →
-      takliflar keladi → mosini tanlab tasdiqlaysiz.
+      <b>Qanday ishlaydi?</b> Bo‘limni bosing → ma’lumot kiriting → e’lon ketadi → faqat rozi bo‘lgan ishchilar taklif yuboradi → mosini tanlab tasdiqlaysiz.
     </div>
   </main>
 
   <nav>
     <div class="tabs">
       <a class="tab active" href="index.html"><span class="i">🏠</span><span>Bosh</span></a>
-      <a class="tab" href="workers.html"><span class="i">👷‍♀️</span><span>Ishchi</span></a>
+      <a class="tab" href="workers.html"><span class="i">👷</span><span>Ishchi</span></a>
       <a class="tab" href="firms.html"><span class="i">🏢</span><span>Firma</span></a>
-      <a class="tab" href="workers.html#my"><span class="i">🗓️</span><span>Buyurtma</span></a>
+      <a class="tab" href="workers.html#my"><span class="i">📬</span><span>Takliflar</span></a>
     </div>
   </nav>
 
+  <!-- SW: har ochishda yangi versiya (timestamp) -->
   <script>
-    // (ixtiyoriy) SW ro'yxatdan o'tkazish — oddiy cache
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js?v=5').catch(()=>{});
+      const v = Date.now();
+      navigator.serviceWorker.getRegistrations()
+        .then(rs => Promise.all(rs.map(r => r.unregister())))
+        .then(() => navigator.serviceWorker.register('service-worker.js?v=' + v, {scope: './'}))
+        .catch(()=>{});
     }
   </script>
 </body>
