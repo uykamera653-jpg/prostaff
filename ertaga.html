@@ -1,94 +1,104 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="uz">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PROSTAFF — Ertaga</title>
+  <title>PROSTAFF — Ertaga ishchi</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="app">
-  <header class="appbar">
-    <a class="back" href="index.html">←</a>
-    <div class="brand"><span class="logo">P</span><span class="title">Ertangi buyurtma</span></div>
+<body class="page page--form">
+  <header class="topbar">
+    <a class="pill" href="index.html">←</a>
+    <div class="brand"><span class="badge">P</span><span class="brand__name">PROSTAFF</span></div>
+    <div class="lang">
+      <button class="pill" data-lang="uz">UZ</button>
+      <button class="pill" data-lang="ru">RU</button>
+      <button class="pill" data-lang="en">EN</button>
+    </div>
   </header>
 
   <main class="container">
-    <section class="card">
-      <div class="segmented">
-        <a class="seg" href="bugun.html">Bugun</a>
-        <a class="seg active" href="ertaga.html">Ertaga</a>
-      </div>
+    <h2 class="page-title" data-i18n="tomorrow.title">Ertaga — ishchi bron qilish</h2>
 
-      <form id="form-ertaga" class="form space">
-        <label class="field">
-          <span>Xizmat turi *</span>
-          <select name="xizmat" required>
-            <option value="Tozalash">Tozalash</option>
-            <option value="Usta">Usta</option>
-            <option value="Ko‘chirish">Ko‘chirish</option>
-            <option value="Bog‘ishlari">Bog‘ ishlari</option>
+    <form id="orderForm" class="card form">
+      <div class="grid-2">
+        <label class="fld">
+          <span data-i18n="form.service">Xizmat turi</span>
+          <select name="service" required>
+            <option value="clean" data-i18n="services.clean">Tozalash</option>
+            <option value="repair" data-i18n="services.repair">Ta’mirlash</option>
+            <option value="move" data-i18n="services.move">Ko‘chirish</option>
+            <option value="garden" data-i18n="services.garden">Bog‘</option>
           </select>
         </label>
-
-        <label class="field">
-          <span>Nechta ishchi kerak? *</span>
-          <div class="stepper">
-            <button type="button" class="step minus" data-target="soni">–</button>
-            <input id="soni" name="soni" type="number" value="1" min="1" max="20" required />
-            <button type="button" class="step plus" data-target="soni">+</button>
+        <label class="fld">
+          <span data-i18n="form.people">Necha kishi</span>
+          <div class="counter">
+            <button type="button" class="ctr ctr--dec">−</button>
+            <input type="number" name="count" min="1" value="2" required />
+            <button type="button" class="ctr ctr--inc">+</button>
           </div>
         </label>
+      </div>
 
-        <div class="grid-2">
-          <label class="field">
-            <span>Sana *</span>
-            <input name="sana" type="date" required />
-          </label>
-          <label class="field">
-            <span>Vaqt *</span>
-            <input name="vaqt" type="time" required />
-          </label>
-        </div>
+      <div class="grid-3">
+        <label class="fld">
+          <span data-i18n="form.city">Shahar</span>
+          <input name="city" placeholder="Toshkent" required />
+        </label>
+        <label class="fld">
+          <span data-i18n="form.date">Sana</span>
+          <input type="date" name="date" required />
+        </label>
+        <label class="fld">
+          <span data-i18n="form.time">Soat</span>
+          <input type="time" name="time" required />
+        </label>
+      </div>
 
-        <label class="field">
-          <span>Ish haqida ma’lumot *</span>
-          <textarea name="izoh" rows="3" placeholder="Qisqa tavsif yozing..." required></textarea>
+      <div class="grid-2">
+        <label class="fld">
+          <span data-i18n="form.address">Manzil (aniq joy)</span>
+          <input name="address" placeholder="Yunusobod, 15-kvartal..." required />
+          <small id="gpsText">GPS: —</small>
         </label>
 
-        <div class="grid-2">
-          <label class="field">
-            <span>Shahar *</span>
-            <input name="shahar" value="Toshkent" required />
-          </label>
-          <label class="field">
-            <span>Manzil (aniq joy) *</span>
-            <input id="manzil" name="manzil" placeholder="Chilonzor-3, 12-uy, 45-xon." required />
-          </label>
+        <div class="fld">
+          <span data-i18n="form.gps">GPS</span>
+          <button type="button" id="gpsBtn" class="btn btn--line" data-i18n="form.getGps">GPS ni olish</button>
+          <input type="hidden" name="lat" /><input type="hidden" name="lng" />
+          <small data-i18n="form.gpsHint">Joylashuv ingl. brauzer ruxsati talab etiladi.</small>
         </div>
+      </div>
 
-        <div class="row gap">
-          <button type="button" class="btn ghost" id="btn-gps">📍 GPS</button>
-          <span id="gps-label" class="muted">GPS: –</span>
-        </div>
-
-        <label class="field">
-          <span>Rasm(lar) (ixtiyoriy)</span>
-          <input id="files-ertaga" type="file" accept="image/*" multiple />
-          <div class="preview" id="preview-ertaga"></div>
+      <div class="grid-1">
+        <label class="fld">
+          <span data-i18n="form.desc">Ish haqida ma’lumot</span>
+          <textarea name="desc" rows="4" placeholder="Kerakli materiallar, lift bor-yo‘qligi, maydon va h.k."></textarea>
         </label>
+      </div>
 
-        <button class="btn primary block" type="submit">E’lon berish</button>
-      </form>
-    </section>
+      <div class="grid-1">
+        <label class="fld">
+          <span data-i18n="form.photos">Rasm(lar) (ixtiyoriy)</span>
+          <input type="file" name="photos" id="photos" accept="image/*" multiple />
+          <div id="preview" class="preview"></div>
+        </label>
+      </div>
+
+      <div class="form__actions">
+        <button class="btn btn--primary" type="submit" data-i18n="form.publish">E’lonni yuborish</button>
+        <a class="btn" href="bugun.html" data-i18n="tomorrow.switchToday">Bugun uchun →</a>
+      </div>
+    </form>
   </main>
 
-  <footer class="navbar">
-    <a class="nav-item" href="index.html">🏠 <span>Home</span></a>
-    <a class="nav-item active" href="bugun.html">👷 <span>Ishchi</span></a>
-    <a class="nav-item" href="firmalar.html">🏢 <span>Firmalar</span></a>
+  <footer class="tabbar">
+    <a class="tab" href="index.html">🏠<span data-i18n="tabs.home">Home</span></a>
+    <a class="tab tab--active" href="bugun.html">👷<span data-i18n="tabs.worker">Ishchi</span></a>
+    <a class="tab" href="firms.html">🏬<span data-i18n="tabs.firms">Firmalar</span></a>
   </footer>
 
-  <div id="toast" class="toast"></div>
   <script src="app.js"></script>
 </body>
-</html>
+  </html>
