@@ -1,280 +1,359 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<link rel="manifest" href="manifest.json">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>PROSTAFF</title>
-<meta name="theme-color" content="#f59e0b"/>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0ea5e9">
 <style>
+  /* ====== TOKIYO-GLASS UI ====== */
   :root{
-    --brand:#f59e0b; --brand-2:#f8c35b; --ink:#0f172a; --muted:#64748b;
-    --bg:#ffffff; --card:#fff6e5; --shadow:0 8px 24px rgba(15,23,42,.08);
-    --radius:16px;
+    --brand:#0ea5e9;         /* sky-500 */
+    --brand-2:#22d3ee;       /* cyan-400 */
+    --ink:#0b1220;           /* slate-950 */
+    --muted:#6b7280;         /* gray-500 */
+    --bg:#0f172a;            /* slate-900 */
+    --card:rgba(255,255,255,.08);
+    --stroke:rgba(255,255,255,.18);
+    --blur:18px;
+    --rad:18px;
+    --shadow:0 12px 30px rgba(2,8,23,.35);
+    --shadow-soft:0 6px 18px rgba(2,8,23,.18);
   }
-  *{box-sizing:border-box} html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;color:#e5e7eb;background:
+    radial-gradient(1200px 900px at 100% -10%, #0ea5e922, transparent 60%),
+    radial-gradient(1200px 800px at -10% 10%, #22d3ee22, transparent 60%),
+    var(--bg);
+    font:15px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  }
   a{color:inherit;text-decoration:none}
   .app{min-height:100dvh;display:grid;grid-template-rows:auto 1fr auto}
   .container{width:min(980px,100%);margin:0 auto;padding:18px}
-  .title{font-weight:800;letter-spacing:.8px;text-align:center;font-size:28px}
-  .pill{display:block;width:100%;border-radius:20px;padding:18px 22px;background:var(--card);
-        box-shadow:var(--shadow);text-align:center;font-weight:700;font-size:18px}
-  .grid{display:grid;gap:16px}
-  .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-  @media (max-width:700px){.grid.cols-2{grid-template-columns:1fr}}
-  .search{display:flex;gap:10px;align-items:center;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:32px;padding:10px 14px}
-  .search input{flex:1;border:0;background:transparent;outline:none;font-size:16px}
-  .chips{display:flex;gap:10px;overflow:auto;padding-bottom:6px}
-  .chip{min-width:86px;text-align:center;border-radius:18px;padding:10px 12px;background:#fff;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,.03)}
-  .hero{background:linear-gradient(180deg,#fff3d1,#fff);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
-  .hero h3{margin:0 0 6px;font-size:20px}
-  .muted{color:var(--muted)}
-  .btn{appearance:none;border:0;border-radius:14px;background:var(--ink);color:#fff;padding:12px 16px;font-weight:700;box-shadow:var(--shadow);cursor:pointer}
-  .btn.secondary{background:#fff;color:var(--ink);border:1px solid #e5e7eb}
-  .btn.brand{background:var(--brand)}
-  .safe{position:sticky;bottom:0;inset-inline:0;background:linear-gradient(180deg,transparent,rgba(255,255,255,.9) 20%, #fff 60%);padding:14px 18px}
-  /* NAV */
-  .nav{display:flex;justify-content:space-between;gap:6px;background:#fff;border-top:1px solid #e5e7eb}
-  .nav a{flex:1;text-align:center;padding:12px 0}
-  .nav .on{color:var(--brand);font-weight:700}
-  /* PAGES (views) */
+
+  /* ====== APP BAR ====== */
+  .appbar{
+    position:sticky;top:0;z-index:3;
+    background:linear-gradient(180deg, rgba(2,8,23,.85), rgba(2,8,23,.65));
+    backdrop-filter:saturate(120%) blur(10px);
+    border-bottom:1px solid #1f2937;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    font-weight:800;letter-spacing:.6px;font-size:18px;color:#f8fafc;
+  }
+  .brand-badge{
+    width:36px;height:36px;border-radius:12px;
+    background:linear-gradient(135deg,var(--brand),var(--brand-2));
+    display:grid;place-items:center;color:white;font-weight:900;box-shadow:var(--shadow-soft)
+  }
+
+  /* ====== NAV (floating) ====== */
+  .nav{
+    position:sticky;bottom:10px;z-index:3;
+    display:flex;gap:8px;justify-content:center;
+  }
+  .nav .tab{
+    flex:0 1 auto; min-width:78px;
+    display:flex;align-items:center;gap:8px;justify-content:center;
+    padding:12px 14px;
+    border-radius:999px;color:#e5e7eb;
+    background:rgba(255,255,255,.06);
+    border:1px solid var(--stroke);
+    backdrop-filter: blur(var(--blur));
+    box-shadow:var(--shadow-soft);
+    transition:.18s ease;
+  }
+  .nav .tab.on{ background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#03121a; font-weight:800 }
+
+  /* ====== VIEW WRAPPER ====== */
   .view{display:none;animation:fade .18s ease}
   .view.show{display:block}
   @keyframes fade{from{opacity:0;transform:translateY(6px)}}
-  /* FORMS */
-  .card{background:#fff;border:1px solid #eaeaea;border-radius:18px;box-shadow:var(--shadow);padding:16px}
-  label{display:block;font-weight:600;margin:14px 6px 6px}
-  .input,.select,.textarea{width:100%;padding:12px 14px;border:1px solid #e5e7eb;border-radius:12px;background:#f9fafb}
+
+  /* ====== GLASS CARDS & UI ====== */
+  .glass{
+    background:var(--card);border:1px solid var(--stroke);
+    border-radius:var(--rad);box-shadow:var(--shadow);backdrop-filter:blur(var(--blur));
+  }
+  .soft{box-shadow:var(--shadow-soft)}
+  .section-title{margin:0 0 10px;font-size:20px;font-weight:900;color:#f1f5f9}
+
+  /* Hero */
+  .hero{padding:18px;display:grid;gap:10px}
+  .hero h1{margin:0;color:#f1f5f9;font-weight:900;letter-spacing:.4px}
+  .hero p{margin:0;color:#cbd5e1}
+  .cta{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{
+    appearance:none;border:0;cursor:pointer;
+    padding:12px 16px;border-radius:14px;font-weight:800;
+    background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#03121a;
+    box-shadow:var(--shadow-soft);
+  }
+  .btn.ghost{background:rgba(255,255,255,.06);color:#e5e7eb;border:1px solid var(--stroke)}
+
+  /* Inputs */
+  label{display:block;margin:12px 8px 6px;color:#cbd5e1;font-weight:700}
+  .input,.select,.textarea{
+    width:100%;padding:12px 14px;border-radius:12px;border:1px solid #334155;
+    background:#0b1220;color:#e5e7eb;outline:none;
+  }
   .select{appearance:none}
   .row{display:grid;gap:12px;grid-template-columns:1fr 1fr}
-  @media (max-width:720px){.row{grid-template-columns:1fr}}
+  @media (max-width:760px){.row{grid-template-columns:1fr}}
+  .kpi{display:flex;gap:14px;align-items:center}
+  .step{display:flex;align-items:center;gap:6px}
+  .step button{width:38px;height:38px;border-radius:12px;border:1px solid #334155;background:#0b1220;color:#e5e7eb;font-weight:900}
+  .hint{color:#94a3b8;font-size:12px;margin-top:4px}
+
+  /* Chips / tags */
+  .chips{display:flex;gap:10px;overflow:auto;padding-bottom:4px}
+  .chip{white-space:nowrap;border:1px solid #334155;background:#0b1220;color:#cbd5e1;border-radius:999px;padding:8px 12px}
+
+  /* Lists */
+  .list{display:grid;gap:12px}
+  .firm{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;padding:14px}
+  .logo{height:56px;width:56px;border-radius:14px;background:linear-gradient(135deg,#1e293b,#0b1220);display:grid;place-items:center;font-size:22px;color:#cbd5e1;border:1px solid #334155}
+  .firm h3{margin:0;color:#f1f5f9}
+  .tag{display:inline-flex;gap:6px;align-items:center;border:1px solid #334155;background:#0b1220;color:#cbd5e1;border-radius:999px;padding:6px 10px;font-size:12px}
+  .muted{color:#94a3b8}
+
+  /* Gallery */
   .gallery{display:flex;gap:10px;overflow:auto}
-  .gallery img{height:84px;width:110px;object-fit:cover;border-radius:12px;border:1px solid #eee}
-  /* list cards */
-  .firm{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:center;padding:14px;border:1px solid #eee;border-radius:16px;background:#fff;box-shadow:var(--shadow)}
-  .logo{height:54px;width:54px;border-radius:14px;background:var(--card);display:grid;place-items:center;font-size:24px}
-  .tag{display:inline-flex;align-items:center;gap:6px;background:#f3f4f6;border:1px solid #e7e7e7;border-radius:999px;padding:6px 10px;font-size:12px}
-  .tags{display:flex;gap:8px;flex-wrap:wrap}
-  .hidden{display:none !important}
-  .ok{color:#16a34a;font-weight:700}
-  .warn{color:#e11d48;font-weight:700}
+  .gallery img{height:90px;width:130px;object-fit:cover;border-radius:12px;border:1px solid #334155}
+
+  /* Offers */
+  .card{padding:14px}
+
+  /* Modal */
+  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,8,23,.5)}
+  .modal.show{display:flex}
+  .sheet{width:min(520px,92%);padding:20px}
 </style>
 </head>
 <body>
-<div class="app" id="app">
-  <!-- HEADER -->
-  <header class="container">
-    <div class="title">PROSTAFF</div>
-  </header>
+  <!-- APP -->
+  <div class="app" id="app">
 
-  <!-- MAIN -->
-  <main class="container">
-
-    <!-- HOME -->
-    <section id="home" class="view show">
-      <div class="grid cols-2" style="margin-bottom:14px">
-        <a class="pill" href="#/workers">Kunlik ishchilar</a>
-        <a class="pill" href="#/firms">Xizmat ko‘rsatish firmalari</a>
+    <!-- APP BAR -->
+    <header class="appbar">
+      <div class="container" style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="brand">
+          <div class="brand-badge">P</div>
+          PROSTAFF
+        </div>
+        <div class="muted" style="font-weight:700">Kunlik ishchi & xizmat</div>
       </div>
+    </header>
 
-      <div class="search">
-        <span>🔎</span>
-        <input id="q" placeholder="Izlash (firma yoki xizmat)" />
-        <button class="btn secondary" id="qGo">Qidir</button>
+    <!-- MAIN -->
+    <main class="container">
+
+      <!-- HOME -->
+      <section id="home" class="view show">
+        <div class="hero glass">
+          <h1>Tezkor xizmat kerakmi?</h1>
+          <p>Tozalash, ta’mirlash, ko‘chirish va boshqalar — yaqin atrofdagi ijrochilar taklif yuboradi.</p>
+          <div class="cta">
+            <a class="btn" href="#/workers">Ishchi chaqirish</a>
+            <a class="btn ghost" href="#/firms">Firmalarni ko‘rish</a>
+          </div>
+        </div>
+
+        <div class="glass soft" style="margin-top:14px;padding:14px">
+          <div class="chips">
+            <div class="chip">🧹 Tozalash</div>
+            <div class="chip">🛠️ Usta</div>
+            <div class="chip">🚚 Ko‘chirish</div>
+            <div class="chip">🌿 Bog‘</div>
+            <div class="chip">🧽 Oyna/pol</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ORDER (WORKERS) -->
+      <section id="workers" class="view">
+        <h2 class="section-title">Buyurtma — ishchi</h2>
+        <form id="orderForm" class="glass" style="padding:16px" autocomplete="on">
+          <div class="row">
+            <div>
+              <label>Xizmat turi</label>
+              <select class="select" name="service" required>
+                <option>Yuvish</option>
+                <option>Remontdan keyingi tozalash</option>
+                <option>Oyna/pol yuvish</option>
+                <option>Yuk ko‘tarish</option>
+                <option>Ko‘chirish (gazel+brigada)</option>
+                <option>Usta (elektrik/santexnik)</option>
+                <option>Boshqa</option>
+              </select>
+            </div>
+            <div>
+              <label>Shahar</label>
+              <select class="select" name="city" required>
+                <option>Toshkent</option><option>Samarqand</option>
+                <option>Farg‘ona</option><option>Navoiy</option>
+                <option>Andijon</option><option>Buxoro</option>
+              </select>
+            </div>
+          </div>
+
+          <label>Manzil (aniq joy)</label>
+          <div class="row">
+            <input class="input" name="addr" placeholder="Chilonzor-3, 12-uy…" required>
+            <button type="button" class="btn ghost" id="gpsBtn">📍 GPS</button>
+          </div>
+          <div id="gpsTxt" class="hint">GPS: –</div>
+
+          <div class="row" style="margin-top:8px">
+            <div>
+              <label>Sana</label>
+              <input class="input" type="date" name="date" required>
+            </div>
+            <div>
+              <label>Vaqt</label>
+              <input class="input" type="time" name="time" required>
+            </div>
+          </div>
+
+          <div class="kpi" style="margin-top:10px">
+            <div class="step">
+              <label style="margin:0;color:#cbd5e1">Necha soat</label>
+            </div>
+            <div class="step" style="margin-left:auto">
+              <button type="button" data-dec>-</button>
+              <input class="input" id="hours" name="hours" value="2" style="width:64px;text-align:center">
+              <button type="button" data-inc>+</button>
+            </div>
+            <div class="step">
+              <label style="margin:0;color:#cbd5e1">Ishchilar</label>
+            </div>
+            <div class="step">
+              <button type="button" data-dec2>-</button>
+              <input class="input" id="count" name="count" value="2" style="width:64px;text-align:center">
+              <button type="button" data-inc2>+</button>
+            </div>
+          </div>
+
+          <label>Rasm(lar) (ixtiyoriy)</label>
+          <input class="input" type="file" id="imgs" multiple accept="image/*">
+          <div id="thumbs" class="gallery" style="margin-top:8px"></div>
+
+          <label>Qo‘shimcha izoh</label>
+          <textarea class="textarea" name="note" rows="3" placeholder="kv.m, orientir, kalit, hayvon…"></textarea>
+
+          <label class="hint" style="display:flex;gap:10px;align-items:center;margin-top:10px">
+            <input type="checkbox" id="agree" required> Shaxsiy ma’lumotlarimni qayta ishlashga roziman
+          </label>
+
+          <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px">
+            <button class="btn ghost" type="button" id="offersBtn">Takliflar</button>
+            <button class="btn" type="submit">Buyurtmani yuborish</button>
+          </div>
+        </form>
+
+        <div id="offersCard" class="glass" style="padding:14px;margin-top:14px;display:none">
+          <h3 class="section-title" style="font-size:18px">Tushgan takliflar</h3>
+          <div id="offersList" class="list"></div>
+          <div id="offersEmpty" class="muted">Hozircha taklif yo‘q.</div>
+        </div>
+      </section>
+
+      <!-- FIRMS -->
+      <section id="firms" class="view">
+        <h2 class="section-title">Firmalar</h2>
+        <div id="firmList" class="list"></div>
+      </section>
+
+      <!-- FIRMA DETAIL -->
+      <section id="firmDetail" class="view">
+        <a class="muted" href="#/firms">← Orqaga</a>
+        <div id="firmCard" class="glass" style="padding:16px;margin-top:12px"></div>
+      </section>
+
+    </main>
+
+    <!-- FLOATING NAV -->
+    <nav class="nav container">
+      <a class="tab on" data-to="#/home">🏠 Home</a>
+      <a class="tab" data-to="#/workers">👷 Ishchi</a>
+      <a class="tab" data-to="#/firms">🏢 Firmalar</a>
+      <a class="tab" data-to="#/offers">📬 Takliflar</a>
+    </nav>
+  </div>
+
+  <!-- MODAL (success) -->
+  <div id="modal" class="modal">
+    <div class="sheet glass">
+      <h3 class="section-title">Buyurtma yuborildi ✅</h3>
+      <p class="muted">Yaqin 5–10 daqiqada ijrochilar taklif qoldirishadi. “Takliflar” bo‘limidan tanlashingiz mumkin.</p>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:10px">
+        <button class="btn ghost" id="closeModal">Yopish</button>
+        <a class="btn" href="#/workers" id="toOffers">Takliflarga o‘tish</a>
       </div>
-
-      <div class="chips" style="margin:14px 0">
-        <div class="chip">🧹 Tozalash</div>
-        <div class="chip">🛠️ Ta’mirlash</div>
-        <div class="chip">🚚 Yuk tashish</div>
-        <div class="chip">🌿 Bog‘-hovli</div>
-        <div class="chip">… Boshqa</div>
-      </div>
-
-      <div class="hero">
-        <h3>Xizmat buyurtma qiling</h3>
-        <div class="muted">
-          Professional tozalash, ta’mirlash, ko‘chirish va boshqa xizmatlar.
-          Yaqin atrofdagi ijrochilar 5–10 daqiqada taklif yuborishadi.
-        </div>
-        <div style="margin-top:12px;display:flex;gap:10px">
-          <a class="btn brand" href="#/workers">Ishchi chaqirish</a>
-          <a class="btn secondary" href="#/firms">Firmalarni ko‘rish</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- WORKERS (ORDER) -->
-    <section id="workers" class="view">
-      <h2 style="margin:6px 0 12px">Buyurtma — ishchi</h2>
-      <form id="orderForm" class="card" autocomplete="on">
-        <div class="row">
-          <div>
-            <label>Xizmat turi</label>
-            <select class="select" name="service" required>
-              <option>Yuvish</option>
-              <option>Remontdan keyingi tozalash</option>
-              <option>Oyna/pol yuvish</option>
-              <option>Yuk ko‘tarish</option>
-              <option>Ko‘chirish (gazel+brigada)</option>
-              <option>Usta (elektrik/santexnik)</option>
-              <option>Boshqa</option>
-            </select>
-          </div>
-          <div>
-            <label>Shahar / hudud</label>
-            <select class="select" name="city" required>
-              <option>Toshkent</option><option>Samarqand</option>
-              <option>Farg‘ona</option><option>Navoiy</option>
-              <option>Andijon</option><option>Buxoro</option>
-            </select>
-          </div>
-        </div>
-
-        <label>Manzil (aniq joy)</label>
-        <div class="row">
-          <input class="input" name="addr" placeholder="Ko‘cha, uy, orientir" required>
-          <button type="button" class="btn secondary" id="gpsBtn">📍 GPS</button>
-        </div>
-        <div id="gpsTxt" class="muted" style="margin-top:6px">GPS: –</div>
-
-        <div class="row" style="margin-top:10px">
-          <div>
-            <label>Sana</label>
-            <input class="input" type="date" name="date" required>
-          </div>
-          <div>
-            <label>Boshlanish vaqti</label>
-            <input class="input" type="time" name="time" required>
-          </div>
-        </div>
-
-        <div class="row">
-          <div>
-            <label>Davomiylik (soat)</label>
-            <select class="select" name="hours">
-              <option>2</option><option selected>4</option><option>6</option><option>8</option>
-            </select>
-          </div>
-          <div>
-            <label>Ishchilar soni</label>
-            <select class="select" name="count">
-              <option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option>
-            </select>
-          </div>
-        </div>
-
-        <label>Rasm(lar)ni yuklang (ixtiyoriy)</label>
-        <input class="input" type="file" id="imgs" multiple accept="image/*">
-        <div id="thumbs" class="gallery" style="margin-top:8px"></div>
-
-        <label>Qo‘shimcha izoh</label>
-        <textarea class="textarea" name="note" rows="3" placeholder="kv.m, eshik/kalit, hayvon va hokazo"></textarea>
-
-        <label class="muted" style="display:flex;gap:10px;align-items:center">
-          <input type="checkbox" id="agree" required>
-          <span>Shaxsiy ma’lumotlarni qayta ishlashga roziman</span>
-        </label>
-
-        <div class="safe">
-          <div style="display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap">
-            <button type="button" class="btn secondary" id="offersBtn">Tushgan takliflar</button>
-            <button class="btn brand" type="submit">Buyurtmani yuborish</button>
-          </div>
-        </div>
-      </form>
-
-      <div id="offersCard" class="card hidden" style="margin-top:14px">
-        <h3 style="margin:0 0 8px">Takliflar</h3>
-        <div id="offersList" class="grid"></div>
-        <div class="muted" id="offersEmpty">Hozircha taklif yo‘q. Buyurtma yuborilgach, yaqin atrofdagi ishchilar ko‘radilar va roziligi bilan taklif qoldirishadi.</div>
-      </div>
-    </section>
-
-    <!-- FIRMS LIST -->
-    <section id="firms" class="view">
-      <h2 style="margin:6px 0 12px">Firmalar</h2>
-      <div class="grid" id="firmList"></div>
-    </section>
-
-    <!-- FIRM DETAIL (modal-like card) -->
-    <section id="firmDetail" class="view">
-      <a class="muted" href="#/firms">← Orqaga</a>
-      <div id="firmCard" class="card" style="margin-top:10px"></div>
-    </section>
-
-  </main>
-
-  <!-- NAV -->
-  <nav class="nav container">
-    <a data-to="#/home" id="nav-home" class="on">🏠 Bosh sahifa</a>
-    <a data-to="#/workers" id="nav-workers">👷 Ishchilar</a>
-    <a data-to="#/firms" id="nav-firms">🏢 Firmalar</a>
-    <a data-to="#/offers" id="nav-offers">📅 Buyurtmalar</a>
-  </nav>
-</div>
+    </div>
+  </div>
 
 <script>
-/* ---------- Mini Router (hash) ---------- */
-const routes = ["#/home","#/workers","#/firms","#/firm","#/offers"];
-const el = id=>document.getElementById(id);
-const views = {home:el("home"), workers:el("workers"), firms:el("firms"), firmDetail:el("firmDetail")};
-
-function show(view){
-  Object.values(views).forEach(v=>v.classList.remove("show"));
-  view.classList.add("show");
-  // nav on state
-  document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('on'));
-  if(location.hash.startsWith("#/workers")) el("nav-workers").classList.add("on");
-  else if(location.hash.startsWith("#/firms")) el("nav-firms").classList.add("on");
-  else if(location.hash.startsWith("#/home")||location.hash==="") el("nav-home").classList.add("on");
-  else el("nav-offers").classList.add("on");
+/* ======= Router ======= */
+const views = {
+  home: document.getElementById('home'),
+  workers: document.getElementById('workers'),
+  firms: document.getElementById('firms'),
+  firmDetail: document.getElementById('firmDetail')
+};
+function show(v){
+  Object.values(views).forEach(x=>x.classList.remove('show'));
+  v.classList.add('show');
+  document.querySelectorAll('.nav .tab').forEach(t=>t.classList.remove('on'));
+  const h = location.hash || '#/home';
+  if(h.startsWith('#/workers')) document.querySelector('[data-to="#/workers"]').classList.add('on');
+  else if(h.startsWith('#/firms')) document.querySelector('[data-to="#/firms"]').classList.add('on');
+  else if(h.startsWith('#/home')||h==='#') document.querySelector('[data-to="#/home"]').classList.add('on');
+  else document.querySelector('[data-to="#/offers"]').classList.add('on');
 }
-
 function route(){
-  const h = location.hash || "#/home";
-  if(h.startsWith("#/workers")) show(views.workers);
-  else if(h.startsWith("#/firms")) show(views.firms);
-  else if(h.startsWith("#/firm/")) { renderFirmDetail(h.split("/")[2]); show(views.firmDetail); }
+  const h = location.hash || '#/home';
+  if(h.startsWith('#/workers')) show(views.workers);
+  else if(h.startsWith('#/firms')) show(views.firms);
+  else if(h.startsWith('#/firm/')) { renderFirmDetail(h.split('/')[2]); show(views.firmDetail); }
   else show(views.home);
 }
-addEventListener("hashchange", route); addEventListener("load", route);
-document.querySelectorAll(".nav a").forEach(a=>a.onclick=(e)=>{e.preventDefault();location.hash=a.dataset.to;});
+addEventListener('hashchange', route);
+addEventListener('load', route);
+document.querySelectorAll('.nav .tab').forEach(t=>t.onclick=(e)=>{e.preventDefault();location.hash=t.dataset.to});
 
-/* ---------- Mock data (firmalar) ---------- */
+/* ======= Mock data (firms) ======= */
 const firms = [
-  {id:"cleanpro", name:"CleanPro LLC", cat:"Tozalash", city:"Toshkent", price:"450 000 / xona", rating:4.9,
-   badges:["Sertifikatli","24/7"], imgs:["https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=800","https://images.unsplash.com/photo-1584624278909-1e4d4c5d3c3b?q=80&w=800"],
-   about:"Professional tozalash kompaniyasi. Remontdan keyingi, ofis va uy tozalash."},
-  {id:"masterfix", name:"MasterFix", cat:"Ta’mirlash", city:"Samarqand", price:"soatiga 120 000", rating:4.7,
-   badges:["Kafolat 14 kun"], imgs:["https://images.unsplash.com/photo-1581091870627-3b5fef3c6b3a?q=80&w=800","https://images.unsplash.com/photo-1581092912881-5a6a1b08d4a6?q=80&w=800"],
-   about:"Elektrik, santexnik, mebel yig‘ish — tez va sifatli."},
-  {id:"moveit", name:"MoveIt Team", cat:"Ko‘chirish", city:"Toshkent", price:"1 800 000 / smena", rating:4.8,
-   badges:["Gazel","Brigada"], imgs:["https://images.unsplash.com/photo-1581093588401-16b1d13fc1c3?q=80&w=800","https://images.unsplash.com/photo-1581091012184-5c4b0b8b5cfe?q=80&w=800"],
-   about:"Ko‘chirish, yuk ko‘tarish, qadoqlash xizmatlari."}
+  {id:'cleanpro', name:'CleanPro LLC', cat:'Tozalash', city:'Toshkent', price:'450 000 / xona', rating:4.9,
+    badges:['Sertifikat','24/7'], imgs:['https://picsum.photos/seed/clean1/800/500','https://picsum.photos/seed/clean2/800/500'],
+    about:'Professional tozalash: uy/ofis, remontdan keyin, gilam va boshqalar.'},
+  {id:'masterfix', name:'MasterFix', cat:'Usta', city:'Samarqand', price:'soatiga 120 000', rating:4.7,
+    badges:['Kafolat 14 kun'], imgs:['https://picsum.photos/seed/fix1/800/500','https://picsum.photos/seed/fix2/800/500'],
+    about:'Elektrik, santexnik, mebel yig‘ish — tez va sifatli.'},
+  {id:'moveit', name:'MoveIt Team', cat:'Ko‘chirish', city:'Toshkent', price:'1 800 000 / smena', rating:4.8,
+    badges:['Gazel','Brigada'], imgs:['https://picsum.photos/seed/move1/800/500','https://picsum.photos/seed/move2/800/500'],
+    about:'Ko‘chirish, yuk ko‘tarish, qadoqlash va sug‘urta.'}
 ];
-
 function renderFirms(){
-  const wrap = el("firmList"); wrap.innerHTML="";
+  const wrap = document.getElementById('firmList'); wrap.innerHTML='';
   firms.forEach(f=>{
-    const d = document.createElement('div');
-    d.className = "firm";
+    const d=document.createElement('div'); d.className='glass firm';
     d.innerHTML = `
       <div class="logo">🏢</div>
       <div>
-        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
-          <div style="font-weight:800">${f.name}</div>
+        <h3>${f.name}</h3>
+        <div class="muted">${f.cat} · ${f.city}</div>
+        <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap">
           <span class="tag">⭐ ${f.rating}</span>
-        </div>
-        <div class="tags" style="margin:6px 0">
-          <span class="tag">${f.cat}</span>
-          <span class="tag">${f.city}</span>
           <span class="tag">${f.price}</span>
+          ${f.badges.map(b=>`<span class="tag">✅ ${b}</span>`).join('')}
         </div>
-        <div style="display:flex;gap:10px;margin-top:6px">
-          <a class="btn secondary" href="#/firm/${f.id}">Batafsil</a>
-          <a class="btn brand" href="#/workers">Buyurtma</a>
-        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <a class="btn ghost" href="#/firm/${f.id}">Batafsil</a>
+        <a class="btn" href="#/workers">Buyurtma</a>
       </div>`;
     wrap.appendChild(d);
   });
@@ -282,155 +361,113 @@ function renderFirms(){
 renderFirms();
 
 function renderFirmDetail(id){
-  const f = firms.find(x=>x.id===id);
-  const c = el("firmCard");
-  if(!f){ c.innerHTML="<div class='warn'>Topilmadi</div>"; return; }
+  const f = firms.find(x=>x.id===id); const c=document.getElementById('firmCard');
+  if(!f){ c.innerHTML='<div class="muted">Topilmadi</div>'; return; }
   c.innerHTML = `
-    <div class="grid">
-      <div class="gallery">
-        ${f.imgs.map(src=>`<img loading="lazy" src="${src}" alt="">`).join("")}
-      </div>
-      <div>
-        <h2 style="margin:8px 0">${f.name}</h2>
-        <div class="tags">
-          <span class="tag">⭐ ${f.rating}</span>
-          <span class="tag">${f.cat}</span>
-          <span class="tag">${f.city}</span>
-          <span class="tag">${f.price}</span>
-          ${f.badges.map(b=>`<span class="tag">✅ ${b}</span>`).join("")}
-        </div>
-        <p style="margin:12px 0" class="muted">${f.about}</p>
-        <div style="display:flex;gap:10px">
-          <a class="btn secondary" href="#/firms">Ro‘yxatga qaytish</a>
-          <a class="btn brand" href="#/workers">Bu firma uchun buyurtma</a>
-        </div>
-      </div>
+    <div class="gallery">${f.imgs.map(s=>`<img loading="lazy" src="${s}" alt="">`).join('')}</div>
+    <h2 class="section-title" style="margin-top:10px">${f.name}</h2>
+    <div class="muted">${f.cat} · ${f.city}</div>
+    <div style="margin:10px 0;display:flex;gap:8px;flex-wrap:wrap">
+      <span class="tag">⭐ ${f.rating}</span><span class="tag">${f.price}</span>
+      ${f.badges.map(b=>`<span class="tag">✅ ${b}</span>`).join('')}
+    </div>
+    <p class="muted">${f.about}</p>
+    <div style="display:flex;gap:10px">
+      <a class="btn ghost" href="#/firms">Ro‘yxatga qaytish</a>
+      <a class="btn" href="#/workers">Bu firma uchun buyurtma</a>
     </div>`;
 }
 
-/* ---------- Order form (privacy rule & offers) ---------- */
-const LS_KEY = "prostaff_orders";
-const OFFERS_KEY = "prostaff_offers";
+/* ======= Order form, offers, UX ======= */
+const LS_KEY='prostaff_orders'; const OFFERS_KEY='prostaff_offers';
+document.querySelector('[data-inc]').onclick=()=>{const i=hours; i.value=+i.value+1}
+document.querySelector('[data-dec]').onclick=()=>{const i=hours; i.value=Math.max(1,+i.value-1)}
+document.querySelector('[data-inc2]').onclick=()=>{const i=count; i.value=+i.value+1}
+document.querySelector('[data-dec2]').onclick=()=>{const i=count; i.value=Math.max(1,+i.value-1)}
 
-const gpsBtn = el("gpsBtn"), gpsTxt = el("gpsTxt"), form = el("orderForm");
-gpsBtn?.addEventListener("click", ()=>{
-  if(!navigator.geolocation){ gpsTxt.textContent="GPS: qurilmada yo‘q"; return; }
-  gpsTxt.textContent="GPS: aniqlanmoqda…";
+const gpsBtn=document.getElementById('gpsBtn'), gpsTxt=document.getElementById('gpsTxt'), form=document.getElementById('orderForm');
+gpsBtn.addEventListener('click',()=>{
+  if(!navigator.geolocation){gpsTxt.textContent='GPS: qurilmada yo‘q';return;}
+  gpsTxt.textContent='GPS: aniqlanmoqda…';
   navigator.geolocation.getCurrentPosition(pos=>{
-    const {latitude, longitude} = pos.coords;
-    gpsTxt.textContent = `GPS: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
-    form.dataset.gps = `${latitude},${longitude}`;
-  }, _=> gpsTxt.textContent="GPS: ruxsat berilmadi");
+    const {latitude,longitude}=pos.coords;
+    form.dataset.gps=`${latitude},${longitude}`;
+    gpsTxt.textContent=`GPS: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
+  },()=>gpsTxt.textContent='GPS: ruxsat berilmadi');
 });
 
-document.getElementById("imgs").addEventListener("change", e=>{
-  const box = el("thumbs"); box.innerHTML="";
-  [...e.target.files].slice(0,6).forEach(f=>{
-    const img = document.createElement("img");
-    img.src = URL.createObjectURL(f);
-    box.appendChild(img);
+document.getElementById('imgs').addEventListener('change',e=>{
+  const box=document.getElementById('thumbs'); box.innerHTML='';
+  [...e.target.files].slice(0,8).forEach(f=>{
+    const img=document.createElement('img'); img.src=URL.createObjectURL(f); box.appendChild(img);
   });
 });
 
-// only show workers list right after an order exists (privacy rule)
-function userHasActiveOrder(){
-  const o = JSON.parse(localStorage.getItem(LS_KEY)||"[]");
-  return o.length>0;
-}
-
-el("offersBtn").addEventListener("click", ()=> {
-  if(!userHasActiveOrder()){
-    alert("Hozircha buyurtma yo‘q. Avval buyurtma yuboring — keyin tushgan takliflarni ko‘rasiz.");
-    return;
-  }
-  document.getElementById("offersCard").classList.remove("hidden");
+function userHasOrder(){ return JSON.parse(localStorage.getItem(LS_KEY)||'[]').length>0 }
+document.getElementById('offersBtn').onclick=()=>{
+  if(!userHasOrder()){ alert('Avval buyurtma yuboring, keyin takliflar ko‘rinadi.'); return; }
+  document.getElementById('offersCard').style.display='';
   renderOffers();
-});
+};
 
-form.addEventListener("submit", (e)=>{
+form.addEventListener('submit',(e)=>{
   e.preventDefault();
-  const fd = new FormData(form);
-  const order = Object.fromEntries(fd.entries());
-  order.gps = form.dataset.gps||"";
-  order.id = "o"+Date.now();
-  // save
-  const all = JSON.parse(localStorage.getItem(LS_KEY)||"[]");
-  all.unshift(order);
+  const fd=new FormData(form); const order=Object.fromEntries(fd.entries());
+  order.id='o'+Date.now(); order.gps=form.dataset.gps||'';
+  const all=JSON.parse(localStorage.getItem(LS_KEY)||'[]'); all.unshift(order);
   localStorage.setItem(LS_KEY, JSON.stringify(all));
-  // mock: generate 2-4 fake offers from nearby workers
-  const workers = ["Jasur","Umid","Dilshod","Bekzod","Aziza","Sardor"];
-  const offers = Array.from({length:Math.floor(Math.random()*3)+2}).map((_,i)=>({
-    id:"w"+(Date.now()+i),
-    name: workers[Math.floor(Math.random()*workers.length)],
-    rating: (4+Math.random()).toFixed(1),
-    price: (150+Math.floor(Math.random()*70))+" ming/soat",
-    eta: (5+Math.floor(Math.random()*8))+" daqiqa ichida keladi",
-    orderId: order.id
+  // fake offers
+  const names=['Jasur','Umid','Dilshod','Aziza','Bekzod','Sardor'];
+  const offers=Array.from({length:Math.floor(Math.random()*3)+2}).map((_,i)=>({
+    id:'w'+(Date.now()+i), name:names[Math.floor(Math.random()*names.length)],
+    rating:(4+Math.random()).toFixed(1),
+    price:(150+Math.floor(Math.random()*80))+' ming/soat',
+    eta:(5+Math.floor(Math.random()*8))+' daq'
   }));
   localStorage.setItem(OFFERS_KEY, JSON.stringify(offers));
-  // reset UI
-  form.reset(); el("thumbs").innerHTML=""; form.dataset.gps="";
-  alert("Buyurtmangiz yuborildi! Yaqin daqiqalarda takliflar tushadi.");
-  document.getElementById("offersCard").classList.remove("hidden");
+  form.reset(); document.getElementById('thumbs').innerHTML=''; form.dataset.gps='';
+  document.getElementById('offersCard').style.display='';
   renderOffers();
+  // modal
+  document.getElementById('modal').classList.add('show');
 });
+document.getElementById('closeModal').onclick=()=>document.getElementById('modal').classList.remove('show');
+document.getElementById('toOffers').onclick=()=>document.getElementById('modal').classList.remove('show');
 
 function renderOffers(){
-  const wrap = el("offersList");
-  const offers = JSON.parse(localStorage.getItem(OFFERS_KEY)||"[]");
-  wrap.innerHTML="";
-  el("offersEmpty").style.display = offers.length? "none":"block";
+  const wrap=document.getElementById('offersList');
+  const offers=JSON.parse(localStorage.getItem(OFFERS_KEY)||'[]');
+  wrap.innerHTML=''; document.getElementById('offersEmpty').style.display=offers.length?'none':'block';
   offers.forEach(of=>{
-    const d = document.createElement('div'); d.className="card";
-    d.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+    const d=document.createElement('div'); d.className='glass card';
+    d.innerHTML=`
+      <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
         <div style="display:flex;gap:10px;align-items:center">
           <div class="logo">👷</div>
           <div>
-            <div style="font-weight:800">${of.name}</div>
+            <div style="color:#f1f5f9;font-weight:800">${of.name}</div>
             <div class="muted">⭐ ${of.rating} · ${of.eta}</div>
           </div>
         </div>
         <div style="text-align:right">
-          <div class="ok">${of.price}</div>
-          <div style="margin-top:8px">
-            <button class="btn brand" data-choose="${of.id}">Tanlash</button>
-          </div>
+          <div style="color:#86efac;font-weight:900">${of.price}</div>
+          <button class="btn" data-choose="${of.id}" style="margin-top:8px">Tanlash</button>
         </div>
       </div>`;
     wrap.appendChild(d);
   });
-  // choose buttons
-  wrap.querySelectorAll("[data-choose]").forEach(b=>b.onclick=()=>{
+  wrap.querySelectorAll('[data-choose]').forEach(b=>b.onclick=()=>{
     const id=b.dataset.choose;
-    const offers=JSON.parse(localStorage.getItem(OFFERS_KEY)||"[]");
-    const pick = offers.find(x=>x.id===id);
-    if(!pick) return;
-    alert(`Tabriklaymiz! ${pick.name} tanlandi.\nBog‘lanish yuborildi.`);
-    // after choose: clear offers but keep order history
+    const offers=JSON.parse(localStorage.getItem(OFFERS_KEY)||'[]');
+    const pick=offers.find(x=>x.id===id); if(!pick) return;
+    alert(`${pick.name} tanlandi. Bog‘lanish yuborildi!`);
     localStorage.removeItem(OFFERS_KEY);
     renderOffers();
   });
 }
 
-/* ---------- Search (home) ---------- */
-document.getElementById("qGo").addEventListener("click", ()=>{
-  const q = (document.getElementById("q").value||"").toLowerCase();
-  location.hash="#/firms";
-  // quick filter
-  setTimeout(()=>{
-    const list = el("firmList").children;
-    [...list].forEach(card=>{
-      const text = card.innerText.toLowerCase();
-      card.style.display = text.includes(q) ? "" : "none";
-    });
-  },50);
-});
-
-/* ---------- PWA ---------- */
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('service-worker.js').catch(()=>{});
-}
+/* ======= PWA ======= */
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('service-worker.js').catch(()=>{}); }
 </script>
 </body>
-          </html>
+            </html>
