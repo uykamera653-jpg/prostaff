@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>PROSTAFF — Firmalar</title>
+<meta name="theme-color" content="#f59e0b" />
+<link rel="manifest" href="manifest.json" />
+<style>
+  :root{--ink:#0f172a;--muted:#475569;--bg:#fff;--panel:#f9fafb;--ok:#16a34a;--warn:#f59e0b}
+  *{box-sizing:border-box} html,body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+  body{background:#fff;color:var(--ink)}
+  header{position:sticky;top:0;background:#fff;border-bottom:1px solid #e5e7eb;z-index:10}
+  .title{padding:16px;text-align:center;font-weight:900;font-size:22px}
+  .wrap{max-width:900px;margin:0 auto;padding:16px 16px 120px}
+  .search{display:flex;gap:8px;margin:8px 0}
+  .sbox{flex:1;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:10px}
+  .filter select{padding:10px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+  .grid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
+  .item{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:12px;display:flex;gap:12px}
+  .avatar{width:64px;height:64px;border-radius:12px;border:1px solid #e5e7eb;display:grid;place-items:center;font-size:28px}
+  .meta{flex:1}.meta h4{margin:2px 0 6px}
+  .badge{font-size:12px;border:1px solid #e5e7eb;border-radius:999px;padding:3px 10px;margin-right:6px;background:#fff;color:#334155}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .btn{border:none;border-radius:12px;padding:12px 14px;font-weight:800;cursor:pointer}
+  .primary{background:#111;color:#fff}.ghost{background:#f1f5f9}
+  .gallery{display:flex;gap:8px;overflow:auto;margin:10px 0}
+  .gallery img{height:120px;border:1px solid #e5e7eb;border-radius:12px}
+  .chipgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .chipbtn{border:1px solid #e5e7eb;background:#fff;border-radius:14px;padding:12px;font-weight:800;cursor:pointer}
+  .card{background:#fefce8;border:1px solid #fde68a;border-radius:12px;padding:12px;margin:12px 0}
+  .field{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+  .label{font-size:13px;font-weight:700}
+  .help{font-size:12px;color:#475569}
+  nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:12px}
+  .nav{display:flex;justify-content:space-between}
+  .nav a{display:grid;place-items:center;width:56px;height:56px;border:1px solid #e5e7eb;border-radius:16px;text-decoration:none}
+</style>
+</head>
+<body>
+<header><div class="title">PROSTAFF — Firmalar</div></header>
+<main class="wrap">
+
+  <div class="search">
+    <input id="q" class="sbox" placeholder="Firmalardan izlash">
+    <div class="filter"><select id="city"><option value="">Shahar: barchasi</option><option>Toshkent</option><option>Samarqand</option><option>Buxoro</option><option>Andijon</option><option>Namangan</option></select></div>
+  </div>
+
+  <section id="list" class="grid"></section>
+
+  <hr style="margin:18px 0;border:0;border-top:1px solid #e5e7eb">
+  <section id="detail" style="display:none">
+    <h3 id="d_name">Firma</h3>
+    <div id="d_meta"></div>
+    <div id="d_gallery" class="gallery"></div>
+    <div id="d_desc" class="card"></div>
+    <h4>Xizmatlar</h4>
+    <div id="d_services" class="chipgrid"></div>
+
+    <h3 style="margin-top:14px">Buyurtma — firma</h3>
+    <div id="fErr" class="card" style="display:none;color:#b00000;border-color:#fecaca;background:#fff">Xato</div>
+    <div class="field"><div class="label">Xizmat turi</div><select id="fo_svc"></select></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="fo_date" type="date"><input id="fo_time" type="time"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><select id="fo_city"><option>Toshkent</option><option>Samarqand</option><option>Buxoro</option><option>Andijon</option><option>Namangan</option></select><input id="fo_addr" placeholder="Manzil (aniq joy)" style="flex:1"><button class="btn ghost" id="fo_gps">GPS</button></div>
+    <div class="help" id="fo_gpsHint">GPS: –</div>
+    <div class="card">
+      <b>Objekt rasmlari (ixtiyoriy)</b>
+      <input id="fo_imgs" type="file" accept="image/*" multiple style="margin-top:8px">
+      <div id="fo_prev" class="gallery"></div>
+    </div>
+    <textarea id="fo_note" rows="3" placeholder="Talablar, brigada soni, material bor/yo‘q ..." style="width:100%;padding:12px;border-radius:12px;border:1px solid #e5e7eb"></textarea>
+    <div class="actions"><button class="btn primary" id="fo_send">Buyurtmani yuborish</button></div>
+  </section>
+</main>
+
+<nav>
+  <div class="nav">
+    <a href="./index.html" title="Bosh sahifa">🏠</a>
+    <a href="./firms.html" title="Firmalar" style="background:#111;color:#fff">🏢</a>
+    <a href="./workers.html" title="Ishchilar">🧑‍🔧</a>
+  </div>
+</nav>
+
+<script>
+const $=s=>document.querySelector(s); const $$=s=>document.querySelectorAll(s);
+const tagSvc=v=>({yuvish:'Yuvish',remont_clean:'Remontdan keyingi tozalash',general_clean:'General tozalash',window:'Oyna yuvish',carpet:'Gilam yuvish',laundry:'Kiyim yuvish',yuk:'Yuk tashish',boshqa:'Boshqa'})[v]||v;
+function makeThumb(text,color='#f1f5f9'){const c=document.createElement('canvas');c.width=320;c.height=200;const x=c.getContext('2d');x.fillStyle=color;x.fillRect(0,0,320,200);x.fillStyle='#111';x.font='bold 16px Inter,Arial';x.fillText(text,16,30);return c.toDataURL('image/png');}
+const FIRMS=[
+  {id:'f1',name:'CleanPro LLC',cat:'tozalash',rating:4.9,city:'Toshkent',desc:'Professional tozalash kompaniyasi. Kafolat va shartnoma bilan ishlaymiz.',services:['general_clean','window','carpet','yuvish']},
+  {id:'f2',name:'Usta+ Servis',cat:'tamirlash',rating:4.6,city:'Toshkent',desc:'Ta’mirlash brigadasi: suvoq-bo‘yoq, gipsokarton, santexnika va elektrik.',services:['remont_clean','yuk','boshqa']},
+  {id:'f3',name:'TezYuk',cat:'yuk',rating:4.4,city:'Andijon',desc:'2–3 kishi bilan yuk tashish. Gazel/portyer mavjud.',services:['yuk']}
+];
+FIRMS.forEach(f=>f.images=[makeThumb(f.name+' 1'),makeThumb(f.name+' 2','#e5e7eb'),makeThumb(f.name+' 3','#f3f4f6')]);
+
+let GPS=null, uploads=[];
+function firmCard(f){return `<article class="item" data-id="${f.id}"><div class="avatar">🏢</div><div class="meta"><h4>${f.name}</h4><div><span class="badge">⭐ ${f.rating}</span><span class="badge">${f.city}</span><span class="badge">${f.cat}</span></div><div class="actions"><button class="btn ghost" onclick="openDetail('${f.id}')">Ko‘rish</button><a class="btn primary" href="./workers.html?pref=${f.services[0]||'yuvish'}" style="text-decoration:none">Ishchi kerakmi?</a></div></div></article>`}
+
+function renderList(){
+  const q=$('#q').value.toLowerCase(), city=$('#city').value;
+  const list=FIRMS.filter(f=>(!city||f.city===city)&&(!q||f.name.toLowerCase().includes(q)||f.city.toLowerCase().includes(q)));
+  $('#list').innerHTML=list.map(firmCard).join('')||'<div class="help">Hech narsa topilmadi.</div>';
+}
+$('#q').oninput=renderList; $('#city').onchange=renderList; renderList();
+
+function openDetail(id){
+  const f=FIRMS.find(x=>x.id===id); if(!f)return;
+  $('#detail').style.display='block'; $('#d_name').textContent=f.name;
+  $('#d_meta').innerHTML=`<span class="badge">⭐ ${f.rating}</span><span class="badge">${f.city}</span><span class="badge">${f.cat}</span>`;
+  const g=$('#d_gallery'); g.innerHTML=''; f.images.forEach(src=>{const im=new Image();im.src=src;g.appendChild(im)});
+  $('#d_desc').textContent=f.desc||'';
+  const s=$('#d_services'); s.innerHTML=''; f.services.forEach(v=>{const b=document.createElement('button');b.className='chipbtn';b.textContent=tagSvc(v); b.onclick=()=>{ $('#fo_svc').value=v; window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}; s.appendChild(b) });
+  const sel=$('#fo_svc'); sel.innerHTML=''; f.services.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=tagSvc(v); sel.appendChild(o) });
+  $('#fo_send').onclick=()=>sendFirmOrder(f);
+}
+
+$('#fo_imgs').addEventListener('change',e=>{
+  uploads.length=0; const box=$('#fo_prev'); box.innerHTML='';
+  const files=[...e.target.files].slice(0,8); const LIM=5*1024*1024;
+  files.forEach(f=>{ if(f.size>LIM)return; const r=new FileReader(); r.onload=ev=>{uploads.push(ev.target.result); const im=new Image(); im.src=ev.target.result; im.height=100; box.appendChild(im)}; r.readAsDataURL(f) });
+});
+
+$('#fo_gps').onclick=()=>{
+  if(!navigator.geolocation){$('#fo_gpsHint').textContent='GPS: qurilma qo‘llamaydi';return}
+  navigator.geolocation.getCurrentPosition(p=>{GPS={lat:p.coords.latitude,lng:p.coords.longitude}; $('#fo_gpsHint').innerHTML=`GPS: ${GPS.lat.toFixed(5)}, ${GPS.lng.toFixed(5)} · <a target="_blank" href="https://maps.google.com/?q=${GPS.lat},${GPS.lng}">Xaritada</a>`;},_=>$('#fo_gpsHint').textContent='GPS: ruxsat berilmadi');
+};
+
+function sendFirmOrder(f){
+  const need=[]; if(!$('#fo_svc').value)need.push('Xizmat turi'); if(!$('#fo_date').value)need.push('Sana'); if(!$('#fo_time').value)need.push('Vaqt'); if(!$('#fo_city').value)need.push('Shahar'); if(!$('#fo_addr').value.trim())need.push('Manzil');
+  if(need.length){const b=$('#fErr'); b.style.display='block'; b.textContent='Majburiy: '+need.join(', '); return}
+  $('#fErr').style.display='none';
+  const o={id:'o_'+Date.now(),type:'firm',firmId:f.id,firmName:f.name,service:$('#fo_svc').value,city:$('#fo_city').value,addr:$('#fo_addr').value,date:$('#fo_date').value,time:$('#fo_time').value,note:$('#fo_note').value,gps:GPS,images:uploads,status:'pending',accepts:[]};
+  const all=JSON.parse(localStorage.getItem('ps_orders')||'[]'); all.unshift(o); localStorage.setItem('ps_orders',JSON.stringify(all));
+  alert('✅ Buyurtma yuborildi. Tushgan takliflarni “Kunlik ishchilar” sahifasida ko‘rishingiz mumkin (ishchi turiga qarab).');
+}
+
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('service-worker.js'); }
+</script>
+</body>
+</html>
