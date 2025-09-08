@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>PROSTAFF — Ertangi ishchi</title>
+<meta name="theme-color" content="#0b1220" />
+<style>
+  :root{--bg:#0b1220;--bg2:#101a30;--b:#1f2a44;--ink:#e5e7eb;--muted:#9fb0c7;--brand:#22d3ee;--brand2:#60a5fa;--sh:0 8px 30px rgb(0 0 0/.35)}
+  *{box-sizing:border-box} body{margin:0;font-family:system-ui,Inter,Segoe UI,Roboto,Arial;background:linear-gradient(160deg,var(--bg),var(--bg2));color:var(--ink)}
+  header{position:sticky;top:0;background:linear-gradient(180deg,#0b1220,transparent);padding:14px 16px}
+  .wrap{max-width:960px;margin:12px auto 120px;padding:0 16px}
+  .panel{background:linear-gradient(180deg,rgba(15,28,51,.6),rgba(15,28,51,.35));border:1px solid var(--b);border-radius:24px;box-shadow:var(--sh);padding:18px}
+  h1{margin:0 0 10px;font-weight:900} .muted{color:var(--muted);margin:0 0 16px}
+  .grid{display:grid;gap:14px} @media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
+  label{display:block;margin:10px 0 6px;font-weight:700}
+  select,input[type="text"],input[type="number"],input[type="time"],textarea{width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--b);background:rgba(255,255,255,.06);color:var(--ink)}
+  textarea{min-height:110px;resize:vertical}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:14px;border:1px solid var(--b);background:rgba(255,255,255,.08);color:var(--ink);font-weight:800;cursor:pointer}
+  .btn.primary{background:linear-gradient(90deg,var(--brand),var(--brand2));border-color:transparent;color:#03121a}
+  .btn.gps{background:#0b2a3a;border-color:#164862}
+  .row{display:flex;gap:12px} .row>*{flex:1}
+  .preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .preview img{width:74px;height:74px;border-radius:12px;object-fit:cover;border:1px solid var(--b)}
+  nav{position:fixed;left:0;right:0;bottom:0;background:rgba(11,18,32,.9);border-top:1px solid var(--b)}
+  .tabs{max-width:960px;margin:auto;padding:8px 12px;display:flex;gap:10px;justify-content:space-around}
+  .tab{color:#94a3b8;background:rgba(255,255,255,.06);border:1px solid var(--b);padding:10px 14px;border-radius:999px;display:flex;gap:8px;align-items:center}
+  .tab.active{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#001824;border-color:transparent;font-weight:900}
+</style>
+</head>
+<body>
+<header><a class="btn" href="workers.html">⬅️ Orqaga</a></header>
+<main class="wrap">
+  <section class="panel">
+    <h1>Ertangi ishchi</h1>
+    <p class="muted">Ertangi ish uchun kerakli ma’lumotlarni to‘ldiring.</p>
+
+    <form id="formTomorrow" class="grid">
+      <div>
+        <label>Xizmat turi *</label>
+        <select id="service" required>
+          <option value="" selected disabled>Tanlang</option>
+          <option>Tozalash</option><option>Remont</option><option>Ko‘chirish</option><option>Usta</option><option>Bog‘ ishlari</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Necha kishi *</label>
+        <input type="number" id="people" min="1" value="1" required />
+      </div>
+
+      <div>
+        <label>Soat nechida? *</label>
+        <input type="time" id="time" required />
+      </div>
+
+      <div style="grid-column:1/-1">
+        <label>Ish haqida batafsil *</label>
+        <textarea id="desc" required placeholder="Masalan: 09:00 da oshxona mebelini o‘rnatish. Lift bor."></textarea>
+      </div>
+
+      <div>
+        <label>Rasm(lar) (ixtiyoriy)</label>
+        <input type="file" id="imgs" accept="image/*" multiple />
+        <div id="prev" class="preview"></div>
+      </div>
+
+      <div>
+        <label>Manzil (aniq joy) *</label>
+        <input id="addr" required placeholder="Mahalla / ko‘cha / uy / xona" />
+        <div class="row" style="margin-top:8px">
+          <button type="button" class="btn gps" onclick="fillGPS()">📍 GPS olish</button>
+          <input id="gps" type="text" placeholder="GPS: lat,lon" readonly />
+        </div>
+      </div>
+
+      <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:10px;margin-top:8px">
+        <a class="btn" href="workers.html">Bekor qilish</a>
+        <button class="btn primary" type="submit">E’lonni yuborish</button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<nav>
+  <div class="tabs">
+    <a class="tab" href="index.html">🏠 Home</a>
+    <a class="tab active" href="workers.html">👷 Ishchi</a>
+    <a class="tab" href="firms.html">🏢 Firmalar</a>
+  </div>
+</nav>
+
+<script>
+  // preview
+  const imgs=document.getElementById('imgs'), prev=document.getElementById('prev');
+  imgs.addEventListener('change',()=>{ prev.innerHTML=''; [...imgs.files].slice(0,8).forEach(f=>{let i=new Image(); i.src=URL.createObjectURL(f); i.width=74;i.height=74;i.style.borderRadius='12px';i.style.objectFit='cover';i.style.border='1px solid #1f2a44'; prev.appendChild(i);});});
+
+  // gps
+  function fillGPS(){
+    const out=document.getElementById('gps');
+    if(!navigator.geolocation){ out.value='Uskuna qo‘llamaydi'; return;}
+    navigator.geolocation.getCurrentPosition(
+      p=>{out.value=p.coords.latitude.toFixed(6)+','+p.coords.longitude.toFixed(6)},
+      _=>{out.value='Ruxsat berilmadi'}
+    );
+  }
+
+  // submit (hozircha log)
+  document.getElementById('formTomorrow').addEventListener('submit',e=>{
+    e.preventDefault();
+    const data={
+      day:'tomorrow',
+      service:service.value, people:+people.value, time:time.value, desc:desc.value,
+      addr:addr.value, gps:gps.value, images:[...imgs.files].map(f=>f.name)
+    };
+    console.log('TOMORROW ORDER', data);
+    alert('Buyurtma qabul qilindi! (Ertaga)');
+    location.href='index.html';
+  });
+
+  // keshni yangilash
+  if('serviceWorker' in navigator){
+    const v=Date.now();
+    navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))).then(()=>navigator.serviceWorker.register('service-worker.js?v='+v,{scope:'./'}));
+  }
+</script>
+</body>
+</html>
