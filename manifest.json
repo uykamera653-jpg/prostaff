@@ -5,8 +5,8 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#ffffff",
-  "theme_color": "#f59e0b",
+  "background_color": "#0b1220",
+  "theme_color": "#0b1220",
   "description": "Kunlik ishchilar va xizmat ko‘rsatish firmalariga buyurtma berish ilovasi",
   "icons": [
     { "src": "icon-190.png", "sizes": "192x192", "type": "image/png" },
