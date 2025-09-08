@@ -3,290 +3,44 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>PROSTAFF — Kunlik ishchi buyurtma</title>
-<link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#111827" />
+<title>PROSTAFF — Kun tanlang</title>
+<meta name="theme-color" content="#0b1220" />
 <style>
-  :root{
-    --bg:#0b1220; --bg2:#0f1a2f; --card:#0f1c33; --ink:#e5e7eb; --muted:#94a3b8;
-    --brand:#22d3ee; --brand2:#60a5fa; --b:#1f2a44; --r:20px; --sh:0 8px 30px rgb(0 0 0 / .35);
-    --ok:#22c55e; --err:#ef4444;
-  }
-  *{box-sizing:border-box} html,body{height:100%}
-  body{margin:0;font-family:system-ui,Inter,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(160deg,var(--bg) 0%, var(--bg2) 100%);color:var(--ink)}
-  a{color:inherit;text-decoration:none}
-
-  header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,#0b1220,transparent);backdrop-filter:saturate(140%) blur(6px)}
-  .bar{max-width:960px;margin:auto;padding:14px 16px;display:flex;align-items:center;gap:12px}
-  .logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(145deg,#0ea5e9,#9333ea);display:grid;place-items:center;box-shadow:var(--sh)}
-  .logo b{color:white;font-weight:900}
-  .brand{font-weight:900;letter-spacing:.3px}
-  .chip{margin-left:12px;background:#083344;border:1px solid #145b6b;color:#67e8f9;border-radius:999px;padding:6px 10px;font-size:12px}
-
-  .wrap{max-width:960px;margin:18px auto 120px;padding:0 16px}
-  .panel{background:linear-gradient(180deg,rgba(15,28,51,.6),rgba(15,28,51,.35));border:1px solid #1f2a44;border-radius:24px;padding:18px;box-shadow:var(--sh)}
-  h1{margin:0 0 12px;font-weight:900}
-  .muted{color:var(--muted);margin:0 0 18px}
-
-  .grid{display:grid;gap:14px}
-  @media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
-
-  label{display:block;margin:10px 0 6px;font-weight:700}
-  select,input[type="text"],input[type="number"],textarea,input[type="time"]{
-    width:100%;padding:12px 14px;border-radius:14px;border:1px solid #1f2a44;background:rgba(255,255,255,.06);color:var(--ink);outline:none
-  }
-  textarea{min-height:110px;resize:vertical}
+  :root{--bg:#0b1220;--card:#0f1c33;--ink:#e5e7eb;--b:#1f2a44;--sh:0 8px 30px rgb(0 0 0 / .35)}
+  *{box-sizing:border-box} body{margin:0;font-family:system-ui,Inter,Segoe UI,Roboto,Arial;background:linear-gradient(160deg,#0b1220,#101a30);color:var(--ink)}
+  .wrap{min-height:100dvh;display:grid;place-items:center;padding:24px}
+  .panel{width:min(92vw,540px);background:linear-gradient(180deg,rgba(15,28,51,.6),rgba(15,28,51,.35));border:1px solid var(--b);border-radius:24px;box-shadow:var(--sh);padding:22px}
+  h1{margin:0 0 10px;font-weight:900}
+  p{margin:0 0 18px;color:#9fb0c7}
   .row{display:flex;gap:12px}
-  .row>*{flex:1}
-  .counter{display:flex;align-items:center;gap:10px}
-  .btn,button{
-    display:inline-flex;align-items:center;justify-content:center;gap:8px;
-    border-radius:14px;border:1px solid #1f2a44;background:rgba(255,255,255,.08);
-    color:var(--ink);padding:12px 16px;font-weight:800;cursor:pointer;transition:.15s transform ease
-  }
-  .btn:hover{transform:translateY(-1px)}
-  .btn.primary{background:linear-gradient(90deg,var(--brand),var(--brand2));border-color:transparent;color:#04121a}
-  .btn.gps{background:#0b2a3a;border-color:#164862}
-  .hint{font-size:12px;color:var(--muted);margin-top:6px}
-
-  .preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-  .preview img{width:74px;height:74px;border-radius:12px;object-fit:cover;border:1px solid #1f2a44}
-
-  nav{position:fixed;left:0;right:0;bottom:0;background:rgba(11,18,32,.9);border-top:1px solid #1f2a44;backdrop-filter:blur(10px)}
-  .tabs{max-width:960px;margin:auto;padding:8px 12px;display:flex;gap:10px;justify-content:space-around}
-  .tab{color:#94a3b8;background:rgba(255,255,255,.06);border:1px solid #1f2a44;padding:10px 14px;border-radius:999px;display:flex;gap:8px;align-items:center}
-  .tab.active{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#001824;border-color:transparent;font-weight:900}
-
-  /* Modal */
-  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.5);display:grid;place-items:center;z-index:20}
-  .modal{width:min(92vw,520px);background:#0e1a31;border:1px solid #1f2a44;border-radius:22px;box-shadow:var(--sh);padding:18px}
-  .modal h3{margin:0 0 8px;font-size:22px}
-  .modal p{margin:0 0 16px;color:var(--muted)}
-  .modal .row{margin-top:6px}
-  .opt{flex:1;padding:16px;border-radius:16px;border:1px solid #1f2a44;background:rgba(255,255,255,.06);text-align:center;font-weight:900;cursor:pointer}
+  .opt{flex:1;padding:18px;border-radius:16px;border:1px solid var(--b);background:rgba(255,255,255,.06);text-align:center;font-weight:900;cursor:pointer}
   .opt:hover{transform:translateY(-1px)}
-  .opt.today{background:linear-gradient(90deg,#22c55e,#84cc16);color:#03140a;border-color:transparent}
-  .opt.tom{background:linear-gradient(90deg,#22d3ee,#60a5fa);color:#04121a;border-color:transparent}
+  .today{background:linear-gradient(90deg,#22c55e,#84cc16);color:#04110a;border-color:transparent}
+  .tom{background:linear-gradient(90deg,#22d3ee,#60a5fa);color:#03131c;border-color:transparent}
+  nav{position:fixed;left:0;right:0;bottom:0;background:rgba(11,18,32,.9);border-top:1px solid var(--b)}
+  .tabs{max-width:960px;margin:auto;padding:8px 12px;display:flex;gap:10px;justify-content:space-around}
+  .tab{color:#94a3b8;background:rgba(255,255,255,.06);border:1px solid var(--b);padding:10px 14px;border-radius:999px;display:flex;gap:8px;align-items:center}
+  .tab.active{background:linear-gradient(90deg,#22d3ee,#60a5fa);color:#001824;border-color:transparent;font-weight:900}
 </style>
 </head>
 <body>
-<header>
-  <div class="bar">
-    <div class="logo"><b>P</b></div>
-    <div class="brand">PROSTAFF</div>
-    <span class="chip">Kunlik ishchi — buyurtma</span>
-  </div>
-</header>
-
-<main class="wrap">
-  <section class="panel">
-    <h1>Buyurtma ma’lumotlari</h1>
-    <p class="muted">Avval kunni tanlang: bugunmi yoki ertagami. Keyin kerakli maydonlarni to‘ldiring.</p>
-
-    <!-- FORMS -->
-    <form id="form-today" class="grid" hidden>
-      <div>
-        <label>Xizmat turi *</label>
-        <select id="tService" required>
-          <option value="" selected disabled>Tanlang</option>
-          <option>Tozalash</option><option>Remont</option><option>Ko‘chirish</option><option>Usta</option><option>Bog‘ ishlar</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Necha kishi *</label>
-        <div class="row">
-          <input type="number" id="tPeople" min="1" value="1" required />
-          <div class="hint">Bugungi ish uchun zarur ishchilar soni</div>
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1">
-        <label>Ish haqida batafsil *</label>
-        <textarea id="tDesc" placeholder="Masalan: 2 xonali uy general tozalash. Mebel ko‘p emas. Lift bor. Uy hayvoni yo‘q." required></textarea>
-      </div>
-
-      <div>
-        <label>Rasm(lar) (ixtiyoriy)</label>
-        <input type="file" id="tImgs" accept="image/*" multiple />
-        <div id="tPrev" class="preview"></div>
-        <div class="hint">8 tagacha rasm yuklashingiz mumkin</div>
-      </div>
-
-      <div>
-        <label>Manzil (aniq joy) *</label>
-        <input id="tAddr" type="text" placeholder="Masalan: Chilonzor-3, 12-uy, 45-xon." required />
-        <div class="row" style="margin-top:8px">
-          <button type="button" class="btn gps" onclick="fillGPS('tGPS')">📍 GPS olish</button>
-          <input id="tGPS" type="text" placeholder="GPS: lat,lon" readonly />
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:10px;margin-top:6px">
-        <button type="button" class="btn" onclick="resetForms()">Bekor qilish</button>
-        <button class="btn primary" type="submit">E’lonni yuborish</button>
-      </div>
-    </form>
-
-    <form id="form-tomorrow" class="grid" hidden>
-      <div>
-        <label>Xizmat turi *</label>
-        <select id="mService" required>
-          <option value="" selected disabled>Tanlang</option>
-          <option>Tozalash</option><option>Remont</option><option>Ko‘chirish</option><option>Usta</option><option>Bog‘ ishlar</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Necha kishi *</label>
-        <input type="number" id="mPeople" min="1" value="1" required />
-      </div>
-
-      <div>
-        <label>Soat nechida? *</label>
-        <input type="time" id="mTime" required />
-      </div>
-
-      <div style="grid-column:1/-1">
-        <label>Ish haqida batafsil *</label>
-        <textarea id="mDesc" placeholder="Masalan: Ertaga 09:00 da oshxona mebelini o‘rnatish. Kalit bor, lift ishlaydi." required></textarea>
-      </div>
-
-      <div>
-        <label>Rasm(lar) (ixtiyoriy)</label>
-        <input type="file" id="mImgs" accept="image/*" multiple />
-        <div id="mPrev" class="preview"></div>
-      </div>
-
-      <div>
-        <label>Manzil (aniq joy) *</label>
-        <input id="mAddr" type="text" placeholder="Mahalla / ko‘cha / uy / xona" required />
-        <div class="row" style="margin-top:8px">
-          <button type="button" class="btn gps" onclick="fillGPS('mGPS')">📍 GPS olish</button>
-          <input id="mGPS" type="text" placeholder="GPS: lat,lon" readonly />
-        </div>
-      </div>
-
-      <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:10px;margin-top:6px">
-        <button type="button" class="btn" onclick="resetForms()">Bekor qilish</button>
-        <button class="btn primary" type="submit">E’lonni yuborish</button>
-      </div>
-    </form>
-  </section>
-</main>
-
-<!-- Bottom nav -->
-<nav>
-  <div class="tabs">
-    <a class="tab" href="index.html"><span>🏠</span><span>Home</span></a>
-    <a class="tab active" href="workers.html"><span>👷</span><span>Ishchi</span></a>
-    <a class="tab" href="firms.html"><span>🏢</span><span>Firmalar</span></a>
-  </div>
-</nav>
-
-<!-- KUN TANLASH MODALI -->
-<div id="dayModal" class="modal-back" hidden>
-  <div class="modal">
-    <h3>Qaysi kunga ishchi kerak?</h3>
+<div class="wrap">
+  <div class="panel">
+    <h1>Qaysi kunga ishchi kerak?</h1>
     <p>Bugungi ishlar zudlik bilan ko‘rib chiqiladi, ertangi ishlar esa belgilangan vaqtda bajariladi.</p>
     <div class="row">
-      <div class="opt today" onclick="pickDay('today')">Bugungi</div>
-      <div class="opt tom" onclick="pickDay('tomorrow')">Ertangi</div>
+      <a class="opt today" href="workers-today.html">Bugungi</a>
+      <a class="opt tom"   href="workers-tomorrow.html">Ertangi</a>
     </div>
   </div>
 </div>
 
-<script>
-  // ————— Modalni ko‘rsatish
-  const dayModal = document.getElementById('dayModal');
-  const fToday  = document.getElementById('form-today');
-  const fTom    = document.getElementById('form-tomorrow');
-
-  function showModal(){ dayModal.hidden = false; }
-  function hideModal(){ dayModal.hidden = true; }
-  function pickDay(k){
-    hideModal();
-    if(k==='today'){ fToday.hidden=false; fTom.hidden=true; }
-    else{ fTom.hidden=false; fToday.hidden=true; }
-    scrollTo({top:0,behavior:'smooth'});
-  }
-
-  // ————— Rasmlar preview
-  function bindPreview(inputId, prevId){
-    const input = document.getElementById(inputId);
-    const box   = document.getElementById(prevId);
-    input.addEventListener('change', ()=>{
-      box.innerHTML='';
-      [...input.files].slice(0,8).forEach(f=>{
-        const img=document.createElement('img');
-        img.src = URL.createObjectURL(f);
-        box.appendChild(img);
-      });
-    });
-  }
-  bindPreview('tImgs','tPrev');
-  bindPreview('mImgs','mPrev');
-
-  // ————— GPS olish
-  function fillGPS(fieldId){
-    const out = document.getElementById(fieldId);
-    if(!navigator.geolocation){ out.value='Geolokatsiya yo‘q'; return; }
-    navigator.geolocation.getCurrentPosition(
-      pos => { out.value = pos.coords.latitude.toFixed(6)+','+pos.coords.longitude.toFixed(6); },
-      err => { out.value = 'Ruxsat berilmadi'; }
-    );
-  }
-
-  // ————— Form submit (mock)
-  fToday.addEventListener('submit', e=>{
-    e.preventDefault();
-    const data = {
-      day:'today',
-      service:document.getElementById('tService').value,
-      people:+document.getElementById('tPeople').value,
-      desc:document.getElementById('tDesc').value,
-      addr:document.getElementById('tAddr').value,
-      gps:document.getElementById('tGPS').value,
-      images:[...document.getElementById('tImgs').files].map(f=>f.name)
-    };
-    console.log('TODAY ORDER', data);
-    alert('Buyurtma qabul qilindi! (Bugun)\nEkranda “Tushgan takliflar” oynasi bo‘ladi.');
-    e.target.reset(); resetPreviews();
-    showModal();
-  });
-
-  fTom.addEventListener('submit', e=>{
-    e.preventDefault();
-    const data = {
-      day:'tomorrow',
-      service:document.getElementById('mService').value,
-      people:+document.getElementById('mPeople').value,
-      time:document.getElementById('mTime').value,
-      desc:document.getElementById('mDesc').value,
-      addr:document.getElementById('mAddr').value,
-      gps:document.getElementById('mGPS').value,
-      images:[...document.getElementById('mImgs').files].map(f=>f.name)
-    };
-    console.log('TOMORROW ORDER', data);
-    alert('Buyurtma qabul qilindi! (Ertaga)');
-    e.target.reset(); resetPreviews();
-    showModal();
-  });
-
-  function resetPreviews(){ document.getElementById('tPrev').innerHTML=''; document.getElementById('mPrev').innerHTML=''; }
-  function resetForms(){ fToday.reset(); fTom.reset(); resetPreviews(); showModal(); }
-
-  // ————— PWA SW versiya majburlab yangilash
-  if ('serviceWorker' in navigator) {
-    const v = Date.now();
-    navigator.serviceWorker.getRegistrations()
-      .then(rs => Promise.all(rs.map(r => r.unregister())))
-      .then(() => navigator.serviceWorker.register('service-worker.js?v='+v,{scope:'./'}))
-      .catch(()=>{});
-  }
-
-  // Sahifa ochilganda kun tanlash
-  showModal();
-</script>
+<nav>
+  <div class="tabs">
+    <a class="tab" href="index.html">🏠 Home</a>
+    <a class="tab active" href="workers.html">👷 Ishchi</a>
+    <a class="tab" href="firms.html">🏢 Firmalar</a>
+  </div>
+</nav>
 </body>
-  </html>
+</html>
