@@ -3,8 +3,9 @@
   "short_name": "Prostaff",
   "start_url": "./index.html",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "theme_color": "#f59e0b",
   "description": "Kunlik ishchilar va xizmat ko‘rsatish firmalariga buyurtma berish ilovasi",
   "icons": [
     {
