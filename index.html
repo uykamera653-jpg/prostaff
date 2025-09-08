@@ -1,133 +1,81 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uz">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>PROSTAFF — Tezkor xizmat</title>
-<link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#111827" />
-<style>
-  :root{
-    --bg:#0b1220; --bg2:#0f1a2f; --card:#0f1c33; --ink:#e5e7eb; --muted:#94a3b8;
-    --brand:#22d3ee; --brand2:#60a5fa; --b:#1f2a44; --r:18px; --sh:0 8px 30px rgb(0 0 0 / .35);
-    --ad:#0c1730; --adBorder:#23324f;
-  }
-  *{box-sizing:border-box} html,body{height:100%}
-  body{margin:0;font-family:system-ui,Inter,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(160deg,var(--bg) 0%, var(--bg2) 100%);color:var(--ink)}
-  a{color:inherit;text-decoration:none}
-
-  /* top bar */
-  header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,#0b1220,transparent);backdrop-filter:saturate(140%) blur(6px)}
-  .bar{max-width:960px;margin:auto;padding:14px 16px;display:flex;align-items:center;gap:12px}
-  .logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(145deg,#0ea5e9,#9333ea);display:grid;place-items:center;box-shadow:var(--sh)}
-  .logo b{color:white;font-weight:900}
-  .brand{font-weight:900;letter-spacing:.3px}
-  .chip{margin-left:12px;background:#083344;border:1px solid #145b6b;color:#67e8f9;border-radius:999px;padding:6px 10px;font-size:12px}
-  .slogan{margin-left:auto;color:var(--muted);font-size:13px;display:none}
-  @media(min-width:640px){.slogan{display:block}}
-
-  /* content */
-  .wrap{max-width:960px;margin:18px auto 120px;padding:0 16px}
-  .panel{
-    background:linear-gradient(180deg,rgba(15,28,51,.6),rgba(15,28,51,.35));
-    border:1px solid #1f2a44;border-radius:24px;padding:18px;box-shadow:var(--sh);
-  }
-  .title{font-size:30px;font-weight:900;margin:0 0 10px}
-  .lead{margin:0 0 18px;color:var(--muted)}
-
-  /* two big buttons */
-  .grid2{display:grid;gap:14px}
-  @media(min-width:620px){.grid2{grid-template-columns:1fr 1fr}}
-  .big{
-    display:flex;align-items:center;justify-content:center;gap:10px;
-    padding:18px;border-radius:18px;font-weight:900;font-size:18px;
-    border:1px solid #1f2a44;background:rgba(255,255,255,.06);box-shadow:var(--sh);
-    transition:.15s transform ease;
-  }
-  .big:hover{transform:translateY(-1px)}
-  .big.brand{background:linear-gradient(90deg,var(--brand),var(--brand2));border-color:transparent;color:#04121a}
-  .big.flat{background:rgba(255,255,255,.08)}
-  .big span.i{font-size:22px}
-
-  /* AD banner */
-  .ad{
-    margin-top:18px;background:var(--ad);border:1px solid var(--adBorder);border-radius:24px;
-    padding:0;overflow:hidden;box-shadow:var(--sh)
-  }
-  .ad-head{
-    background:linear-gradient(180deg,rgba(255,255,255,.05),transparent);
-    padding:14px 18px;border-bottom:1px solid var(--adBorder);font-weight:800;letter-spacing:.2px
-  }
-  .ad-body{position:relative;height:140px;background:radial-gradient(1200px 400px at -10% 110%, #1c2a4e 0%, #0d152c 50%, #0b1220 100%)}
-  /* moving rainbow text */
-  .ticker{
-    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
-    white-space:nowrap;font-size:22px;font-weight:900;letter-spacing:.3px;
-    -webkit-text-stroke:0.5px #000;
-    background:linear-gradient(90deg,#22d3ee,#34d399,#f59e0b,#f43f5e,#8b5cf6,#22d3ee);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-    animation:slide 18s linear infinite;
-    padding:0 10px;
-  }
-  @keyframes slide{
-    from{transform:translate(-100%, -50%)}
-    to{transform:translate(100%, -50%)}
-  }
-
-  /* bottom nav */
-  nav{position:fixed;left:0;right:0;bottom:0;background:rgba(11,18,32,.9);border-top:1px solid #1f2a44;backdrop-filter:blur(10px)}
-  .tabs{max-width:960px;margin:auto;padding:8px 12px;display:flex;gap:10px;justify-content:space-around}
-  .tab{color:#94a3b8;background:rgba(255,255,255,.06);border:1px solid #1f2a44;padding:10px 14px;border-radius:999px;display:flex;gap:8px;align-items:center}
-  .tab.active{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#001824;border-color:transparent;font-weight:900}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PROSTAFF — Asosiy</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+  <meta name="theme-color" content="#0ea5e9" />
 </head>
-<body>
-<header>
-  <div class="bar">
-    <div class="logo"><b>P</b></div>
-    <div class="brand">PROSTAFF</div>
-    <span class="chip">Kunlik ishchilar</span>
-    <div class="slogan">Tezkor xizmat — yaqin ijrochilar</div>
-  </div>
-</header>
-
-<main class="wrap">
-  <section class="panel">
-    <h1 class="title">Tezkor xizmat kerakmi?</h1>
-    <p class="lead">Faqat kerakli bo‘limni tanlang — qolganini biz soddalashtirdik.</p>
-
-    <div class="grid2">
-      <a class="big brand" href="workers.html"><span class="i">🔔</span> Kunlik ishchilar</a>
-      <a class="big flat" href="firms.html"><span class="i">🏢</span> Xizmat ko‘rsatish firmalari</a>
+<body class="app">
+  <header class="appbar">
+    <div class="brand">
+      <span class="logo">P</span>
+      <span class="title">PROSTAFF</span>
     </div>
+    <nav class="top-actions">
+      <a class="chip active">UZ</a>
+      <a class="chip ghost" href="firmalar.html">Firmalar</a>
+      <a class="chip danger" href="#">Chiqish</a>
+    </nav>
+  </header>
 
-    <!-- Reklama banneri -->
-    <div class="ad">
-      <div class="ad-head">Reklama</div>
-      <div class="ad-body">
-        <div class="ticker">★ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ★ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ★</div>
+  <main class="container">
+    <section class="hero card">
+      <h1>Tezkor xizmat kerakmi?</h1>
+      <p class="muted">
+        Tozalash, ta’mirlash, ko‘chirish va boshqalar — yaqin atrofdagi ijrochilar orqali.
+      </p>
+
+      <div class="row gap">
+        <a class="btn primary" href="bugun.html">Ishchi chaqirish</a>
+        <a class="btn outline" href="firmalar.html">Firmalarni ko‘rish</a>
       </div>
-    </div>
-  </section>
-</main>
 
-<nav>
-  <div class="tabs">
-    <a class="tab active" href="index.html"><span>🏠</span><span>Home</span></a>
-    <a class="tab" href="workers.html"><span>👷</span><span>Ishchi</span></a>
-    <a class="tab" href="firms.html"><span>🏢</span><span>Firmalar</span></a>
-  </div>
-</nav>
+      <div class="pill-group">
+        <span class="pill">🧹 Tozalash</span>
+        <span class="pill">🛠️ Usta</span>
+        <span class="pill">🚚 Ko‘chirish</span>
+        <span class="pill">🌿 Bog‘</span>
+      </div>
+    </section>
 
-<script>
-  // Service worker — har safar yangilansin
-  if ('serviceWorker' in navigator) {
-    const v = Date.now();
-    navigator.serviceWorker.getRegistrations()
-      .then(rs => Promise.all(rs.map(r => r.unregister())))
-      .then(() => navigator.serviceWorker.register('service-worker.js?v='+v,{scope:'./'}))
-      .catch(()=>{});
-  }
-</script>
+    <!-- R E K L A M A  B A N N E R -->
+    <section class="card banner">
+      <div class="banner-frame">
+        <div class="ticker">
+          <span>⭐ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ⭐ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ⭐</span>
+          <span aria-hidden="true">⭐ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ⭐ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ⭐</span>
+        </div>
+      </div>
+      <p class="banner-note">Reklama joylash uchun: reklama@prostaff.uz</p>
+    </section>
+
+    <section class="grid-2">
+      <a class="tile" href="bugun.html">
+        <div class="tile-emoji">⚡</div>
+        <div class="tile-body">
+          <h3>Bugun</h3>
+          <p class="muted">Zudlik bilan ishchi kerakmi? Darhol buyurtma qoldiring.</p>
+        </div>
+      </a>
+      <a class="tile" href="ertaga.html">
+        <div class="tile-emoji">📅</div>
+        <div class="tile-body">
+          <h3>Ertaga</h3>
+          <p class="muted">Oldindan rejalashtiring: sana va vaqtni belgilang.</p>
+        </div>
+      </a>
+    </section>
+  </main>
+
+  <footer class="navbar">
+    <a class="nav-item active" href="index.html">🏠 <span>Home</span></a>
+    <a class="nav-item" href="bugun.html">👷 <span>Ishchi</span></a>
+    <a class="nav-item" href="firmalar.html">🏢 <span>Firmalar</span></a>
+  </footer>
+
+  <script src="app.js"></script>
 </body>
 </html>
