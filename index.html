@@ -1,69 +1,471 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uz">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PROSTAFF — Kunlik ishchilar</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="style.css" />
-  <meta name="theme-color" content="#0b1224" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>PROSTAFF — Ishchi va firmalar</title>
+
+  <!-- BARCHA USLUBLAR SHU YERDA -->
+  <style>
+    :root{
+      --bg:#0b1320;--bg2:#101a2e;--card:#121f36;--muted:#9fb4d1;--text:#ecf3ff;
+      --brand:#2dd4ff;--brand2:#22c55e;--warn:#f59e0b;--danger:#ef4444;
+      --glass:rgba(255,255,255,.06);--glass2:rgba(255,255,255,.08);
+      --radius:18px;--rsm:12px;--shadow:0 12px 40px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box} html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+    a{color:inherit;text-decoration:none}
+    .wrap{min-height:100dvh;display:flex;flex-direction:column}
+
+    /* Topbar */
+    .top{
+      position:sticky;top:0;z-index:5;background:
+        radial-gradient(1200px 200px at 10% -100px,#1a2b48,transparent),
+        linear-gradient(180deg,#0e1630 0%, #0b1320 100%);
+      padding:12px 14px 10px;border-bottom:1px solid #0f1b32;
+      box-shadow:0 4px 30px rgba(0,0,0,.25);
+    }
+    .row{display:flex;align-items:center;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
+    .badge{width:38px;height:38px;border-radius:12px;background:linear-gradient(140deg,#22d3ee,#60a5fa);display:grid;place-items:center;font-weight:900;color:#00243a}
+    .navlink{padding:10px 14px;border-radius:999px;background:var(--glass2);backdrop-filter:blur(8px)}
+    .spacer{flex:1}
+    .lang{display:flex;gap:6px;overflow:auto}
+    .pill{padding:8px 12px;border-radius:999px;background:var(--glass2);font-weight:600;white-space:nowrap}
+    .pill.active{background:linear-gradient(90deg,#22d3ee,#3b82f6);color:#051320}
+
+    /* Banner */
+    .hero{padding:18px}
+    .card{background:var(--card);border:1px solid #162440;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .pad{padding:18px}
+    .title{font-size:28px;font-weight:800;margin:0 0 6px}
+    .muted{color:var(--muted)}
+    .cta-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}
+    .cta{display:flex;gap:12px;align-items:center;padding:16px;border-radius:16px;background:var(--glass2);border:1px solid #183052}
+    .cta .icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#0f233e}
+    .cta.primary{background:linear-gradient(180deg,#0e335b,#0d2543)}
+    .cta:hover{outline:2px solid #1f3960}
+
+    /* rainbow ticker */
+    .ad{margin-top:16px;border:1px dashed #2a3e63;border-radius:16px;overflow:hidden}
+    .ad-inner{display:flex;gap:24px;align-items:center;padding:12px 16px;font-weight:800}
+    .chip{padding:6px 10px;border-radius:999px;background:#0f2544}
+    .rainbow{background:linear-gradient(90deg,#22d3ee,#22c55e,#f59e0b,#ef4444,#a855f7,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:900}
+    .marq{white-space:nowrap; animation:ticker 16s linear infinite}
+    @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* Sections */
+    main{flex:1;display:block}
+    section{display:none;padding:18px}
+    section.active{display:block;animation:fade .2s ease}
+    @keyframes fade{from{opacity:.0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+    /* form */
+    .grid{display:grid;gap:12px}
+    .two{grid-template-columns:1fr 1fr}
+    @media (max-width:640px){.two{grid-template-columns:1fr}}
+    label{font-size:13px;color:var(--muted)}
+    .inp{margin-top:6px;padding:12px 14px;border-radius:14px;border:1px solid #1b3357;background:#0e1a31;color:#e9f2ff;outline:none}
+    select.inp{appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="%23a6c1e7"><path d="M7 10l5 5 5-5z"/></svg>');background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+    .rowbtn{display:flex;gap:10px;align-items:center}
+    .btn{padding:12px 16px;border-radius:12px;border:0;background:#15365f;color:#dff3ff;font-weight:700}
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{background:linear-gradient(90deg,#22d3ee,#3b82f6);color:#082032}
+    .btn.green{background:linear-gradient(90deg,#34d399,#10b981);color:#07221a}
+    .counter{display:flex;align-items:center;gap:8px}
+    .counter button{width:40px;height:40px;border-radius:12px;border:1px solid #1b3357;background:#0e1a31;color:#e9f2ff}
+
+    /* firms list */
+    .firm{display:flex;gap:12px;padding:14px;border-radius:14px;background:#0f1d35;border:1px solid #183052}
+    .firm .logo{width:48px;height:48px;border-radius:12px;background:#132748;display:grid;place-items:center}
+    .stars{color:#fbbf24}
+
+    /* bottom nav */
+    .tabbar{position:sticky;bottom:0;background:linear-gradient(0deg,#f59e0b,#f59e0b);padding:8px 12px}
+    .tabs{display:flex;gap:12px}
+    .tab{flex:1;border-radius:18px;padding:10px;display:grid;place-items:center;background:rgba(255,255,255,.1);color:#082032;font-weight:800}
+    .tab.active{background:linear-gradient(135deg,#a5f3fc,#60a5fa)}
+
+    /* helpers */
+    .mb8{margin-bottom:8px}
+    .mb16{margin-bottom:16px}
+  </style>
 </head>
-<body class="page page--home">
-  <header class="topbar">
-    <div class="brand">
-      <span class="badge">P</span>
-      <span class="brand__name">PROSTAFF</span>
-    </div>
-    <nav class="topbar__right">
+<body>
+<div class="wrap">
+
+  <!-- TOPBAR -->
+  <header class="top">
+    <div class="row">
+      <div class="brand">
+        <div class="badge">P</div>
+        <div>PROSTAFF</div>
+      </div>
+      <div class="spacer"></div>
+      <a href="#/firms" class="navlink" data-i="firmsTab">Firmalar</a>
+      <a href="#/logout" class="navlink" data-i="logout">Chiqish</a>
       <div class="lang">
         <button class="pill" data-lang="uz">UZ</button>
         <button class="pill" data-lang="ru">RU</button>
         <button class="pill" data-lang="en">EN</button>
       </div>
-      <a class="pill" href="firms.html" data-i18n="nav.firms">Firmalar</a>
-      <a class="pill pill--ghost" href="#" data-i18n="nav.logout">Chiqish</a>
-    </nav>
+    </div>
   </header>
 
-  <section class="hero">
-    <div class="hero__text">
-      <h1 data-i18n="home.title">Tezkor xizmat kerakmi?</h1>
-      <p data-i18n="home.subtitle">Tozalash, ta’mirlash, ko‘chirish va boshqalar — yaqin atrofdagi ijrochilar orqali.</p>
-    </div>
+  <!-- HERO / HOME -->
+  <div class="hero">
+    <div class="card pad">
+      <h1 class="title" data-i="heroTitle">Tezkor xizmat kerakmi?</h1>
+      <div class="muted" data-i="heroSub">Tozalash, ta’mirlash, ko‘chirish va boshqalar — yaqin atrofdagi ijrochilar orqali.</div>
 
-    <div class="hero__actions">
-      <a class="card action action--primary" href="bugun.html">
-        <div class="action__icon">⚡</div>
-        <div class="action__txt">
-          <h3 data-i18n="home.cards.today.title">Ishchi chaqirish</h3>
-          <p data-i18n="home.cards.today.desc">Zudlik bilan ishchi kerakmi? Darhol buyurtma qoldiring.</p>
+      <div class="cta-grid">
+        <a class="cta primary" href="#/ishchi">
+          <div class="icon">⚡️</div>
+          <div>
+            <div style="font-weight:800" data-i="ctaWorker">Ishchi chaqirish</div>
+            <div class="muted" data-i="ctaWorkerSub">Zudlik bilan ishchi kerakmi? Darhol buyurtma qoldiring.</div>
+          </div>
+        </a>
+        <a class="cta" href="#/firms">
+          <div class="icon">🏢</div>
+          <div>
+            <div style="font-weight:800" data-i="ctaFirm">Firmalarni ko‘rish</div>
+            <div class="muted" data-i="ctaFirmSub">Xizmat ko‘rsatuvchi tashkilotlar ro‘yxati va reytinglari.</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- REKLAMA BANNERI -->
+      <div class="ad card">
+        <div class="ad-inner">
+          <span class="chip">⭐</span>
+          <div class="marq">
+            <span class="rainbow" data-i="adText">BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="rainbow" data-i="adText">BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN</span>
+          </div>
         </div>
-      </a>
+      </div>
+    </div>
+  </div>
 
-      <a class="card action" href="firms.html">
-        <div class="action__icon">🏢</div>
-        <div class="action__txt">
-          <h3 data-i18n="home.cards.firms.title">Firmalarni ko‘rish</h3>
-          <p data-i18n="home.cards.firms.desc">Xizmat ko‘rsatuvchi tashkilotlar ro‘yxati va reytinglari.</p>
+  <!-- SAHIFALAR -->
+  <main>
+
+    <!-- Ishchi: bugun/ertaga switch -->
+    <section id="ishchi" class="active">
+      <div class="card pad">
+        <div class="rowbtn mb16">
+          <button class="btn primary" id="btnBugun" data-i="today">Bugun</button>
+          <button class="btn green" id="btnErtaga" data-i="tomorrow">Ertaga</button>
         </div>
-      </a>
-    </div>
-  </section>
 
-  <section class="ad card">
-    <div class="ad__inner">
-      <span class="rainbow-text" data-i18n="ad.msg">★ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ★</span>
-      <span class="rainbow-text" aria-hidden="true">★ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ★</span>
-    </div>
-    <small data-i18n="ad.mail">Reklama joylash uchun: reklama@prostaff.uz</small>
-  </section>
+        <!-- BUGUN FORMA -->
+        <form id="formBugun" class="grid">
+          <h2 class="title" style="font-size:22px" data-i="todayTitle">Bugun — ishchi chaqirish</h2>
 
+          <div class="grid two">
+            <div>
+              <label data-i="serviceType">Xizmat turi</label>
+              <select class="inp" name="type">
+                <option value="clean" data-i="optClean">Tozalash</option>
+                <option value="repair" data-i="optMaster">Usta</option>
+                <option value="move" data-i="optMove">Ko‘chirish</option>
+                <option value="garden" data-i="optGarden">Bog‘</option>
+              </select>
+            </div>
+            <div>
+              <label data-i="howMany">Necha kishi</label>
+              <div class="counter">
+                <button type="button" onclick="dec('countToday')">−</button>
+                <input class="inp" style="width:90px;text-align:center" id="countToday" name="count" value="2">
+                <button type="button" onclick="inc('countToday')">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid two">
+            <div>
+              <label data-i="city">Shahar</label>
+              <select class="inp" name="city">
+                <option>Toshkent</option><option>Samarqand</option><option>Buxoro</option>
+              </select>
+            </div>
+            <div>
+              <label data-i="date">Sana</label>
+              <input class="inp" type="date" name="date">
+            </div>
+          </div>
+
+          <div class="grid two">
+            <div>
+              <label data-i="address">Manzil (aniq joy)</label>
+              <input class="inp" name="addr" placeholder="Chilonzor-3, 12-uy, 45-xon.">
+            </div>
+            <div>
+              <label>GPS</label>
+              <div class="rowbtn">
+                <input class="inp" id="gpsToday" placeholder="—" disabled>
+                <button class="btn" type="button" onclick="getGPS('gpsToday')" data-i="getGps">GPS ni olish</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid two">
+            <div>
+              <label data-i="time">Vaqt</label>
+              <select class="inp" name="time">
+                <option>08:00</option><option>09:00</option><option>10:00</option><option>11:00</option>
+                <option selected>14:00</option><option>16:00</option><option>18:00</option>
+              </select>
+            </div>
+            <div>
+              <label data-i="notes">Ish haqida ma’lumot</label>
+              <textarea class="inp" rows="3" placeholder="Qisqa, aniq va kerakli tafsilotlar..."></textarea>
+            </div>
+          </div>
+
+          <div>
+            <label data-i="photos">Rasm(lar) (ixtiyoriy)</label>
+            <input class="inp" type="file" multiple accept="image/*">
+            <div class="muted" style="margin-top:6px" data-i="limit">8 ta, har biri ≤5MB</div>
+          </div>
+
+          <div class="rowbtn">
+            <button class="btn primary" type="submit" data-i="send">E’lonni yuborish</button>
+            <a class="btn" href="#/ertaga" data-i="goTomorrow">Ertaga uchun buyurtma →</a>
+          </div>
+        </form>
+
+        <!-- ERTAGA FORMA -->
+        <form id="formErtaga" class="grid" style="display:none">
+          <h2 class="title" style="font-size:22px" data-i="tomTitle">Ertaga — ishchi chaqirish</h2>
+
+          <div class="grid two">
+            <div>
+              <label data-i="serviceType">Xizmat turi</label>
+              <select class="inp" name="type2">
+                <option value="clean" data-i="optClean">Tozalash</option>
+                <option value="repair" data-i="optMaster">Usta</option>
+                <option value="move" data-i="optMove">Ko‘chirish</option>
+                <option value="garden" data-i="optGarden">Bog‘</option>
+              </select>
+            </div>
+            <div>
+              <label data-i="howMany">Necha kishi</label>
+              <div class="counter">
+                <button type="button" onclick="dec('countTomorrow')">−</button>
+                <input class="inp" style="width:90px;text-align:center" id="countTomorrow" name="count2" value="2">
+                <button type="button" onclick="inc('countTomorrow')">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid two">
+            <div>
+              <label data-i="city">Shahar</label>
+              <select class="inp" name="city2">
+                <option>Toshkent</option><option>Samarqand</option><option>Buxoro</option>
+              </select>
+            </div>
+            <div>
+              <label data-i="time">Soat</label>
+              <select class="inp" name="time2">
+                <option>08:00</option><option>09:00</option><option selected>10:00</option>
+                <option>14:00</option><option>16:00</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid two">
+            <div>
+              <label data-i="notes">Ish haqida ma’lumot</label>
+              <textarea class="inp" rows="3" placeholder="Qisqa tavsif..."></textarea>
+            </div>
+            <div>
+              <label>GPS</label>
+              <div class="rowbtn">
+                <input class="inp" id="gpsTomorrow" placeholder="—" disabled>
+                <button class="btn" type="button" onclick="getGPS('gpsTomorrow')" data-i="getGps">GPS ni olish</button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label data-i="photos">Rasm(lar)</label>
+            <input class="inp" type="file" multiple accept="image/*">
+          </div>
+
+          <div class="rowbtn">
+            <button class="btn green" type="submit" data-i="send">E’lonni yuborish</button>
+            <a class="btn" href="#/" data-i="goHome">← Bosh sahifa</a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Firmalar -->
+    <section id="firms">
+      <div class="card pad">
+        <h2 class="title" style="font-size:22px" data-i="firmsTitle">Firmalar va tashkilotlar</h2>
+        <div class="grid">
+          <div class="firm">
+            <div class="logo">🧼</div>
+            <div>
+              <div style="font-weight:800">CleanPro LLC</div>
+              <div class="stars">★★★★★</div>
+              <div class="muted">Tozalash, ofis / uy | +998 90 000 00 00</div>
+            </div>
+          </div>
+          <div class="firm">
+            <div class="logo">🛠️</div>
+            <div>
+              <div style="font-weight:800">UstaExpert</div>
+              <div class="stars">★★★★☆</div>
+              <div class="muted">Ta’mirlash, elektr, santexnika</div>
+            </div>
+          </div>
+          <div class="firm">
+            <div class="logo">🚚</div>
+            <div>
+              <div style="font-weight:800">Ko‘chirTeam</div>
+              <div class="stars">★★★★☆</div>
+              <div class="muted">Ko‘chirish va logistika</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM TABS -->
   <footer class="tabbar">
-    <a class="tab tab--active" href="index.html">🏠<span data-i18n="tabs.home">Home</span></a>
-    <a class="tab" href="bugun.html">👷<span data-i18n="tabs.worker">Ishchi</span></a>
-    <a class="tab" href="firms.html">🏬<span data-i18n="tabs.firms">Firmalar</span></a>
+    <div class="tabs">
+      <a class="tab active" id="tabHome" href="#/">🏠 Home</a>
+      <a class="tab" id="tabIshchi" href="#/ishchi">👷 Ishchi</a>
+      <a class="tab" id="tabFirms" href="#/firms">🏢 Firmalar</a>
+    </div>
   </footer>
+</div>
 
-  <script src="app.js"></script>
+<!-- BARCHA JS SHU YERDA -->
+<script>
+  // ===== Mini Router (hash) =====
+  const routes = {
+    '/': () => {show('ishchi'); setToday(true); activateTab('home');},
+    '/ishchi': () => {show('ishchi'); activateTab('ishchi');},
+    '/firms': () => {show('firms'); activateTab('firms');},
+    '/logout': () => alert('Chiqish (demo)'),
+    '/ertaga': () => {show('ishchi'); setToday(false); activateTab('ishchi');},
+  };
+  function show(id){
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+  function activateTab(which){
+    document.getElementById('tabHome').classList.toggle('active', which==='home');
+    document.getElementById('tabIshchi').classList.toggle('active', which==='ishchi');
+    document.getElementById('tabFirms').classList.toggle('active', which==='firms');
+  }
+  function router(){
+    const h = location.hash.replace('#','') || '/';
+    (routes[h] || routes['/'])();
+  }
+  window.addEventListener('hashchange', router);
+  router();
+
+  // ===== Bugun/Ertaga toggle =====
+  const btnBugun = document.getElementById('btnBugun');
+  const btnErtaga = document.getElementById('btnErtaga');
+  const formBugun = document.getElementById('formBugun');
+  const formErtaga = document.getElementById('formErtaga');
+
+  btnBugun.onclick = ()=> setToday(true);
+  btnErtaga.onclick = ()=> setToday(false);
+
+  function setToday(isToday){
+    formBugun.style.display = isToday?'grid':'none';
+    formErtaga.style.display = isToday?'none':'grid';
+    btnBugun.classList.toggle('primary', isToday);
+    btnErtaga.classList.toggle('green', !isToday);
+  }
+
+  // counters
+  window.inc = id => { const el = document.getElementById(id); el.value = (+el.value||0)+1; }
+  window.dec = id => { const el = document.getElementById(id); el.value = Math.max(1,(+el.value||0)-1); }
+
+  // GPS helper
+  window.getGPS = async function(outId){
+    const out = document.getElementById(outId);
+    try{
+      out.value = '...';
+      const pos = await new Promise((res,rej)=>navigator.geolocation.getCurrentPosition(res,rej,{enableHighAccuracy:true,timeout:8000}));
+      out.value = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
+    }catch(e){ out.value = 'Ruxsat berilmadi'; }
+  }
+
+  // ===== I18N (UZ/RU/EN) =====
+  const dict = {
+    uz:{
+      heroTitle:'Tezkor xizmat kerakmi?',
+      heroSub:'Tozalash, ta’mirlash, ko‘chirish va boshqalar — yaqin atrofdagi ijrochilar orqali.',
+      ctaWorker:'Ishchi chaqirish', ctaWorkerSub:'Zudlik bilan ishchi kerakmi? Darhol buyurtma qoldiring.',
+      ctaFirm:'Firmalarni ko‘rish', ctaFirmSub:'Xizmat ko‘rsatuvchi tashkilotlar ro‘yxati va reytinglari.',
+      adText:'BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN',
+      firmsTab:'Firmalar', logout:'Chiqish',
+      today:'Bugun', tomorrow:'Ertaga', todayTitle:'Bugun — ishchi chaqirish', tomTitle:'Ertaga — ishchi chaqirish',
+      serviceType:'Xizmat turi', howMany:'Necha kishi', city:'Shahar', date:'Sana', address:'Manzil (aniq joy)', time:'Vaqt',
+      notes:'Ish haqida ma’lumot', photos:'Rasm(lar) (ixtiyoriy)', limit:'8 ta, har biri ≤5MB', getGps:'GPS ni olish',
+      send:'E’lonni yuborish', goTomorrow:'Ertaga uchun buyurtma →', goHome:'← Bosh sahifa',
+      optClean:'Tozalash', optMaster:'Usta', optMove:'Ko‘chirish', optGarden:'Bog‘',
+      firmsTitle:'Firmalar va tashkilotlar',
+    },
+    ru:{
+      heroTitle:'Нужна быстрая услуга?',
+      heroSub:'Уборка, ремонт, переезд и другое — исполнители рядом с вами.',
+      ctaWorker:'Вызвать рабочего', ctaWorkerSub:'Нужно срочно? Оставьте заявку.',
+      ctaFirm:'Посмотреть фирмы', ctaFirmSub:'Список и рейтинги исполнителей.',
+      adText:'ЗДЕСЬ МОЖЕТ БЫТЬ ВАША РЕКЛАМА',
+      firmsTab:'Фирмы', logout:'Выход',
+      today:'Сегодня', tomorrow:'Завтра', todayTitle:'Сегодня — заявка', tomTitle:'Завтра — заявка',
+      serviceType:'Тип услуги', howMany:'Сколько людей', city:'Город', date:'Дата', address:'Адрес (точный)', time:'Время',
+      notes:'Описание работы', photos:'Фото (по желанию)', limit:'До 8 файлов, ≤5МБ', getGps:'Взять GPS',
+      send:'Отправить', goTomorrow:'Заказ на завтра →', goHome:'← На главную',
+      optClean:'Уборка', optMaster:'Мастер', optMove:'Переезд', optGarden:'Сад',
+      firmsTitle:'Фирмы и организации',
+    },
+    en:{
+      heroTitle:'Need a quick service?',
+      heroSub:'Cleaning, repair, moving and more — via nearby providers.',
+      ctaWorker:'Hire a worker', ctaWorkerSub:'Need someone now? Create a request.',
+      ctaFirm:'Browse companies', ctaFirmSub:'Directory and ratings.',
+      adText:'YOUR AD CAN APPEAR HERE',
+      firmsTab:'Companies', logout:'Logout',
+      today:'Today', tomorrow:'Tomorrow', todayTitle:'Today — order worker', tomTitle:'Tomorrow — order worker',
+      serviceType:'Service type', howMany:'How many people', city:'City', date:'Date', address:'Address (exact)', time:'Time',
+      notes:'Job details', photos:'Photo(s) (optional)', limit:'Up to 8 files, ≤5MB each', getGps:'Get GPS',
+      send:'Submit request', goTomorrow:'Order for tomorrow →', goHome:'← Home',
+      optClean:'Cleaning', optMaster:'Master', optMove:'Moving', optGarden:'Garden',
+      firmsTitle:'Companies & organizations',
+    }
+  };
+  const langBtns = document.querySelectorAll('.pill[data-lang]');
+  let currentLang = localStorage.getItem('lang') || 'uz';
+  function applyLang(code){
+    currentLang = code; localStorage.setItem('lang',code);
+    langBtns.forEach(b=>b.classList.toggle('active', b.dataset.lang===code));
+    const t = dict[code]; document.querySelectorAll('[data-i]').forEach(el=>{
+      const k = el.getAttribute('data-i'); if(t[k]) el.textContent = t[k];
+    });
+    document.documentElement.lang = (code==='uz'?'uz':code);
+  }
+  langBtns.forEach(b=>b.addEventListener('click',()=>applyLang(b.dataset.lang)));
+  applyLang(currentLang);
+
+  // Submit demo
+  formBugun.addEventListener('submit', e=>{e.preventDefault(); alert('Buyurtma yuborildi (demo)');});
+  formErtaga.addEventListener('submit', e=>{e.preventDefault(); alert('Buyurtma yuborildi (demo)');});
+</script>
 </body>
-  </html>
+                  </html>
