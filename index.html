@@ -1,596 +1,111 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>PROSTAFF — Oq fon, To‘lov bilan (MVP+)</title>
-<meta name="theme-color" content="#ffffff" />
-<link rel="manifest" href="data:application/manifest+json,{&quot;name&quot;:&quot;PROSTAFF&quot;,&quot;short_name&quot;:&quot;PROSTAFF&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#ffffff&quot;,&quot;theme_color&quot;:&quot;#ffffff&quot;}" />
-<style>
-  :root{
-    --ink:#0f172a; --muted:#475569; --ring:#0001;
-    --bg:#ffffff; --panel:#f9fafb; --panel2:#f1f5f9;
-    --ok:#16a34a; --warn:#f59e0b; --err:#ef4444;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;height:100%;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
-  body{background:var(--bg);color:var(--ink)}
-  header{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid #e5e7eb}
-  .title{padding:18px 16px 10px;text-align:center;font-weight:900;font-size:26px}
-  .wrap{max-width:920px;margin:0 auto;padding:12px 16px 110px}
-  .pill{display:block;width:100%;border:none;border-radius:22px;padding:18px 20px;margin:10px 0;font-size:20px;font-weight:800;background:var(--panel);box-shadow:0 2px 8px #0001;cursor:pointer}
-  .card{background:var(--panel);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 2px 12px #0001}
-  .search{display:flex;gap:10px;align-items:center;margin:12px 0}
-  .sbox{flex:1;background:#fff;border-radius:16px;padding:12px 14px;display:flex;gap:10px;align-items:center;box-shadow:0 0 0 1px #e5e7eb}
-  .sbox input{border:none;outline:none;background:transparent;width:100%;font-size:16px}
-  .filter{display:flex;gap:8px;margin:6px 0;flex-wrap:wrap}
-  .filter select,.filter input{flex:1;min-width:180px;padding:10px 12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
-  .grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:8px}
-  @media(min-width:720px){.grid{grid-template-columns:1fr 1fr}}
-  .item{background:#fff;border-radius:16px;box-shadow:0 2px 6px #0001;padding:12px;display:flex;gap:12px}
-  .avatar{width:64px;height:64px;border-radius:14px;border:1px solid #e5e7eb;display:grid;place-items:center;font-size:28px}
-  .meta{flex:1}.meta h4{margin:2px 0 6px;font-size:18px}
-  .line{display:flex;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
-  .badge{background:#f9fafb;border:1px solid #e5e7eb;border-radius:20px;padding:4px 10px;font-size:12px}
-  .actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-  .btn{border:none;border-radius:12px;padding:12px 14px;font-weight:800;cursor:pointer}
-  .btn.primary{background:#111;color:#fff}.btn.ghost{background:#f1f5f9}
-  .btn.success{background:var(--ok);color:#fff}.btn.warn{background:var(--warn);color:#111}.btn.danger{background:var(--err);color:#fff}
-  .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-  .thumbs img{width:72px;height:72px;object-fit:cover;border-radius:10px;border:1px solid #e5e7eb}
-  .gallery{display:flex;gap:8px;overflow:auto;margin:8px 0}
-  .gallery img{height:120px;border-radius:12px;border:1px solid #e5e7eb}
-  .chipgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
-  .chipbtn{border:1px solid #e5e7eb;background:#fff;border-radius:14px;padding:14px;font-weight:800;display:flex;align-items:center;gap:10px;justify-content:center;cursor:pointer}
-  .empty{padding:24px;text-align:center;color:var(--muted)}
-  .err{background:#fff;border:1px solid var(--err);padding:10px;border-radius:12px;color:#b00000;margin:8px 0}
-  nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:12px 18px 10px;z-index:40}
-  .nav{display:flex;justify-content:space-between;gap:16px}
-  .nav button{width:52px;height:52px;border-radius:16px;border:1px solid #e5e7eb;background:#fff;display:grid;place-items:center;cursor:pointer}
-  .nav .active{background:#111;color:#fff}
-  .hide{display:none!important}
-  body.lock nav{display:none}
-  .hr{height:1px;background:#e5e7eb;margin:12px 0}
-  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:80px;background:#111;color:#fff;padding:10px 14px;border-radius:12px;box-shadow:0 12px 24px #0005;z-index:50;opacity:0;pointer-events:none;transition:.25s}
-  .toast.show{opacity:1;bottom:90px}
-  .kv{display:flex;justify-content:space-between;gap:12px;padding:8px 12px;border-bottom:1px dashed #e5e7eb}
-  .pilltab{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}
-  .pilltab .tab{padding:8px 12px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;cursor:pointer}
-  .pilltab .tab.active{background:#111;color:#fff}
-  .payment-logos{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .payment-logos .plogo{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 10px;font-size:12px}
-  /* Form helpers */
-  .field{display:flex;flex-direction:column;gap:6px;margin:8px 0}
-  .label{font-size:13px;font-weight:700;color:#0f172a}
-  .req{color:#ef4444;margin-left:4px}
-  .help{font-size:12px;color:#475569}
-  .errline{font-size:12px;color:#b00000}
-  .stepper{display:flex;align-items:center;gap:8px}
-  .stepper button{width:40px;height:40px;border-radius:10px;border:1px solid #e5e7eb;background:#fff}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>PROSTAFF</title>
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#f59e0b" />
+  <link rel="manifest" href="./manifest.json" />
+
+  <style>
+    :root {
+      --bg:#ffffff;
+      --ink:#0f172a;
+      --muted:#64748b;
+      --primary:#f59e0b;
+      --panel:#f9fafb;
+      --border:#e5e7eb;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+    body{background:var(--bg);color:var(--ink)}
+    header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--border);z-index:10}
+    .brand{padding:16px 16px 10px;text-align:center;font-weight:900;font-size:26px}
+    .wrap{max-width:900px;margin:0 auto;padding:16px 16px 110px}
+    .btn{width:100%;border:0;border-radius:16px;padding:18px 16px;font-size:18px;font-weight:900;background:var(--primary);color:#fff;cursor:pointer;box-shadow:0 6px 18px rgba(245,158,11,.25)}
+    .btn + .btn{margin-top:12px}
+    .search{display:flex;gap:10px;margin:16px 0}
+    .search input{flex:1;border:1px solid var(--border);border-radius:14px;padding:14px 14px;font-size:16px}
+    .services{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:8px 0 18px}
+    .svc{background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px;text-align:center}
+    .svc b{display:block;margin-top:6px;font-size:12px;color:#111}
+    .card{background:#fefce8;border:1px solid #fde68a;border-radius:16px;padding:16px}
+    .card h3{margin:0 0 6px}
+    nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--border);padding:12px}
+    .nav{display:flex;justify-content:space-between}
+    .nav a{display:grid;place-items:center;width:56px;height:56px;border:1px solid var(--border);border-radius:16px;text-decoration:none;font-size:22px;color:#111}
+    .hint{font-size:12px;color:var(--muted);margin-top:8px}
+    .topNote{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:10px 12px;margin-bottom:14px;font-size:14px}
+    a.silent{color:inherit;text-decoration:none}
+  </style>
 </head>
 <body>
-<header><div class="title">PROSTAFF</div></header>
+  <header>
+    <div class="brand">PROSTAFF</div>
+  </header>
 
-<!-- ================= HOME ================= -->
-<main class="wrap" id="home">
-  <button class="pill" id="goWorkers">Kunlik ishchilar</button>
-  <button class="pill" id="goFirms">Xizmat ko‘rsatish firmalari</button>
-
-  <div class="card">
-    <h3 style="margin:0 0 6px">Xizmat buyurtma qiling</h3>
-    <p class="help" style="margin:0">Ishchi: ish turini tanlang → forma → matching. Firma: profil → buyurtma.</p>
-  </div>
-
-  <div class="search">
-    <div class="sbox">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="#555" stroke-width="2" stroke-linecap="round"/></svg>
-      <input id="q" placeholder="Firmalardan izlash" />
+  <main class="wrap">
+    <div class="topNote">
+      Kunlik ishchilar va xizmat ko‘rsatish firmalarini bir joyda toping.
+      Buyurtma berish – 3 daqiqada, takliflar – faqat rozi bo‘lganlardan.
     </div>
-  </div>
-  <div class="filter">
-    <select id="cat"><option value="">Kategoriya: barchasi</option><option value="tozalash">Tozalash</option><option value="tamirlash">Ta’mirlash</option><option value="yuk">Yuk tashish</option><option value="boshqa">Boshqa</option></select>
-    <select id="city"><option value="">Shahar: barchasi</option><option>Toshkent</option><option>Samarqand</option><option>Buxoro</option><option>Andijon</option><option>Namangan</option></select>
-  </div>
-  <section id="listFirms" class="grid"></section>
-</main>
 
-<!-- ================= SAVED ================= -->
-<main class="wrap hide" id="saved">
-  <h3>Saqlangan firmalar</h3>
-  <section id="savedList" class="grid"></section>
-  <div id="savedEmpty" class="empty">Hozircha saqlangan firma yo‘q.</div>
-</main>
+    <!-- 2 ta asosiy bo'lim -->
+    <button class="btn" onclick="openWorkers()">Kunlik ishchilar</button>
+    <button class="btn" onclick="openFirms()">Xizmat ko‘rsatish firmalari</button>
 
-<!-- ================= ORDERS ================= -->
-<main class="wrap hide" id="orders">
-  <h3>Buyurtmalarim</h3>
-  <section id="ordersList" class="grid"></section>
-  <div id="ordersEmpty" class="empty">Buyurtmalar hali yo‘q.</div>
-</main>
-
-<!-- ================= PROFILE ================= -->
-<main class="wrap hide" id="profile">
-  <div class="card"><h3>Profil</h3><p class="help">Ism va aloqa ma’lumotlari shakllarda avtomatik qo‘llanadi.</p></div>
-  <div class="filter" style="gap:12px">
-    <input id="p_name" placeholder="Ism, familiya" />
-    <input id="p_phone" placeholder="+998..." value="+998501017695" />
-  </div>
-  <div class="filter" style="gap:12px">
-    <select id="p_city"><option>Toshkent</option><option>Samarqand</option><option>Buxoro</option><option>Andijon</option><option>Namangan</option></select>
-    <input id="p_addr" placeholder="Manzil (tuman/ko‘cha)" />
-  </div>
-  <button class="btn primary" id="saveProfile">Saqlash</button>
-  <div class="hr"></div>
-  <div class="card">
-    <h4>To‘lovlar tarixi (oxirgi 3 ta)</h4>
-    <div id="payHistory"></div>
-    <div class="actions"><button class="btn ghost" onclick="openInNewWindow('payments')">Barchasini ko‘rish</button></div>
-  </div>
-</main>
-
-<!-- ================= CHOOSE TYPE (WORKERS) ================= -->
-<main class="wrap hide" id="chooseType">
-  <h3>Ish turini tanlang</h3>
-  <div class="chipgrid">
-    <button class="chipbtn" data-svc="yuvish"><span>🧼</span> Yuvish</button>
-    <button class="chipbtn" data-svc="remont_clean"><span>🧹</span> Remontdan keyingi tozalash</button>
-    <button class="chipbtn" data-svc="general_clean"><span>🏠</span> General tozalash</button>
-    <button class="chipbtn" data-svc="window"><span>🪟</span> Oyna yuvish</button>
-    <button class="chipbtn" data-svc="carpet"><span>🧽</span> Gilam yuvish</button>
-    <button class="chipbtn" data-svc="laundry"><span>👗</span> Kiyim yuvish</button>
-    <button class="chipbtn" data-svc="yuk"><span>🚚</span> Yuk tashish</button>
-    <button class="chipbtn" data-svc="boshqa"><span>➕</span> Boshqa</button>
-  </div>
-  <p class="help">Keyingi oynada sana/vaqt, lokatsiya, GPS va rasm(lar)ni biriktirasiz.</p>
-</main>
-
-<!-- ================= WORKER ORDER ================= -->
-<main class="wrap hide" id="orderPage">
-  <h3>Buyurtma — ishchi</h3>
-  <div id="orderErr" class="err hide"></div>
-
-  <div class="field">
-    <div class="label">Xizmat turi <span class="req">*</span></div>
-    <select id="f_service">
-      <option value="yuvish">Yuvish</option>
-      <option value="remont_clean">Remontdan keyingi tozalash</option>
-      <option value="general_clean">General tozalash</option>
-      <option value="window">Oyna yuvish</option>
-      <option value="carpet">Gilam yuvish</option>
-      <option value="laundry">Kiyim yuvish</option>
-      <option value="yuk">Yuk tashish</option>
-      <option value="boshqa">Boshqa</option>
-    </select>
-    <div class="errline" id="e_service"></div>
-  </div>
-
-  <div class="field">
-    <div class="label">Shahar <span class="req">*</span></div>
-    <select id="f_city"><option>Toshkent</option><option>Samarqand</option><option>Buxoro</option><option>Andijon</option><option>Namangan</option></select>
-    <div class="errline" id="e_city"></div>
-  </div>
-
-  <div class="field">
-    <div class="label">Manzil (aniq joy) <span class="req">*</span></div>
-    <div style="display:flex;gap:10px">
-      <input id="f_addr" placeholder="Masalan: Chilonzor-3, 12-uy, 45-xon." style="flex:1">
-      <button class="btn ghost" id="gpsBtn" type="button">GPS</button>
+    <!-- Qidiruv -->
+    <div class="search">
+      <input id="q" placeholder="Xizmat yoki firma nomidan izlash" />
     </div>
-    <div class="help" id="gpsHint">GPS: –</div>
-    <div class="errline" id="e_addr"></div>
-  </div>
 
-  <div class="field">
-    <div class="label">Sana va vaqt <span class="req">*</span></div>
-    <div class="filter" style="gap:10px;margin:0">
-      <input id="f_date" type="date">
-      <input id="f_time" type="time">
+    <!-- Tez kirish xizmatlari -->
+    <section class="services">
+      <a class="svc silent" href="./workers.html?pref=yuvish"     title="Yuvish"><div>🧼</div><b>Yuvish</b></a>
+      <a class="svc silent" href="./workers.html?pref=remont_clean" title="Remontdan keyingi"><div>🧹</div><b>Remontdan keyingi</b></a>
+      <a class="svc silent" href="./workers.html?pref=yuk"       title="Yuk tashish"><div>🚚</div><b>Yuk tashish</b></a>
+      <a class="svc silent" href="./workers.html?pref=window"    title="Oyna yuvish"><div>🪟</div><b>Oyna yuvish</b></a>
+    </section>
+
+    <!-- Promo karta -->
+    <section class="card">
+      <h3>Xizmat buyurtma qiling</h3>
+      <div class="hint">
+        Professional tozalash, ta’mirlash kompaniyalari va boshqa xizmatlar. 
+        Joylashuvni (GPS) bir bosishda ulashing, rasm(lar) qo‘shing, sana-vaqtni belgilang.
+      </div>
+    </section>
+  </main>
+
+  <!-- Pastki navigatsiya -->
+  <nav>
+    <div class="nav">
+      <a href="./index.html" title="Bosh sahifa" style="background:#111;color:#fff">🏠</a>
+      <a href="./firms.html"  title="Firmalar">🏢</a>
+      <a href="./workers.html" title="Ishchilar">🧑‍🔧</a>
     </div>
-    <div class="errline" id="e_dt"></div>
-  </div>
+  </nav>
 
-  <div class="field">
-    <div class="label">Necha soat</div>
-    <div class="stepper">
-      <button type="button" id="h_minus">−</button>
-      <input id="f_hours" type="number" min="1" max="12" value="2" style="width:90px;text-align:center">
-      <button type="button" id="h_plus">+</button>
-    </div>
-  </div>
+  <script>
+    // Qidiruv inputidan oddiy yo'naltirish (ixtiyoriy)
+    document.getElementById('q').addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){
+        // Hozircha firmalar sahifasiga yo'naltirib qo'yamiz
+        location.href = './firms.html';
+      }
+    });
 
-  <div class="card">
-    <strong>Rasm(lar) (ixtiyoriy)</strong>
-    <input id="f_images" type="file" accept="image/*" multiple style="margin-top:8px">
-    <div class="help">8 ta, har biri ≤5MB</div>
-    <div id="previews" class="thumbs"></div>
-  </div>
+    function openWorkers(){ location.href = './workers.html'; }
+    function openFirms(){   location.href = './firms.html';   }
 
-  <div class="field">
-    <div class="label">Qo‘shimcha izoh</div>
-    <textarea id="f_note" rows="3" placeholder="Kv.m, kalit/eshik, uy hayvoni va b."></textarea>
-  </div>
-
-  <div class="actions">
-    <button class="btn ghost" id="openMatches" disabled title="Avval buyurtma yarating">Tushgan takliflar</button>
-    <button class="btn primary" id="sendOrder">Buyurtmani yuborish</button>
-  </div>
-</main>
-
-<!-- ================= FIRM DETAIL ================= -->
-<main class="wrap hide" id="firmDetail">
-  <h3 id="firmName">Firma</h3>
-  <div class="line" id="firmMeta"></div>
-  <div class="gallery" id="firmGallery"></div>
-  <div class="card" id="firmDesc">—</div>
-  <h4>Xizmatlar</h4>
-  <div id="firmServices" class="chipgrid"></div>
-  <div class="actions"><button class="btn primary" id="firmOrderBtn">Buyurtma</button></div>
-  <div class="hr"></div>
-  <div class="card">
-    <h4>Sharhlar</h4>
-    <div id="firmReviews"></div>
-  </div>
-</main>
-
-<!-- ================= FIRM ORDER ================= -->
-<main class="wrap hide" id="firmOrder">
-  <h3 id="firmOrderTitle">Buyurtma — firma</h3>
-  <div id="fFirmErr" class="err hide"></div>
-  <div class="filter" style="gap:10px">
-    <select id="fo_service"></select>
-    <input id="fo_date" type="date" />
-    <input id="fo_time" type="time" />
-  </div>
-  <div class="filter" style="gap:10px">
-    <select id="fo_city"><option>Toshkent</option><option>Samarqand</option><option>Buxoro</option><option>Andijon</option><option>Namangan</option></select>
-    <input id="fo_addr" placeholder="Manzil (aniq joy)" />
-    <button class="btn ghost" id="fo_gps">GPS</button>
-  </div>
-  <div class="help" id="fo_gpsHint">GPS: –</div>
-  <div class="card">
-    <strong>Objekt rasmlari (ixtiyoriy)</strong>
-    <input id="fo_images" type="file" accept="image/*" multiple style="margin-top:8px" />
-    <div class="help">8 ta, har biri ≤5MB</div>
-    <div id="fo_previews" class="thumbs"></div>
-  </div>
-  <textarea id="fo_note" rows="3" placeholder="Talablar (brigada soni, material bor/yo‘q ...) " style="width:100%;padding:12px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;margin:8px 0"></textarea>
-  <div class="actions"><button class="btn primary" id="fo_send">Buyurtmani yuborish</button></div>
-</main>
-
-<!-- ================= MATCHES ================= -->
-<main class="wrap hide" id="matchesPage">
-  <h3>Tushgan takliflar</h3>
-  <p class="help">Faqat e’loningizni qabul qilgan ishchilar ro‘yxati.</p>
-  <section id="matchesList" class="grid"></section>
-  <div id="matchesEmpty" class="empty">Hozircha taklif yo‘q yoki buyurtma berilmagan.</div>
-</main>
-
-<!-- ================= PAYMENTS HISTORY ================= -->
-<main class="wrap hide" id="payments">
-  <h3>To‘lovlar tarixi</h3>
-  <div class="help">Escrow: Held — saqlangan, Released — yechildi.</div>
-  <div class="pilltab" id="phTabs">
-    <div class="tab active" data-t="all">Barchasi</div>
-    <div class="tab" data-t="held">Held</div>
-    <div class="tab" data-t="released">Released</div>
-    <div class="tab" data-t="failed">Failed</div>
-  </div>
-  <div id="paymentsList"></div>
-</main>
-
-<!-- ================= CHECKOUT ================= -->
-<main class="wrap hide" id="checkout">
-  <h3>To‘lov — Escrow Checkout</h3>
-  <div id="coInfo" class="card">—</div>
-  <div class="payment-logos">
-    <div class="plogo">VISA</div><div class="plogo">Mastercard</div><div class="plogo">UZCARD</div><div class="plogo">HUMO</div><div class="plogo">Payme</div><div class="plogo">Click</div>
-  </div>
-  <div id="coErr" class="err hide"></div>
-  <div class="filter"><input id="cc_name" placeholder="Karta egasi (latin)" /><input id="cc_number" placeholder="Karta raqami (16)" inputmode="numeric" /></div>
-  <div class="filter"><input id="cc_exp" placeholder="MM/YY" /><input id="cc_cvc" placeholder="CVC" inputmode="numeric" /></div>
-  <div class="help">Demo: real gateway emas. Real integratsiya uchun server kerak.</div>
-  <div class="actions"><button class="btn primary" id="payBtn">To‘lovni tasdiqlash</button><button class="btn ghost" onclick="openInNewWindow('orders')">Keyinroq</button></div>
-  <div class="hr"></div>
-  <div class="kv"><span>Escrow:</span><b id="coEscrow">–</b></div>
-  <div class="kv"><span>Order ID:</span><b id="coOrderId">–</b></div>
-  <div class="kv"><span>Summa (UZS):</span><b id="coAmount">–</b></div>
-</main>
-
-<!-- ================= NAV ================= -->
-<nav>
-  <div class="nav">
-    <button class="active" data-page="home" aria-label="Bosh sahifa">🏠</button>
-    <button data-page="saved" aria-label="Saqlanganlar">🔖</button>
-    <button data-page="orders" aria-label="Buyurtmalar">🗓️</button>
-    <button data-page="profile" aria-label="Profil">👤</button>
-  </div>
-</nav>
-
-<div id="toast" class="toast">OK</div>
-
-<script>
-/* ============= UTIL ============= */
-const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
-const chan=new BroadcastChannel('prostaff');
-function qs(k){return new URLSearchParams(location.search).get(k)}
-function openInNewWindow(page,opts={}){
-  const u=new URL(location.href);u.search='';
-  u.searchParams.set('page',page);
-  if(opts.order)u.searchParams.set('order',opts.order);
-  if(opts.pref)u.searchParams.set('pref',opts.pref);
-  if(opts.firm)u.searchParams.set('firm',opts.firm);
-  if(opts.filter)u.searchParams.set('filter',opts.filter);
-  u.searchParams.set('lock','1');
-  window.open(u,'_blank');
-}
-function tagSvc(v){return({yuvish:'Yuvish',remont_clean:'Remontdan keyingi tozalash',general_clean:'General tozalash',window:'Oyna yuvish',carpet:'Gilam yuvish',laundry:'Kiyim yuvish',yuk:'Yuk tashish',boshqa:'Boshqa'})[v]||v}
-function makeThumb(text,color='#f1f5f9'){const c=document.createElement('canvas');c.width=320;c.height=200;const x=c.getContext('2d');x.fillStyle=color;x.fillRect(0,0,320,200);x.fillStyle='#111';x.font='bold 18px Inter,Arial';x.fillText(text,16,34);return c.toDataURL('image/png');}
-function toMoney(n){try{return(n||0).toLocaleString('uz-UZ')}catch(e){return n}}
-function uid(p='id'){return p+'_'+Math.random().toString(36).slice(2,8)+'_'+Date.now().toString(36)}
-function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1700)}
-
-/* ============= DATA (MOCK) ============= */
-const DB={
-  workers:[
-    {id:'w1',name:'Farangiz',cat:'yuvish',rating:4.8,city:'Toshkent',price:90000,unit:'/soat'},
-    {id:'w2',name:'Jamshid',cat:'remont_clean',rating:4.7,city:'Toshkent',price:250000,unit:'/soat'},
-    {id:'w3',name:'Akbar',cat:'yuk',rating:4.5,city:'Samarqand',price:120000,unit:'/soat'},
-    {id:'w4',name:'Aziza',cat:'general_clean',rating:4.9,city:'Toshkent',price:100000,unit:'/soat'},
-    {id:'w5',name:'Bekzod',cat:'window',rating:4.6,city:'Toshkent',price:110000,unit:'/soat'},
-  ],
-  firms:[
-    {id:'f1',name:'CleanPro LLC',cat:'tozalash',rating:4.9,city:'Toshkent',desc:'Professional tozalash kompaniyasi. Kafolat va shartnoma bilan ishlaymiz.',services:['general_clean','window','carpet','yuvish'],images:[],reviews:[{user:'Umidjon',stars:5,text:'Zo‘r tozalashdi!',ts:Date.now()-172800000},{user:'Gulnoza',stars:4,text:'Sifat yaxshi, narx o‘rtacha.',ts:Date.now()-604800000}]},
-    {id:'f2',name:'Usta+ Servis',cat:'tamirlash',rating:4.6,city:'Toshkent',desc:'Ta’mirlash brigadasi: suvoq-bo‘yoq, gipsokarton, santexnika va elektrik.',services:['remont_clean','yuk','boshqa'],images:[],reviews:[{user:'Sherzod',stars:5,text:'Remontdan keyin juda tez tozalashdi.',ts:Date.now()-345600000}]},
-    {id:'f3',name:'TezYuk',cat:'yuk',rating:4.4,city:'Andijon',desc:'2–3 kishi bilan yuk tashish. Gazel/portyer mavjud.',services:['yuk'],images:[],reviews:[{user:'Dinora',stars:5,text:'Ehtiyotkor va tezkor.',ts:Date.now()-1036800000}]},
-  ]
-};
-DB.firms.forEach(f=>{f.images=[makeThumb(f.name+' — 1'),makeThumb(f.name+' — 2','#e5e7eb'),makeThumb(f.name+' — 3','#f3f4f6')]});
-
-/* ============= STATE ============= */
-const STATE={
-  page:'home',
-  profile: JSON.parse(localStorage.getItem('ps_profile')||'{}'),
-  saved:   JSON.parse(localStorage.getItem('ps_saved')||'[]'),
-  orders:  JSON.parse(localStorage.getItem('ps_orders')||'[]'),
-  payments:JSON.parse(localStorage.getItem('ps_payments')||'[]'),
-  filter:{q:'',cat:'',city:''},
-  currentOrderId:null,
-  gps:null,uploads:[],
-  firmGPS:null,firmUploads:[],
-  currentFirm:null,
-  checkout:{orderId:null,amount:0,escrow:'–'}
-};
-
-/* ============= FIRMS LIST ============= */
-function firmCard(f){return `
-  <article class="item" data-id="${f.id}">
-    <div class="avatar">🏢</div>
-    <div class="meta">
-      <h4>${f.name}</h4>
-      <div class="line"><span class="badge">⭐ ${f.rating}</span><span class="badge">${f.city}</span><span class="badge">${f.cat}</span></div>
-      <div class="actions"><button class="btn ghost saveBtn">Saqlash</button><button class="btn primary detailsBtn">Ko‘rish</button></div>
-    </div>
-  </article>`}
-function renderFirms(){
-  const q=STATE.filter.q.toLowerCase(), c=STATE.filter.cat, city=STATE.filter.city;
-  const list=DB.firms.filter(x=>(!c||x.cat===c)&&(!city||x.city===city)&&(!q||x.name.toLowerCase().includes(q)||x.city.toLowerCase().includes(q)));
-  $('#listFirms').innerHTML=list.map(firmCard).join('')||`<div class="empty">Firmalar topilmadi.</div>`;
-  $$('#listFirms .item').forEach(n=>{
-    const id=n.dataset.id;
-    n.querySelector('.saveBtn').onclick=()=>toggleSaveFirm(id);
-    n.querySelector('.detailsBtn').onclick=()=>openInNewWindow('firm',{firm:id});
-  });
-}
-function toggleSaveFirm(id){const i=STATE.saved.indexOf(id);if(i>=0)STATE.saved.splice(i,1);else STATE.saved.push(id);localStorage.setItem('ps_saved',JSON.stringify(STATE.saved));renderFirms();renderSaved();toast('Saqlanganlar yangilandi')}
-function renderSaved(){
-  const list=DB.firms.filter(f=>STATE.saved.includes(f.id));
-  $('#savedList').innerHTML=list.map(firmCard).join('');
-  $('#savedEmpty').classList.toggle('hide',list.length>0);
-  $$('#savedList .item').forEach(n=>{
-    const id=n.dataset.id;
-    n.querySelector('.saveBtn').onclick=()=>toggleSaveFirm(id);
-    n.querySelector('.detailsBtn').onclick=()=>openInNewWindow('firm',{firm:id});
-  });
-}
-
-/* ============= FIRM DETAIL + ORDER ============= */
-function renderFirmDetail(id){
-  const f=DB.firms.find(x=>x.id===id); if(!f){$('#firmName').textContent='Topilmadi';return}
-  STATE.currentFirm=f;
-  $('#firmName').textContent=f.name;
-  $('#firmMeta').innerHTML=`<span class="badge">⭐ ${f.rating}</span><span class="badge">${f.city}</span><span class="badge">${f.cat}</span>`;
-  $('#firmDesc').textContent=f.desc||'';
-  const g=$('#firmGallery'); g.innerHTML=''; f.images.forEach(src=>{const im=new Image();im.src=src;g.appendChild(im)});
-  const s=$('#firmServices'); s.innerHTML=''; f.services.forEach(v=>{const b=document.createElement('button');b.className='chipbtn';b.textContent=tagSvc(v);b.onclick=()=>openInNewWindow('firmOrder',{firm:f.id,pref:v});s.appendChild(b)});
-  $('#firmOrderBtn').onclick=()=>openInNewWindow('firmOrder',{firm:f.id});
-  // reviews
-  const fr=$('#firmReviews'); fr.innerHTML=''; (f.reviews||[]).forEach(r=>{const el=document.createElement('div');el.className='kv';el.innerHTML=`<span>⭐ ${r.stars} — <b>${r.user}</b></span><span>${new Date(r.ts).toLocaleDateString()}</span><div style="flex-basis:100%;height:1px"></div><div style="color:#334155;margin-top:6px">${r.text}</div>`;fr.appendChild(el)});
-}
-function renderFirmOrder(id,pref){
-  const f=DB.firms.find(x=>x.id===id); if(!f) return;
-  $('#firmOrderTitle').textContent='Buyurtma — '+f.name;
-  const sel=$('#fo_service'); sel.innerHTML=''; f.services.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=tagSvc(v);sel.appendChild(o)}); if(pref) sel.value=pref;
-}
-
-/* ============= ORDERS + MATCHES ============= */
-function renderOrders(){
-  const box=$('#ordersList');
-  if(!STATE.orders.length){box.innerHTML='';$('#ordersEmpty').classList.remove('hide');return}
-  $('#ordersEmpty').classList.add('hide');
-  box.innerHTML=STATE.orders.map(o=>{
-    const pay=STATE.payments.find(p=>p.orderId===o.id);
-    const payBadge=pay?`<span class="badge">${pay.status.toUpperCase()}</span>`:`<span class="badge">NO-PAY</span>`;
-    return `<article class="item"><div class="avatar">📝</div><div class="meta">
-      <h4>${o.firmName?(o.firmName+' • '+tagSvc(o.service)):tagSvc(o.service)} • ${o.city}</h4>
-      <div class="line"><span class="badge">${o.date||'-'} ${o.time||''}</span><span class="badge">Soat: ${o.hours||'-'}</span><span class="badge">${o.status.toUpperCase()}</span>${payBadge}</div>
-      <div class="actions">
-        <button class="btn primary" onclick="openInNewWindow('matches',{order:'${o.id}'})">Tushgan takliflar</button>
-        ${o.status==='assigned'?`<button class="btn success" onclick="startJob('${o.id}')">Boshlash</button>`:''}
-        ${o.status==='in_progress'?`<button class="btn success" onclick="finishJob('${o.id}')">Tugatildi</button>`:''}
-        ${(!pay&&(o.status==='assigned'||o.status==='in_progress'))?`<button class="btn warn" onclick="openCheckout('${o.id}')">To‘lov</button>`:''}
-      </div></div></article>`;
-  }).join('');
-}
-function renderMatches(orderId){
-  const o=STATE.orders.find(x=>x.id===orderId);
-  if(!o){$('#matchesEmpty').textContent='Buyurtma topilmadi.';$('#matchesList').innerHTML='';return}
-  const list=o.accepts||[];
-  $('#matchesEmpty').classList.toggle('hide',list.length>0);
-  $('#matchesList').innerHTML=list.map(w=>`
-    <article class="item"><div class="avatar">👤</div><div class="meta">
-      <h4>${w.name} • ${tagSvc(w.cat)}</h4>
-      <div class="line"><span class="badge">⭐ ${w.rating}</span><span class="badge">${w.city}</span><span class="badge">${toMoney(w.price)} ${w.unit}</span><span class="badge">Masofa: ${w.dist} km</span></div>
-      <div class="actions"><button class="btn primary" onclick="chooseWorker('${o.id}','${w.id}')">Tanlash</button></div>
-    </div></article>`).join('');
-}
-function startJob(id){const o=STATE.orders.find(x=>x.id===id);if(!o)return;o.status='in_progress';saveOrders();toast('Ish boshlandi');chan.postMessage({type:'orders:update'})}
-function finishJob(id){const o=STATE.orders.find(x=>x.id===id);if(!o)return;o.status='done';saveOrders();const p=STATE.payments.find(p=>p.orderId===o.id&&p.status==='held');if(p){p.status='released';p.releasedAt=Date.now();savePayments();toast('Escrow released ✅')}chan.postMessage({type:'orders:update'})}
-function chooseWorker(orderId,workerId){const o=STATE.orders.find(x=>x.id===orderId);const w=(o?.accepts||[]).find(a=>a.id===workerId);if(!o||!w)return;o.status='assigned';o.assignee=w;saveOrders();toast(`Tanlandi: ${w.name}`);chan.postMessage({type:'orders:update'})}
-function saveOrders(){localStorage.setItem('ps_orders',JSON.stringify(STATE.orders))}
-function savePayments(){localStorage.setItem('ps_payments',JSON.stringify(STATE.payments))}
-
-/* ============= PROFILE ============= */
-function profileToUI(){ $('#p_name').value=STATE.profile.name||''; $('#p_phone').value=STATE.profile.phone||'+998501017695'; $('#p_city').value=STATE.profile.city||'Toshkent'; $('#p_addr').value=STATE.profile.addr||''; }
-$('#saveProfile').onclick=()=>{STATE.profile={name:$('#p_name').value.trim(),phone:$('#p_phone').value.trim(),city:$('#p_city').value,addr:$('#p_addr').value.trim()};localStorage.setItem('ps_profile',JSON.stringify(STATE.profile));toast('Profil saqlandi ✅')}
-
-/* ============= UPLOADS + GPS ============= */
-function handleUploads(input,outArr,previewsSel){
-  outArr.length=0; const box=$(previewsSel); box.innerHTML='';
-  const files=[...input.files]; const MAX_FILES=8, MAX_MB=5;
-  files.slice(0,MAX_FILES).forEach(file=>{
-    if(file.size>MAX_MB*1024*1024){toast(`⚠️ ${file.name}: ${MAX_MB}MB dan katta`);return;}
-    const r=new FileReader(); r.onload=e=>{outArr.push(e.target.result);const img=new Image();img.src=e.target.result;img.alt=file.name;img.title=file.name;box.appendChild(img)}; r.readAsDataURL(file);
-  });
-  if(files.length>MAX_FILES) toast(`⚠️ Faqat ${MAX_FILES} ta rasm qabul qilinadi`);
-}
-function gpsLocate(setter,hintSel){
-  if(!navigator.geolocation){$(hintSel).textContent='GPS: qurilma qo‘llamaydi';return}
-  navigator.geolocation.getCurrentPosition(pos=>{
-    const {latitude,longitude}=pos.coords; setter({lat:latitude,lng:longitude});
-    $(hintSel).innerHTML=`GPS: ${latitude.toFixed(5)}, ${longitude.toFixed(5)} · <a target="_blank" href="https://maps.google.com/?q=${latitude},${longitude}">Xaritada ochish</a>`;
-  },_=>$(hintSel).textContent='GPS: ruxsat berilmadi');
-}
-
-/* ============= WORKER ORDER: VALIDATE + SUBMIT ============= */
-function validateWorker(){
-  let ok=true; const set=(id,msg)=>{const el=$(id); if(el) el.textContent=msg||''; if(msg) ok=false;}
-  set('#e_service','');set('#e_city','');set('#e_addr','');set('#e_dt','');$('#orderErr').classList.add('hide');
-  if(!$('#f_service').value) set('#e_service','Xizmat turini tanlang');
-  if(!$('#f_city').value) set('#e_city','Shaharni tanlang');
-  if(!$('#f_addr').value.trim()) set('#e_addr','Manzilni kiriting');
-  if(!$('#f_date').value || !$('#f_time').value) set('#e_dt','Sana va vaqt majburiy');
-  if(!ok){ $('#orderErr').textContent='Iltimos, xatolarni tuzating'; $('#orderErr').classList.remove('hide'); }
-  return ok;
-}
-function sendOrder(){
-  if(!validateWorker()) return;
-  const btn=$('#sendOrder'); btn.disabled=true; setTimeout(()=>btn.disabled=false,2000);
-  const o={id:uid('o'),type:'worker',service:$('#f_service').value,city:$('#f_city').value,addr:$('#f_addr').value,date:$('#f_date').value,time:$('#f_time').value,hours:$('#f_hours').value,note:$('#f_note').value,gps:STATE.gps,images:STATE.uploads,status:'pending',accepts:[],created:new Date().toISOString()};
-  STATE.orders.unshift(o); STATE.currentOrderId=o.id; saveOrders();
-  // enable matches
-  $('#openMatches')?.removeAttribute('disabled'); $('#openMatches')?.removeAttribute('title');
-  // simulate accepts
-  const near=DB.workers.filter(w=>w.city===o.city&&(w.cat===o.service||o.service==='boshqa')); let t=1200;
-  near.forEach(w=>{ if(Math.random()>0.3){ setTimeout(()=>{ const ord=STATE.orders.find(x=>x.id===o.id); if(!ord)return; const dist=(Math.random()*4+0.5).toFixed(1); if(!(ord.accepts||[]).some(a=>a.id===w.id)) ord.accepts.push({...w,dist}); saveOrders(); chan.postMessage({type:'matches:new',order:o.id}); }, t); t+=1400+Math.random()*1600; }});
-  alert('✅ Buyurtma yuborildi. “Tushgan takliflar”ga o‘ting.'); openInNewWindow('matches',{order:o.id});
-}
-
-/* ============= FIRM ORDER: VALIDATE + SUBMIT ============= */
-function validateFirm(){
-  const need=[]; if(!$('#fo_service').value)need.push('Xizmat turi'); if(!$('#fo_date').value)need.push('Sana'); if(!$('#fo_time').value)need.push('Vaqt'); if(!$('#fo_city').value)need.push('Shahar'); if(!$('#fo_addr').value.trim())need.push('Manzil');
-  if(need.length){$('#fFirmErr').classList.remove('hide');$('#fFirmErr').textContent='Majburiy: '+need.join(', ');return false}
-  $('#fFirmErr').classList.add('hide');return true;
-}
-function sendFirmOrder(){
-  if(!validateFirm())return;
-  const f=STATE.currentFirm;
-  const o={id:uid('o'),type:'firm',firmId:f?.id,firmName:f?.name,service:$('#fo_service').value,city:$('#fo_city').value,addr:$('#fo_addr').value,date:$('#fo_date').value,time:$('#fo_time').value,note:$('#fo_note').value,gps:STATE.firmGPS,images:STATE.firmUploads,status:'pending',accepts:[],created:new Date().toISOString()};
-  STATE.orders.unshift(o); STATE.currentOrderId=o.id; saveOrders();
-  alert('✅ Buyurtma yuborildi. Firma bilan bog‘laniladi.'); openInNewWindow('matches',{order:o.id});
-}
-
-/* ============= CHECKOUT / PAYMENTS ============= */
-function estimateAmountForOrder(order){ if(order.type==='worker'){const base=(DB.workers.find(w=>w.cat===order.service)?.price||100000);const hours=parseInt(order.hours||'2',10);return base*hours;} else {return 350000;} }
-function openCheckout(orderId){ const o=STATE.orders.find(x=>x.id===orderId); if(!o){alert('Order topilmadi');return} const amount=estimateAmountForOrder(o); STATE.checkout={orderId:o.id,amount,escrow:'held (to be created)'}; localStorage.setItem('ps_checkout',JSON.stringify(STATE.checkout)); openInNewWindow('checkout',{order:o.id}); }
-function luhnValid(num){const s=num.replace(/\D/g,''); if(s.length<13)return false; let sum=0,alt=false; for(let i=s.length-1;i>=0;i--){let n=parseInt(s[i],10); if(alt){n*=2;if(n>9)n-=9} sum+=n; alt=!alt} return (sum%10)===0}
-function expValid(exp){const m=exp.match(/^(\d{2})\/(\d{2})$/); if(!m)return false; const mm=+m[1], yy=2000+(+m[2]); if(mm<1||mm>12)return false; const last=new Date(yy,mm,0); return last>=new Date();}
-function cvcValid(cvc){return/^\d{3,4}$/.test(cvc)}
-function maskCard(num){const n=num.replace(/\D/g,''); if(n.length<8)return'**** **** **** '+(n.slice(-4)||'0000'); return n.slice(0,4)+' '+n.slice(4,8)+' **** '+n.slice(-4)}
-function renderCheckoutUI(){const co=JSON.parse(localStorage.getItem('ps_checkout')||'null'); const o=co?STATE.orders.find(x=>x.id===co.orderId):null; $('#coOrderId').textContent=o?.id||'–'; $('#coAmount').textContent=toMoney(co?.amount||0); $('#coEscrow').textContent=co?.escrow||'–'; $('#coInfo').innerHTML=o?`<div class="kv"><span>Buyurtma:</span><b>${o.firmName?(o.firmName+' • '+tagSvc(o.service)):tagSvc(o.service)}</b></div><div class="kv"><span>Sana/Vaqt:</span><b>${o.date} ${o.time}</b></div><div class="kv"><span>Manzil:</span><b>${o.city}, ${o.addr}</b></div>`:'—';}
-function generateReceipt(pay,order){const data={title:'PROSTAFF RECEIPT',payment_id:pay.id,order_id:order.id,service:order.firmName?(order.firmName+' • '+tagSvc(order.service)):tagSvc(order.service),amount:pay.amount,status:pay.status,card:pay.cardMask,created_at:new Date(pay.createdAt).toISOString()}; const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`receipt_${pay.id}.json`; a.textContent='Kvitansiyani yuklab olish (JSON)'; a.className='btn ghost'; a.style.display='inline-block'; a.style.marginTop='10px'; return a;}
-function performCheckout(){
-  const name=$('#cc_name').value.trim(), number=$('#cc_number').value.replace(/\s+/g,''), exp=$('#cc_exp').value.trim(), cvc=$('#cc_cvc').value.trim(), err=$('#coErr');
-  const bad=[]; if(!/^[a-zA-Z\s.']{3,}$/.test(name))bad.push('Karta egasi'); if(!luhnValid(number))bad.push('Karta raqami'); if(!expValid(exp))bad.push('Amal muddati'); if(!cvcValid(cvc))bad.push('CVC');
-  if(bad.length){err.classList.remove('hide'); err.textContent='Xatolik: '+bad.join(', '); return} err.classList.add('hide');
-  const co=JSON.parse(localStorage.getItem('ps_checkout')||'null'); if(!co){alert('Checkout topilmadi');return}
-  const o=STATE.orders.find(x=>x.id===co.orderId); if(!o){alert('Order topilmadi');return}
-  const pay={id:uid('pay'),orderId:o.id,amount:co.amount,status:'held',cardMask:maskCard(number),name,createdAt:Date.now()}; STATE.payments.unshift(pay); savePayments(); $('#coEscrow').textContent='held'; toast('To‘lov qabul qilindi (HELD)');
-  const receipt=generateReceipt(pay,o); $('#coInfo').appendChild(receipt); setTimeout(()=>openInNewWindow('orders'),600);
-}
-function renderPayHistory(limit=3){const box=$('#payHistory'); if(!box)return; const list=STATE.payments.slice(0,limit); box.innerHTML=list.length?list.map(p=>`<div class="kv"><span>${new Date(p.createdAt).toLocaleString()} — ${p.cardMask}</span><b>${p.status.toUpperCase()} • ${toMoney(p.amount)} UZS</b></div>`).join(''):'<div class="help">Hali to‘lov yo‘q.</div>'}
-function renderPaymentsPage(filter='all'){const box=$('#paymentsList'); let list=[...STATE.payments]; if(filter==='held')list=list.filter(p=>p.status==='held'); if(filter==='released')list=list.filter(p=>p.status==='released'); if(filter==='failed')list=list.filter(p=>p.status==='failed'); box.innerHTML=list.length?list.map(p=>{const o=STATE.orders.find(x=>x.id===p.orderId); return `<div class="item"><div class="meta" style="flex:1"><h4>${o?(o.firmName?(o.firmName+' • '+tagSvc(o.service)):tagSvc(o.service)):'Order'}</h4><div class="line"><span class="badge">${new Date(p.createdAt).toLocaleString()}</span><span class="badge">${p.cardMask}</span><span class="badge">${p.status.toUpperCase()}</span></div></div><div class="actions"><div class="btn ghost">${toMoney(p.amount)} UZS</div>${p.status==='held'?`<button class="btn success" onclick="releaseEscrow('${p.id}')">Release</button>`:''}<button class="btn ghost" onclick="downloadReceipt('${p.id}')">Kvitansiya</button></div></div>`}).join(''):'<div class="empty">To‘lov topilmadi.</div>'}
-function releaseEscrow(id){const p=STATE.payments.find(x=>x.id===id); if(!p)return; p.status='released'; p.releasedAt=Date.now(); savePayments(); toast('Released ✅'); renderPaymentsPage(qs('filter')||'all')}
-function downloadReceipt(id){const p=STATE.payments.find(x=>x.id===id); if(!p)return; const o=STATE.orders.find(x=>x.id===p.orderId)||{}; const a=generateReceipt(p,o); a.click()}
-
-/* ============= NAV ============= */
-function showPage(id){
-  STATE.page=id; $$('main.wrap').forEach(m=>m.classList.add('hide')); $('#'+id).classList.remove('hide');
-  $$('nav .nav button').forEach(b=>b.classList.remove('active')); document.querySelector(`nav .nav button[data-page="${id}"]`)?.classList.add('active');
-  if(id==='saved')renderSaved(); if(id==='orders'){renderOrders(); renderPayHistory();}
-  if(id==='payments')renderPaymentsPage(qs('filter')||'all'); window.scrollTo({top:0,behavior:'smooth'});
-}
-document.querySelectorAll('nav .nav button').forEach(b=>b.addEventListener('click',()=>openInNewWindow(b.dataset.page)));
-$('#goWorkers').onclick=()=>openInNewWindow('choose');
-$('#goFirms').onclick=()=>window.scrollTo({top:document.getElementById('listFirms').offsetTop-40,behavior:'smooth'});
-
-/* filters/search */
-$('#q').oninput=e=>{STATE.filter.q=e.target.value; renderFirms();};
-$('#cat').onchange=e=>{STATE.filter.cat=e.target.value; renderFirms();};
-$('#city').onchange=e=>{STATE.filter.city=e.target.value; renderFirms();};
-
-/* worker form binds */
-$('#f_images').addEventListener('change',e=>handleUploads(e.target,STATE.uploads,'#previews'));
-$('#gpsBtn').addEventListener('click',()=>gpsLocate(v=>STATE.gps=v,'#gpsHint'));
-$('#sendOrder').addEventListener('click',sendOrder);
-$('#openMatches').addEventListener('click',()=>{ if(!STATE.currentOrderId){ toast('Avval buyurtma yarating'); return; } openInNewWindow('matches',{order:STATE.currentOrderId}); });
-$('#h_minus').addEventListener('click',()=>{const i=$('#f_hours'); i.value=Math.max(1,(+i.value||1)-1);});
-$('#h_plus').addEventListener('click',()=>{const i=$('#f_hours'); i.value=Math.min(12,(+i.value||1)+1);});
-
-/* firm order binds */
-$('#fo_images').addEventListener('change',e=>handleUploads(e.target,STATE.firmUploads,'#fo_previews'));
-$('#fo_gps').addEventListener('click',()=>gpsLocate(v=>STATE.firmGPS=v,'#fo_gpsHint'));
-$('#fo_send').addEventListener('click',sendFirmOrder);
-
-/* payments */
-$('#payBtn').addEventListener('click',performCheckout);
-
-/* choose chips -> open order with pref */
-function bindChoose(){ $$('#chooseType .chipbtn').forEach(b=>b.onclick=()=>openInNewWindow('order',{pref:b.dataset.svc})) }
-
-/* ============= INIT ============= */
-function init(){
-  renderFirms(); renderSaved(); renderOrders(); renderPayHistory(); bindChoose(); profileToUI();
-  const page=qs('page')||'home', pref=qs('pref'), firmId=qs('firm'), orderId=qs('order'); if(qs('lock')==='1')document.body.classList.add('lock');
-  if(page==='choose'){showPage('chooseType')}
-  else if(page==='order'){showPage('orderPage'); if(pref)$('#f_service').value=pref; $('#openMatches').setAttribute('disabled','')}
-  else if(page==='matches'){showPage('matchesPage'); if(orderId)renderMatches(orderId)}
-  else if(page==='firm'){showPage('firmDetail'); if(firmId)renderFirmDetail(firmId)}
-  else if(page==='firmOrder'){showPage('firmOrder'); if(firmId){ renderFirmDetail(firmId); setTimeout(()=>{renderFirmOrder(firmId,pref)},0); } }
-  else if(page==='payments'){showPage('payments'); const f=qs('filter')||'all'; $$('#phTabs .tab').forEach(t=>{t.classList.toggle('active',t.dataset.t===f); t.onclick=()=>openInNewWindow('payments',{filter:t.dataset.t});}); renderPaymentsPage(f);}
-  else if(page==='checkout'){showPage('checkout'); renderCheckoutUI();}
-  else showPage(page);
-}
-init();
-
-/* cross-window updates */
-chan.onmessage=e=>{const m=e.data||{}; if(m.type==='orders:update'){STATE.orders=JSON.parse(localStorage.getItem('ps_orders')||'[]'); if(STATE.page==='orders')renderOrders()} if(m.type==='matches:new'){STATE.orders=JSON.parse(localStorage.getItem('ps_orders')||'[]'); if(qs('page')==='matches'){renderMatches(qs('order')||STATE.currentOrderId)}}};
-
-/* service worker (offline cache of current file) */
-if('serviceWorker' in navigator){
-  const sw=`const C='ps-v1'; self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['.']))); self.skipWaiting()}); self.addEventListener('activate',e=>self.clients.claim()); self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))})`;
-  const url=URL.createObjectURL(new Blob([sw],{type:'text/javascript'})); navigator.serviceWorker.register(url);
-}
-</script>
+    // Service Worker ro'yxatdan o'tkazish (subpapka uchun nisbiy yo'l)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(reg => console.log('SW registered', reg.scope))
+        .catch(err => console.log('SW error', err));
+    }
+  </script>
 </body>
 </html>
