@@ -1,79 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="uz">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PROSTAFF — Asosiy</title>
+  <title>PROSTAFF — Kunlik ishchilar</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="style.css" />
-  <meta name="theme-color" content="#0ea5e9" />
 </head>
-<body class="app">
-  <header class="appbar">
+<body class="page page--home">
+  <!-- App bar -->
+  <header class="topbar">
     <div class="brand">
-      <span class="logo">P</span>
-      <span class="title">PROSTAFF</span>
+      <span class="badge">P</span>
+      <span class="brand__name">PROSTAFF</span>
     </div>
-    <nav class="top-actions">
-      <a class="chip active">UZ</a>
-      <a class="chip ghost" href="firmalar.html">Firmalar</a>
-      <a class="chip danger" href="#">Chiqish</a>
+    <nav class="topbar__right">
+      <a class="pill" href="#" aria-label="Til">UZ</a>
+      <a class="pill" href="firms.html">Firmalar</a>
+      <a class="pill pill--ghost" href="#">Chiqish</a>
     </nav>
   </header>
 
-  <main class="container">
-    <section class="hero card">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero__text">
       <h1>Tezkor xizmat kerakmi?</h1>
-      <p class="muted">
-        Tozalash, ta’mirlash, ko‘chirish va boshqalar — yaqin atrofdagi ijrochilar orqali.
-      </p>
-
-      <div class="row gap">
-        <a class="btn primary" href="bugun.html">Ishchi chaqirish</a>
-        <a class="btn outline" href="firmalar.html">Firmalarni ko‘rish</a>
-      </div>
-
-      <div class="pill-group">
-        <span class="pill">🧹 Tozalash</span>
-        <span class="pill">🛠️ Usta</span>
-        <span class="pill">🚚 Ko‘chirish</span>
-        <span class="pill">🌿 Bog‘</span>
-      </div>
-    </section>
-
-    <!-- R E K L A M A  B A N N E R -->
-    <section class="card banner">
-      <div class="banner-frame">
-        <div class="ticker">
-          <span>⭐ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ⭐ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ⭐</span>
-          <span aria-hidden="true">⭐ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ⭐ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ⭐</span>
-        </div>
-      </div>
-      <p class="banner-note">Reklama joylash uchun: reklama@prostaff.uz</p>
-    </section>
-
-    <section class="grid-2">
-      <a class="tile" href="bugun.html">
-        <div class="tile-emoji">⚡</div>
-        <div class="tile-body">
-          <h3>Bugun</h3>
-          <p class="muted">Zudlik bilan ishchi kerakmi? Darhol buyurtma qoldiring.</p>
+      <p>Tozalash, ta’mirlash, ko‘chirish va boshqalar — yaqin atrofdagi ijrochilar orqali.</p>
+    </div>
+    <div class="hero__actions">
+      <a class="card action action--primary" href="bugun.html">
+        <div class="action__icon">⚡</div>
+        <div class="action__txt">
+          <h3>Ishchi chaqirish</h3>
+          <p>Zudlik bilan ishchi kerakmi? Darhol buyurtma qoldiring.</p>
         </div>
       </a>
-      <a class="tile" href="ertaga.html">
-        <div class="tile-emoji">📅</div>
-        <div class="tile-body">
-          <h3>Ertaga</h3>
-          <p class="muted">Oldindan rejalashtiring: sana va vaqtni belgilang.</p>
+
+      <a class="card action" href="firms.html">
+        <div class="action__icon">🏢</div>
+        <div class="action__txt">
+          <h3>Firmalarni ko‘rish</h3>
+          <p>Xizmat ko‘rsatuvchi tashkilotlar ro‘yxati va reytinglari.</p>
         </div>
       </a>
-    </section>
-  </main>
+    </div>
+  </section>
 
-  <footer class="navbar">
-    <a class="nav-item active" href="index.html">🏠 <span>Home</span></a>
-    <a class="nav-item" href="bugun.html">👷 <span>Ishchi</span></a>
-    <a class="nav-item" href="firmalar.html">🏢 <span>Firmalar</span></a>
+  <!-- Ad banner -->
+  <section class="ad card">
+    <div class="ad__inner">
+      <span class="rainbow-text">★ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ★</span>
+      <span class="rainbow-text" aria-hidden="true">★ BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN ★</span>
+    </div>
+    <small>Reklama joylash uchun: reklama@prostaff.uz</small>
+  </section>
+
+  <!-- Bottom nav -->
+  <footer class="tabbar">
+    <a class="tab tab--active" href="index.html">🏠<span>Home</span></a>
+    <a class="tab" href="bugun.html">👷<span>Ishchi</span></a>
+    <a class="tab" href="firms.html">🏬<span>Firmalar</span></a>
   </footer>
 
   <script src="app.js"></script>
