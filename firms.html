@@ -1,108 +1,109 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>PROSTAFF — Firmalar</title>
-  <link rel="manifest" href="manifest.json">
-  <style>
-    :root{--brand:#f59e0b;--ink:#111827;--bg:#fff;--muted:#6b7280;--border:#eee;--card:#f9fafb;--radius:12px}
-    *{box-sizing:border-box} body{margin:0;font-family:system-ui,Inter,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
-    header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--border)}
-    .bar{max-width:880px;margin:auto;padding:14px 16px;display:flex;align-items:center;gap:10px}
-    .back{text-decoration:none;font-size:22px}.title{font-weight:900}
-    main{max-width:880px;margin:18px auto 90px;padding:0 16px}
-    .grid{display:grid;gap:12px}@media(min-width:640px){.grid{grid-template-columns:1fr 1fr}}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
-    .row{display:flex;gap:12px;align-items:center}.logo{font-size:26px}
-    .name{font-weight:900}.meta{color:var(--muted);font-size:13px}
-    .btn{margin-top:10px;display:inline-block;background:var(--brand);color:#fff;padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:800}
-    dialog{width:min(720px,96vw);border:0;border-radius:14px;padding:0;overflow:hidden}
-    dialog::backdrop{background:rgb(0 0 0 / .35)}
-    .modal-h{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);background:#fff}
-    .modal-b{padding:14px;background:#fff}.x{border:0;background:transparent;font-size:22px;cursor:pointer}
-    nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--border)}
-    .tabs{max-width:880px;margin:auto;display:flex;justify-content:space-around;padding:10px 8px}
-    .tab{display:flex;flex-direction:column;align-items:center;gap:6px;color:#6b7280;text-decoration:none;font-size:12px}
-    .tab .i{font-size:22px}.tab.active{color:#111827;font-weight:800}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>PROSTAFF — Firmalar</title>
+<link rel="manifest" href="manifest.json" />
+<style>
+  :root{--bg:#0b1220;--ink:#e5e7eb;--muted:#94a3b8;--b:#1f2a44;--r:16px;--sh:0 8px 30px rgb(0 0 0 /.35);--brand:#22d3ee;--brand2:#60a5fa}
+  *{box-sizing:border-box} body{margin:0;font-family:system-ui,Inter,Segoe UI,Roboto,sans-serif;background:linear-gradient(160deg,#0b1220,#0f1a2f);color:var(--ink)}
+  a{color:inherit;text-decoration:none}
+  header{position:sticky;top:0;background:linear-gradient(180deg,#0b1220,transparent)}
+  .bar{max-width:960px;margin:auto;padding:14px 16px;display:flex;align-items:center;gap:10px}
+  .back{font-size:20px}.title{font-weight:900}
+  main{max-width:960px;margin:16px auto 110px;padding:0 16px}
+  .grid{display:grid;gap:14px}@media(min-width:720px){.grid{grid-template-columns:1fr 1fr}}
+  .card{background:rgba(255,255,255,.04);border:1px solid var(--b);border-radius:18px;padding:14px;box-shadow:var(--sh)}
+  .row{display:flex;gap:12px;align-items:center}
+  .logo{font-size:28px}
+  .name{font-weight:900}.meta{color:var(--muted);font-size:13px}
+  .btn{margin-top:10px;display:inline-block;background:linear-gradient(90deg,var(--brand),var(--brand2));color:#04121a;border:0;padding:10px 12px;border-radius:12px;font-weight:900}
+  dialog{width:min(720px,96vw);border:0;border-radius:16px;padding:0;overflow:hidden;box-shadow:var(--sh)}
+  dialog::backdrop{background:rgb(0 0 0 /.4)}
+  .modal-h{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--b);background:#0b1220}
+  .modal-b{padding:14px;background:#0c1730}
+  .x{border:0;background:transparent;color:#fff;font-size:22px;cursor:pointer}
+  nav{position:fixed;left:0;right:0;bottom:0;background:rgba(11,18,32,.9);border-top:1px solid var(--b);backdrop-filter:blur(10px)}
+  .tabs{max-width:960px;margin:auto;padding:8px 12px;display:flex;gap:10px;justify-content:space-around}
+  .tab{color:#94a3b8;background:rgba(255,255,255,.06);border:1px solid var(--b);padding:10px 14px;border-radius:999px;display:flex;gap:8px;align-items:center}
+  .tab.active{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#001824;border-color:transparent;font-weight:900}
+</style>
 </head>
 <body>
-  <header>
-    <div class="bar">
-      <a class="back" href="index.html">←</a>
-      <div class="title">Xizmat ko‘rsatish firmalari</div>
-    </div>
-  </header>
+<header>
+  <div class="bar">
+    <a class="back" href="index.html">←</a>
+    <div class="title">Xizmat ko‘rsatish firmalari</div>
+  </div>
+</header>
 
-  <main>
-    <div id="list" class="grid"></div>
-  </main>
+<main>
+  <div id="list" class="grid"></div>
+</main>
 
-  <dialog id="dlg">
-    <div class="modal-h">
-      <div id="dlgTitle" class="name"></div>
-      <button class="x" onclick="dlg.close()">×</button>
-    </div>
-    <div id="dlgBody" class="modal-b"></div>
-  </dialog>
+<dialog id="dlg">
+  <div class="modal-h">
+    <div id="dlgTitle" class="name"></div>
+    <button class="x" onclick="dlg.close()">×</button>
+  </div>
+  <div id="dlgBody" class="modal-b"></div>
+</dialog>
 
-  <nav>
-    <div class="tabs">
-      <a class="tab" href="index.html"><span class="i">🏠</span><span>Bosh</span></a>
-      <a class="tab" href="workers.html"><span class="i">👷</span><span>Ishchi</span></a>
-      <a class="tab active" href="firms.html"><span class="i">🏢</span><span>Firma</span></a>
-      <a class="tab" href="workers.html#my"><span class="i">📬</span><span>Takliflar</span></a>
-    </div>
-  </nav>
+<nav>
+  <div class="tabs">
+    <a class="tab" href="index.html"><span>🏠</span><span>Home</span></a>
+    <a class="tab" href="workers.html"><span>👷</span><span>Ishchi</span></a>
+    <a class="tab active" href="firms.html"><span>🏢</span><span>Firmalar</span></a>
+    <a class="tab" href="workers.html#my"><span>📬</span><span>Takliflar</span></a>
+  </div>
+</nav>
 
-  <script>
-    const firms = [
-      {name:'CleanPro LLC', cat:'Tozalash', city:'Toshkent', price:'450 000 / xona', rate:'4.9', about:'Professional tozalash: uy/ofis, remontdan keyin', photos:['🧹','🧽','🪟']},
-      {name:'Usta+ M', cat:'Ta’mirlash', city:'Toshkent', price:'Kelishiladi', rate:'4.7', about:'Elektrik, santexnik, mebel yig‘ish', photos:['🔧','🪚','🧱']},
-      {name:'YukTaxi 24/7', cat:'Ko‘chirish', city:'Toshkent', price:'120 000 / soat', rate:'4.8', about:'Gazel + brigada, qadoqlash', photos:['🚚','📦','🏠']}
-    ];
+<script>
+  const firms = [
+    {name:'CleanPro LLC', cat:'Tozalash', city:'Toshkent', price:'450 000 / xona', rate:'4.9', tel:'+998 90 123 45 67', about:'Professional tozalash: uy/ofis, remontdan keyin', photos:['🧹','🧽','🪟']},
+    {name:'Usta+ M', cat:'Ta’mirlash', city:'Toshkent', price:'Kelishiladi', rate:'4.7', tel:'+998 90 555 55 55', about:'Elektrik, santexnik, mebel yig‘ish', photos:['🔧','🪚','🧱']},
+    {name:'YukTaxi 24/7', cat:'Ko‘chirish', city:'Toshkent', price:'120 000 / soat', rate:'4.8', tel:'+998 97 777 77 77', about:'Gazel + brigada, qadoqlash', photos:['🚚','📦','🏠']}
+  ];
+  const $=s=>document.querySelector(s); const list=$('#list'), dlg=$('#dlg'), t=$('#dlgTitle'), b=$('#dlgBody');
 
-    const $ = s=>document.querySelector(s);
-    const list = $('#list'), dlg=$('#dlg'), t=$('#dlgTitle'), b=$('#dlgBody');
-
-    firms.forEach((f,i)=>{
-      const el=document.createElement('div'); el.className='card';
-      el.innerHTML = `
-        <div class="row">
-          <div class="logo">🏢</div>
-          <div>
-            <div class="name">${f.name}</div>
-            <div class="meta">${f.cat} • ${f.city} • ⭐ ${f.rate}</div>
-            <div class="meta">${f.price}</div>
-            <a class="btn" href="#" onclick="openFirm(${i});return false;">Profil</a>
-          </div>
-        </div>`;
-      list.appendChild(el);
-    });
-
-    window.openFirm = (i)=>{
-      const f=firms[i];
-      t.textContent=f.name;
-      b.innerHTML = `
+  firms.forEach((f,i)=>{
+    const el=document.createElement('div'); el.className='card';
+    el.innerHTML = `<div class="row">
+      <div class="logo">🏢</div>
+      <div>
+        <div class="name">${f.name}</div>
         <div class="meta">${f.cat} • ${f.city} • ⭐ ${f.rate}</div>
-        <p style="margin:10px 0 6px">${f.about}</p>
-        <div style="display:flex;gap:8px;margin:8px 0 14px">
-          ${f.photos.map(p=>`<div style="font-size:34px">${p}</div>`).join('')}
-        </div>
-        <a class="btn" href="workers.html">Buyurtma berish</a>
-      `;
-      dlg.showModal();
-    };
+        <div class="meta">${f.price}</div>
+        <a class="btn" href="#" onclick="openFirm(${i});return false;">Profil</a>
+      </div>
+    </div>`;
+    list.appendChild(el);
+  });
 
-    // Always-fresh SW
-    if ('serviceWorker' in navigator) {
-      const v = Date.now();
-      navigator.serviceWorker.getRegistrations()
-        .then(rs => Promise.all(rs.map(r => r.unregister())))
-        .then(() => navigator.serviceWorker.register('service-worker.js?v=' + v, {scope: './'}))
-        .catch(()=>{});
-    }
-  </script>
+  window.openFirm = (i)=>{
+    const f=firms[i];
+    t.textContent=f.name;
+    b.innerHTML = `
+      <div class="meta">${f.cat} • ${f.city} • ⭐ ${f.rate}</div>
+      <p style="margin:10px 0 6px">${f.about}</p>
+      <div style="display:flex;gap:8px;margin:8px 0 14px">${f.photos.map(p=>`<div style="font-size:34px">${p}</div>`).join('')}</div>
+      <div class="meta">☎ ${f.tel}</div>
+      <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn" href="workers.html">Buyurtma berish</a>
+        <a class="btn" href="tel:${f.tel.replaceAll(' ','')}">Qo‘ng‘iroq qilish</a>
+      </div>`;
+    dlg.showModal();
+  };
+
+  // Always-fresh SW
+  if ('serviceWorker' in navigator) {
+    const v = Date.now();
+    navigator.serviceWorker.getRegistrations()
+      .then(rs => Promise.all(rs.map(r => r.unregister())))
+      .then(() => navigator.serviceWorker.register('service-worker.js?v='+v,{scope:'./'}))
+      .catch(()=>{});
+  }
+</script>
 </body>
 </html>
