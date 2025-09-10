@@ -1,543 +1,252 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PROSTAFF — Ishchi va firmalar</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>PROSTAFF — Tezkor xizmat kerakmi?</title>
+<meta name="theme-color" content="#0b1430" />
+
+<!-- Reset + oila -->
 <style>
-:root{
-  --bg:#0b1320;--bg2:#101a2e;--card:#121f36;--muted:#9fb4d1;--text:#ecf3ff;
-  --brand:#22d3ee;--brand2:#3b82f6;--ok:#22c55e;--warn:#f59e0b;--err:#ef4444;
-  --glass:rgba(255,255,255,.06);--glass2:rgba(255,255,255,.08);
-  --r:18px;--shadow:0 12px 40px rgba(0,0,0,.35)
-}
-*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
-a{color:inherit;text-decoration:none}
-.wrap{min-height:100dvh;display:flex;flex-direction:column}
+  :root{
+    --bg-1:#0b1430;
+    --bg-2:#3a1d87;
+    --card-yellow:#ffb20f;
+    --card-blue:#3a71ff;
+    --text:#e9f1ff;
+    --muted:#b7c3d7;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --radius:22px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+    color:var(--text);
+    background:
+      radial-gradient(1200px 1200px at 80% -10%, #5f32ff22, transparent 60%),
+      radial-gradient(900px 900px at 0% 0%, #00d4ff22, transparent 60%),
+      linear-gradient(160deg, var(--bg-1) 0%, #121b46 45%, var(--bg-2) 100%);
+    min-height:100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .wrap{
+    max-width:980px;
+    margin-inline:auto;
+    padding: clamp(16px, 3vw, 28px);
+  }
 
-/* Top */
-.top{position:sticky;top:0;z-index:5;background:
-  radial-gradient(900px 200px at 10% -120px,#1a2b48,transparent),
-  linear-gradient(180deg,#0e1630 0%, #0b1320 100%);
-  padding:12px 14px;border-bottom:1px solid #0f1b32;box-shadow:0 4px 30px rgba(0,0,0,.25)}
-.row{display:flex;align-items:center;gap:10px}
-.badge{width:38px;height:38px;border-radius:12px;background:linear-gradient(140deg,#22d3ee,#60a5fa);display:grid;place-items:center;font-weight:900;color:#00243a}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
-.spacer{flex:1}
-.pill{padding:8px 12px;border-radius:999px;background:var(--glass2);font-weight:700}
-.pill.active{background:linear-gradient(90deg,#22d3ee,#3b82f6);color:#061629}
-.link{padding:10px 14px;border-radius:999px;background:var(--glass2)}
+  /* Header */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:14px; padding:8px 0 6px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.3px;
+    font-size: clamp(20px, 4.5vw, 26px);
+  }
+  .logo{
+    width:44px; height:44px; border-radius:12px;
+    display:grid; place-items:center;
+    background:linear-gradient(135deg,#24c8ff, #3a71ff 55%, #7d5bff);
+    color:white; font-weight:900; box-shadow: var(--shadow);
+  }
+  .actions{display:flex; gap:10px}
+  .iconbtn{
+    width:44px; height:44px; border-radius:14px; display:grid; place-items:center;
+    background:linear-gradient(180deg,#1a2553,#0e1536);
+    border:1px solid #2a356d;
+    box-shadow: 0 6px 16px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
+    color:#e7efff; text-decoration:none;
+  }
+  .iconbtn svg{width:22px;height:22px;opacity:.95}
 
-/* Hero & ad */
-.hero{padding:18px}
-.card{background:var(--card);border:1px solid #162440;border-radius:var(--r);box-shadow:var(--shadow)}
-.pad{padding:18px}
-.title{font-size:28px;font-weight:800;margin:0 0 6px}
-.muted{color:var(--muted)}
-.cta-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}
-.cta{display:flex;gap:12px;align-items:center;padding:16px;border-radius:16px;background:var(--glass2);border:1px solid #183052}
-.cta .icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#0f233e}
-.cta.primary{background:linear-gradient(180deg,#0e335b,#0d2543)}
-.cta:hover{outline:2px solid #1f3960}
-.ad{margin-top:16px;border:1px dashed #2a3e63;border-radius:16px;overflow:hidden}
-.ad-inner{display:flex;gap:24px;align-items:center;padding:12px 16px;font-weight:800}
-.chip{padding:6px 10px;border-radius:999px;background:#0f2544}
-.rainbow{background:linear-gradient(90deg,#22d3ee,#22c55e,#f59e0b,#ef4444,#a855f7,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
-.marq{white-space:nowrap;animation:ticker 16s linear infinite}
-@keyframes ticker{to{transform:translateX(-50%)}}
+  /* Hero text */
+  .hero{
+    margin-top:6px;
+    background:linear-gradient(180deg, #0e1b45 0%, #171f4e 70%, #1f2158 100%);
+    border:1px solid #2f3a78;
+    border-radius:26px; padding: clamp(18px, 4vw, 26px);
+    box-shadow: var(--shadow);
+  }
+  .title{
+    font-size: clamp(28px, 6.5vw, 44px); line-height:1.05; margin:0 0 10px;
+    font-weight:900; letter-spacing:.2px;
+  }
+  .subtitle{
+    margin:0; color:var(--muted); font-size:clamp(14px, 3.5vw, 18px);
+  }
 
-/* Sections */
-main{flex:1}section{display:none;padding:18px}section.active{display:block;animation:fade .2s ease}
-@keyframes fade{from{opacity:.0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  /* Cards */
+  .grid{
+    display:grid; gap:18px;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    margin-top:20px;
+  }
+  @media (max-width:820px){ .grid{grid-template-columns:1fr} }
 
-/* Form */
-.grid{display:grid;gap:12px}.two{grid-template-columns:1fr 1fr}
-@media (max-width:640px){.two{grid-template-columns:1fr}}
-label{font-size:13px;color:var(--muted)}
-.inp{margin-top:6px;padding:12px 14px;border-radius:14px;border:1px solid #1b3357;background:#0e1a31;color:#e9f2ff;outline:none}
-select.inp{appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="%23a6c1e7"><path d="M7 10l5 5 5-5z"/></svg>');background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
-.rowbtn{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.btn{padding:12px 16px;border-radius:12px;border:0;background:#15365f;color:#dff3ff;font-weight:800}
-.btn:active{transform:translateY(1px)}.btn.primary{background:linear-gradient(90deg,#22d3ee,#3b82f6);color:#082032}
-.btn.green{background:linear-gradient(90deg,#34d399,#10b981);color:#07221a}
-.counter{display:flex;align-items:center;gap:8px}.counter button{width:40px;height:40px;border-radius:12px;border:1px solid #1b3357;background:#0e1a31;color:#e9f2ff}
-.help{font-size:12px;color:#7fa3cd}
-.row-slim{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.bad{color:var(--err);font-weight:700}
+  .card{
+    position:relative;
+    border-radius:26px;
+    padding:22px 22px 18px 22px;
+    color:#0b1228; overflow:hidden;
+    transition:transform .15s ease, filter .15s ease;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow: var(--shadow);
+    text-decoration:none;
+  }
+  .card:hover{transform:translateY(-2px)}
+  .card h3{margin:8px 0 10px; font-size: clamp(20px, 5vw, 28px)}
+  .card p{margin:0; color:#1e2440; opacity:.9; font-weight:600}
+  .card .badge{
+    width:68px; height:68px; border-radius:50%;
+    display:grid; place-items:center;
+    background:#ffffff26; border:2px solid #ffffff55; color:white;
+    position:absolute; right:18px; top:18px;
+    backdrop-filter: blur(6px);
+  }
+  .card--yellow{
+    background:linear-gradient(160deg, #ffcf4d, var(--card-yellow) 55%, #ff9a03);
+    color:#301e00;
+  }
+  .card--blue{
+    background:linear-gradient(160deg, #6aa1ff, var(--card-blue) 55%, #2b56ff);
+    color:#00133a;
+  }
+  .card--blue p, .card--yellow p{color:#08224f; opacity:.9}
 
-/* payment pills */
-.pay{display:flex;gap:8px;flex-wrap:wrap}
-.pay .pp{padding:10px 12px;border-radius:12px;background:#0e1a31;border:1px solid #1b3357;cursor:pointer}
-.pay .pp.active{outline:2px solid #22d3ee;background:#0f2443}
+  /* Ad banner */
+  .ad{
+    margin-top:22px;
+    border-radius:26px;
+    background:linear-gradient(180deg,#0f173a,#0b1430);
+    border:1px solid #2b396e;
+    padding:18px 20px;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+  .ad .marquee{
+    display:flex; gap:26px; align-items:center; white-space:nowrap;
+    animation: scroll 14s linear infinite;
+    font-weight:900; font-size: clamp(18px, 4.5vw, 28px);
+    letter-spacing:.6px;
+  }
+  .ad .star{filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+  .ad .txt{
+    background: linear-gradient(90deg,#0ef, #18f06f, #ffd028, #ff7a10, #ff2d55, #8a5bff, #0ef);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  @keyframes scroll{
+    0%{transform:translateX(0)}
+    100%{transform:translateX(-50%)}
+  }
 
-/* file preview */
-.preview{display:flex;gap:8px;flex-wrap:wrap}
-.preview img{width:64px;height:64px;border-radius:10px;object-fit:cover;border:1px solid #1b3357}
-
-/* firms */
-.firm{display:flex;gap:12px;padding:14px;border-radius:14px;background:#0f1d35;border:1px solid #183052}
-.firm .logo{width:48px;height:48px;border-radius:12px;background:#132748;display:grid;place-items:center}
-.stars{color:#fbbf24}
-
-/* bottom nav */
-.tabbar{position:sticky;bottom:0;background:linear-gradient(0deg,#f59e0b,#f59e0b);padding:8px 12px}
-.tabs{display:flex;gap:12px}.tab{flex:1;border-radius:18px;padding:10px;display:grid;place-items:center;background:rgba(255,255,255,.1);color:#082032;font-weight:800}
-.tab.active{background:linear-gradient(135deg,#a5f3fc,#60a5fa)}
+  /* Footer mini note */
+  .note{color:#9fb0cc; margin:12px 4px 2px; font-size:13px; opacity:.8}
+  /* Tap ripple (small JS) */
+  .ripple{position:relative; overflow:hidden}
+  .ripple::after{
+    content:""; position:absolute; inset:0; border-radius:inherit;
+    background:radial-gradient(circle at var(--x) var(--y), #fff6 0, #fff0 45%);
+    opacity:0; transform:scale(0.9); transition:opacity .35s, transform .35s;
+    pointer-events:none;
+  }
+  .ripple.is-tap::after{opacity:1; transform:scale(1)}
+  a{color:inherit}
 </style>
 </head>
+
 <body>
-<div class="wrap">
-
-<header class="top">
-  <div class="row">
-    <div class="brand"><div class="badge">P</div><div>PROSTAFF</div></div>
-    <div class="spacer"></div>
-    <a class="link" href="#/firms" data-i="firmsTab">Firmalar</a>
-    <a class="link" href="#/logout" data-i="logout">Chiqish</a>
-    <div class="row" style="gap:6px">
-      <button class="pill" data-lang="uz">UZ</button>
-      <button class="pill" data-lang="ru">RU</button>
-      <button class="pill" data-lang="en">EN</button>
-    </div>
-  </div>
-</header>
-
-<!-- Hero -->
-<div class="hero">
-  <div class="card pad">
-    <h1 class="title" data-i="heroTitle">Tezkor xizmat kerakmi?</h1>
-    <div class="muted" data-i="heroSub">Tozalash, ta’mirlash, ko‘chirish va boshqalar — yaqin atrofdagi ijrochilar orqali.</div>
-
-    <div class="cta-grid">
-      <a class="cta primary" href="#/ishchi"><div class="icon">⚡️</div>
-        <div><div style="font-weight:800" data-i="ctaWorker">Ishchi chaqirish</div>
-        <div class="muted" data-i="ctaWorkerSub">Zudlik bilan ishchi kerakmi? Darhol buyurtma qoldiring.</div></div>
-      </a>
-      <a class="cta" href="#/firms"><div class="icon">🏢</div>
-        <div><div style="font-weight:800" data-i="ctaFirm">Firmalarni ko‘rish</div>
-        <div class="muted" data-i="ctaFirmSub">Xizmat ko‘rsatuvchi tashkilotlar ro‘yxati va reytinglari.</div></div>
-      </a>
-    </div>
-
-    <div class="ad card">
-      <div class="ad-inner">
-        <span class="chip">⭐</span>
-        <div class="marq">
-          <span class="rainbow" data-i="adText">BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN</span>
-          &nbsp;&nbsp;•&nbsp;&nbsp;
-          <span class="rainbow" data-i="adText">BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN</span>
-        </div>
+  <div class="wrap">
+    <!-- HEADER -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">P</div>
+        <div>PROSTAFF</div>
       </div>
-    </div>
-  </div>
-</div>
+      <nav class="actions">
+        <a class="iconbtn ripple" href="profil.html" aria-label="Profil">
+          <!-- user icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Z"/>
+            <path d="M20 21a8 8 0 1 0-16 0"/>
+          </svg>
+        </a>
+        <a class="iconbtn ripple" href="tarix.html" aria-label="Tarix">
+          <!-- clock icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 7v6l4 2"/>
+          </svg>
+        </a>
+      </nav>
+    </header>
 
-<main>
-  <!-- Ishchi (Bugun/Ertaga, to'lov, narx, aloqa, hisob) -->
-  <section id="ishchi" class="active">
-    <div class="card pad">
-      <div class="rowbtn" style="margin-bottom:14px">
-        <button class="btn primary" id="btnBugun" data-i="today">Bugun</button>
-        <button class="btn green" id="btnErtaga" data-i="tomorrow">Ertaga</button>
-      </div>
+    <!-- HERO -->
+    <section class="hero">
+      <h1 class="title">Tezkor xizmat kerakmi?</h1>
+      <p class="subtitle">
+        Tozalash, ta’mirlash, ko‘chirish va boshqalar — yaqin atrofdagi ijrochilar orqali.
+      </p>
 
-      <!-- BUGUN -->
-      <form id="formBugun" class="grid">
-        <h2 class="title" style="font-size:22px" data-i="todayTitle">Bugun — ishchi chaqirish</h2>
-
-        <div class="grid two">
-          <div>
-            <label data-i="serviceType">Xizmat turi</label>
-            <select class="inp" name="type">
-              <option value="clean" data-i="optClean">Tozalash</option>
-              <option value="repair" data-i="optMaster">Usta</option>
-              <option value="move" data-i="optMove">Ko‘chirish</option>
-              <option value="garden" data-i="optGarden">Bog‘</option>
-            </select>
-          </div>
-          <div>
-            <label data-i="howMany">Necha kishi</label>
-            <div class="counter">
-              <button type="button" onclick="dec('cntT')">−</button>
-              <input class="inp" id="cntT" name="count" value="2" style="width:90px;text-align:center">
-              <button type="button" onclick="inc('cntT')">+</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid two">
-          <div>
-            <label data-i="city">Shahar</label>
-            <select class="inp" name="city"><option>Toshkent</option><option>Samarqand</option><option>Buxoro</option></select>
-          </div>
-          <div>
-            <label data-i="date">Sana</label>
-            <input class="inp" type="date" name="date">
-          </div>
-        </div>
-
-        <div class="grid two">
-          <div>
-            <label data-i="address">Manzil</label>
-            <input class="inp" name="addr" placeholder="Chilonzor-3, 12-uy, 45-xon.">
-          </div>
-          <div>
-            <label>GPS</label>
-            <div class="rowbtn">
-              <input class="inp" id="gpsToday" placeholder="—" disabled>
-              <button class="btn" type="button" onclick="getGPS('gpsToday')" data-i="getGps">GPS ni olish</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid two">
-          <div>
-            <label data-i="time">Vaqt</label>
-            <select class="inp" name="time"><option>08:00</option><option>09:00</option><option>10:00</option><option>14:00</option><option selected>16:00</option></select>
-          </div>
-          <div>
-            <label data-i="notes">Ish haqida ma’lumot</label>
-            <textarea class="inp" rows="3" placeholder="Qisqa, aniq tafsilotlar..."></textarea>
-          </div>
-        </div>
-
-        <div class="grid two">
-          <div>
-            <label data-i="rate">Soatbay narx (UZS)</label>
-            <input class="inp" type="number" id="rateT" value="40000" min="0">
-          </div>
-          <div>
-            <label data-i="hours">Necha soat</label>
-            <div class="counter">
-              <button type="button" onclick="dec('hrsT')">−</button>
-              <input class="inp" id="hrsT" value="4" style="width:90px;text-align:center">
-              <button type="button" onclick="inc('hrsT')">+</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid two">
-          <div>
-            <label data-i="promo">Promo-kod</label>
-            <input class="inp" id="promoT" placeholder="ixtiyoriy">
-            <div class="help" id="promoHelpT"></div>
-          </div>
-          <div>
-            <label data-i="total">Umumiy summa</label>
-            <input class="inp" id="totalT" disabled>
-            <div class="help" data-i="totalHelp">Formulа: kishi × soat × soatbay narx (− chegirma)</div>
-          </div>
-        </div>
-
-        <div>
-          <label data-i="payMethod">To‘lov usuli</label>
-          <div class="pay" id="payT">
-            <div class="pp active" data-val="cash">Naqd</div>
-            <div class="pp" data-val="card">Karta (UZCARD/HUMO)</div>
-            <div class="pp" data-val="payme">Payme</div>
-            <div class="pp" data-val="click">Click</div>
-          </div>
-        </div>
-
-        <div>
-          <label data-i="photos">Rasm(lar)</label>
-          <input class="inp" id="filesT" type="file" multiple accept="image/*">
-          <div class="preview" id="prevT"></div>
-          <div class="help" data-i="limit">8 ta, har biri ≤5MB</div>
-        </div>
-
-        <div class="grid two">
-          <div>
-            <label data-i="name">Ism</label>
-            <input class="inp" id="nameT" placeholder="Ali">
-          </div>
-          <div>
-            <label data-i="phone">Telefon</label>
-            <input class="inp" id="phoneT" placeholder="+998 90 123 45 67">
-          </div>
-        </div>
-
-        <div class="row-slim">
-          <input id="agreeT" type="checkbox" checked>
-          <label for="agreeT" class="help" data-i="agree">Shartlar bilan tanishdim</label>
-        </div>
-
-        <div class="rowbtn">
-          <button class="btn primary" type="submit" data-i="send">E’lonni yuborish</button>
-          <a class="btn" href="#/ertaga" data-i="goTomorrow">Ertaga uchun buyurtma →</a>
-        </div>
-      </form>
-
-      <!-- ERTAGA -->
-      <form id="formErtaga" class="grid" style="display:none">
-        <h2 class="title" style="font-size:22px" data-i="tomTitle">Ertaga — ishchi chaqirish</h2>
-
-        <div class="grid two">
-          <div>
-            <label data-i="serviceType">Xizmat turi</label>
-            <select class="inp" name="type2">
-              <option value="clean" data-i="optClean">Tozalash</option>
-              <option value="repair" data-i="optMaster">Usta</option>
-              <option value="move" data-i="optMove">Ko‘chirish</option>
-              <option value="garden" data-i="optGarden">Bog‘</option>
-            </select>
-          </div>
-          <div>
-            <label data-i="howMany">Necha kishi</label>
-            <div class="counter">
-              <button type="button" onclick="dec('cntM')">−</button>
-              <input class="inp" id="cntM" value="2" style="width:90px;text-align:center">
-              <button type="button" onclick="inc('cntM')">+</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid two">
-          <div>
-            <label data-i="city">Shahar</label>
-            <select class="inp"><option>Toshkent</option><option>Samarqand</option><option>Buxoro</option></select>
-          </div>
-          <div>
-            <label data-i="time">Soat</label>
-            <select class="inp"><option>08:00</option><option>09:00</option><option selected>10:00</option><option>14:00</option></select>
-          </div>
-        </div>
-
-        <div class="grid two">
-          <div>
-            <label data-i="notes">Ish haqida ma’lumot</label>
-            <textarea class="inp" rows="3" placeholder="Qisqa tavsif..."></textarea>
-          </div>
-          <div>
-            <label>GPS</label>
-            <div class="rowbtn">
-              <input class="inp" id="gpsTomorrow" placeholder="—" disabled>
-              <button class="btn" type="button" onclick="getGPS('gpsTomorrow')" data-i="getGps">GPS ni olish</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid two">
-          <div>
-            <label data-i="rate">Soatbay narx (UZS)</label>
-            <input class="inp" type="number" id="rateM" value="35000" min="0">
-          </div>
-          <div>
-            <label data-i="hours">Necha soat</label>
-            <div class="counter">
-              <button type="button" onclick="dec('hrsM')">−</button>
-              <input class="inp" id="hrsM" value="5" style="width:90px;text-align:center">
-              <button type="button" onclick="inc('hrsM')">+</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid two">
-          <div>
-            <label data-i="promo">Promo-kod</label>
-            <input class="inp" id="promoM" placeholder="ixtiyoriy">
-            <div class="help" id="promoHelpM"></div>
-          </div>
-          <div>
-            <label data-i="total">Umumiy summa</label>
-            <input class="inp" id="totalM" disabled>
-          </div>
-        </div>
-
-        <div>
-          <label data-i="payMethod">To‘lov usuli</label>
-          <div class="pay" id="payM">
-            <div class="pp active" data-val="cash">Naqd</div>
-            <div class="pp" data-val="card">Karta</div>
-            <div class="pp" data-val="payme">Payme</div>
-            <div class="pp" data-val="click">Click</div>
-          </div>
-        </div>
-
-        <div>
-          <label data-i="photos">Rasm(lar)</label>
-          <input class="inp" id="filesM" type="file" multiple accept="image/*">
-          <div class="preview" id="prevM"></div>
-        </div>
-
-        <div class="grid two">
-          <div><label data-i="name">Ism</label><input class="inp" id="nameM" placeholder="Ali"></div>
-          <div><label data-i="phone">Telefon</label><input class="inp" id="phoneM" placeholder="+998 90 123 45 67"></div>
-        </div>
-
-        <div class="row-slim"><input id="agreeM" type="checkbox" checked><label for="agreeM" class="help" data-i="agree">Shartlar bilan tanishdim</label></div>
-
-        <div class="rowbtn">
-          <button class="btn green" type="submit" data-i="send">E’lonni yuborish</button>
-          <a class="btn" href="#/" data-i="goHome">← Bosh sahifa</a>
-        </div>
-      </form>
-    </div>
-  </section>
-
-  <!-- Firmalar -->
-  <section id="firms">
-    <div class="card pad">
-      <h2 class="title" style="font-size:22px" data-i="firmsTitle">Firmalar va tashkilotlar</h2>
+      <!-- CARDS -->
       <div class="grid">
-        <div class="firm"><div class="logo">🧼</div><div><div style="font-weight:800">CleanPro LLC</div><div class="stars">★★★★★</div><div class="muted">Tozalash | +998 90 000 00 00</div></div></div>
-        <div class="firm"><div class="logo">🛠️</div><div><div style="font-weight:800">UstaExpert</div><div class="stars">★★★★☆</div><div class="muted">Ta’mirlash, elektr, santexnika</div></div></div>
-        <div class="firm"><div class="logo">🚚</div><div><div style="font-weight:800">Ko‘chirTeam</div><div class="stars">★★★★☆</div><div class="muted">Ko‘chirish va logistika</div></div></div>
-      </div>
-    </div>
-  </section>
-</main>
+        <a class="card card--yellow ripple" href="bugun.html">
+          <div class="badge">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M6.5 14.5 13 3l-.5 7.5H18L11 21l.5-6.5H6.5Z" stroke="currentColor"/>
+            </svg>
+          </div>
+          <h3>Kunlik ishchilar</h3>
+          <p>Zudlik bilan ishchi kerakmi? Darhol buyurtma qoldiring.</p>
+        </a>
 
-<footer class="tabbar">
-  <div class="tabs">
-    <a class="tab active" id="tabHome" href="#/">🏠 Home</a>
-    <a class="tab" id="tabIshchi" href="#/ishchi">👷 Ishchi</a>
-    <a class="tab" id="tabFirms" href="#/firms">🏢 Firmalar</a>
+        <a class="card card--blue ripple" href="firmalar.html">
+          <div class="badge">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 21s-7-5.1-7-11A7 7 0 0 1 19 10c0 5.9-7 11-7 11Z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <h3>Firmalar</h3>
+          <p>Xizmat ko‘rsatuvchi tashkilotlarni ko‘rib chiqing.</p>
+        </a>
+      </div>
+
+      <!-- AD BANNER (rainbow marquee) -->
+      <div class="ad" role="region" aria-label="Reklama joyi">
+        <div class="marquee" aria-hidden="true">
+          <span class="star">⭐</span>
+          <span class="txt">BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN</span>
+          <span class="star">⭐</span>
+          <span class="txt">BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN</span>
+          <span class="star">⭐</span>
+        </div>
+      </div>
+
+      <p class="note">Reklama joylash uchun: <a href="mailto:reklama@prostaff.uz">reklama@prostaff.uz</a></p>
+    </section>
   </div>
-</footer>
-</div>
 
 <script>
-/* ---------- Router ---------- */
-const routes={
-  '/':()=>{show('ishchi'); setToday(true); activate('home');},
-  '/ishchi':()=>{show('ishchi'); activate('ishchi');},
-  '/firms':()=>{show('firms'); activate('firms');},
-  '/logout':()=>alert('Chiqish (demo)'),
-  '/ertaga':()=>{show('ishchi'); setToday(false); activate('ishchi');}
-};
-function show(id){document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
-function activate(k){tab('tabHome',k==='home');tab('tabIshchi',k==='ishchi');tab('tabFirms',k==='firms');}
-function tab(i,st){document.getElementById(i).classList.toggle('active',st)}
-function router(){(routes[location.hash.replace('#','')||'/']||routes['/'])();}
-addEventListener('hashchange',router);router();
+  // Kichik “tap ripple” effekti va fokus ring uchun
+  const ripples = document.querySelectorAll('.ripple');
+  ripples.forEach(el=>{
+    el.addEventListener('pointerdown', e=>{
+      const rect = el.getBoundingClientRect();
+      el.style.setProperty('--x', (e.clientX-rect.left)+'px');
+      el.style.setProperty('--y', (e.clientY-rect.top)+'px');
+      el.classList.add('is-tap');
+      setTimeout(()=>el.classList.remove('is-tap'), 260);
+    }, {passive:true});
+  });
 
-/* ---------- Toggle Today/Tomorrow ---------- */
-const btnBugun=document.getElementById('btnBugun');
-const btnErtaga=document.getElementById('btnErtaga');
-const formBugun=document.getElementById('formBugun');
-const formErtaga=document.getElementById('formErtaga');
-btnBugun.onclick=()=>setToday(true); btnErtaga.onclick=()=>setToday(false);
-function setToday(b){formBugun.style.display=b?'grid':'none'; formErtaga.style.display=b?'none':'grid';
-  btnBugun.classList.toggle('primary',b); btnErtaga.classList.toggle('green',!b); calcAll();}
-
-/* ---------- Counters & calc ---------- */
-window.inc=id=>{const e=document.getElementById(id); e.value=(+e.value||0)+1; calcAll();}
-window.dec=id=>{const e=document.getElementById(id); e.value=Math.max(1,(+e.value||0)-1); calcAll();}
-['cntT','hrsT','rateT','cntM','hrsM','rateM','promoT','promoM']
-.forEach(id=>{const el=document.getElementById(id); if(el) el.addEventListener('input',calcAll);});
-
-function promoDiscount(code){
-  // oddiy demo: PRO10 → 10%, PRO20 → 20%
-  if(!code) return {pct:0,msg:''};
-  const m=/PRO(\d{1,2})/.exec(code.toUpperCase()); 
-  if(!m) return {pct:0,msg:'❌ Noto‘g‘ri kod'};
-  const pct=+m[1]; return {pct, msg:`✅ ${pct}% chegirma qo‘llandi`};
-}
-function money(n){return (n||0).toLocaleString('uz-UZ')+' so‘m';}
-function calc(cnt,hrs,rate,promoEl,helpEl,totalEl){
-  cnt=+cnt||0; hrs=+hrs||0; rate=+rate||0;
-  const disc=promoDiscount(promoEl?.value);
-  if(helpEl) helpEl.textContent = disc.msg || '';
-  const sum = Math.max(0, cnt*hrs*rate*(1-disc.pct/100));
-  if(totalEl) totalEl.value = money(sum);
-  return sum;
-}
-function calcAll(){
-  calc(document.getElementById('cntT')?.value,document.getElementById('hrsT')?.value,document.getElementById('rateT')?.value,
-       document.getElementById('promoT'),document.getElementById('promoHelpT'),document.getElementById('totalT'));
-  calc(document.getElementById('cntM')?.value,document.getElementById('hrsM')?.value,document.getElementById('rateM')?.value,
-       document.getElementById('promoM'),document.getElementById('promoHelpM'),document.getElementById('totalM'));
-}
-calcAll();
-
-/* ---------- Payment pills ---------- */
-function wirePay(groupId){
-  const box=document.getElementById(groupId);
-  box.querySelectorAll('.pp').forEach(p=>{
-    p.onclick=()=>{box.querySelectorAll('.pp').forEach(x=>x.classList.remove('active'));p.classList.add('active');}
-  })
-}
-wirePay('payT'); wirePay('payM');
-
-/* ---------- File previews ---------- */
-function filePreview(inputId,wrapId){
-  const inp=document.getElementById(inputId), wrap=document.getElementById(wrapId);
-  inp.addEventListener('change',()=>{
-    wrap.innerHTML='';
-    [...inp.files].slice(0,8).forEach(f=>{
-      const img=document.createElement('img');
-      img.src=URL.createObjectURL(f); wrap.appendChild(img);
-    });
-  })
-}
-filePreview('filesT','prevT'); filePreview('filesM','prevM');
-
-/* ---------- GPS ---------- */
-window.getGPS=async function(outId){
-  const out=document.getElementById(outId); out.value='...';
-  try{
-    const pos=await new Promise((res,rej)=>navigator.geolocation.getCurrentPosition(res,rej,{enableHighAccuracy:true,timeout:8000}));
-    out.value=`${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
-  }catch(e){ out.value='Ruxsat berilmadi';}
-}
-
-/* ---------- Submit (demo) ---------- */
-function pickPay(id){const box=document.getElementById(id);const act=box.querySelector('.pp.active');return act?act.dataset.val:'cash'}
-formBugun.addEventListener('submit',e=>{
-  e.preventDefault();
-  if(!document.getElementById('agreeT').checked) return alert('✅ Tasdiqlang: shartlar bilan tanishdim');
-  alert('✅ Buyurtma yuborildi (Bugun)\nTo‘lov: '+pickPay('payT')+'\nSumma: '+document.getElementById('totalT').value);
-});
-formErtaga.addEventListener('submit',e=>{
-  e.preventDefault();
-  if(!document.getElementById('agreeM').checked) return alert('✅ Tasdiqlang: shartlar bilan tanishdim');
-  alert('✅ Buyurtma yuborildi (Ertaga)\nTo‘lov: '+pickPay('payM')+'\nSumma: '+document.getElementById('totalM').value);
-});
-
-/* ---------- I18N ---------- */
-const dict={
-  uz:{heroTitle:'Tezkor xizmat kerakmi?',heroSub:'Tozalash, ta’mirlash, ko‘chirish va boshqalar — yaqin atrofdagi ijrochilar orqali.',
-      ctaWorker:'Ishchi chaqirish',ctaWorkerSub:'Zudlik bilan ishchi kerakmi? Darhol buyurtma qoldiring.',
-      ctaFirm:'Firmalarni ko‘rish',ctaFirmSub:'Xizmat ko‘rsatuvchi tashkilotlar ro‘yxati va reytinglari.',
-      adText:'BU YERDA SIZNING REKLAMANGIZ BO‘LISHI MUMKIN',firmsTab:'Firmalar',logout:'Chiqish',
-      today:'Bugun',tomorrow:'Ertaga',todayTitle:'Bugun — ishchi chaqirish',tomTitle:'Ertaga — ishchi chaqirish',
-      serviceType:'Xizmat turi',howMany:'Necha kishi',city:'Shahar',date:'Sana',address:'Manzil',time:'Vaqt',
-      notes:'Ish haqida ma’lumot',photos:'Rasm(lar)',limit:'8 ta, har biri ≤5MB',getGps:'GPS ni olish',
-      rate:'Soatbay narx (UZS)',hours:'Necha soat',promo:'Promo-kod',total:'Umumiy summa',totalHelp:'Formula: kishi × soat × narx (− chegirma)',
-      payMethod:'To‘lov usuli',name:'Ism',phone:'Telefon',agree:'Shartlar bilan tanishdim',send:'E’lonni yuborish',
-      goTomorrow:'Ertaga uchun buyurtma →',goHome:'← Bosh sahifa',firmsTitle:'Firmalar va tashkilotlar'},
-  ru:{heroTitle:'Нужна быстрая услуга?',heroSub:'Уборка, ремонт, переезд и другое — исполнители рядом.',
-      ctaWorker:'Вызвать рабочего',ctaWorkerSub:'Срочно нужно? Оставьте заявку.',
-      ctaFirm:'Посмотреть фирмы',ctaFirmSub:'Список и рейтинги исполнителей.',
-      adText:'ЗДЕСЬ МОЖЕТ БЫТЬ ВАША РЕКЛАМА',firmsTab:'Фирмы',logout:'Выход',
-      today:'Сегодня',tomorrow:'Завтра',todayTitle:'Сегодня — заявка',tomTitle:'Завтра — заявка',
-      serviceType:'Тип услуги',howMany:'Сколько людей',city:'Город',date:'Дата',address:'Адрес',time:'Время',
-      notes:'Описание работы',photos:'Фото',limit:'До 8 файлов, ≤5 МБ',getGps:'Взять GPS',
-      rate:'Почасовая ставка (UZS)',hours:'Сколько часов',promo:'Промокод',total:'Итого',totalHelp:'Формула: люди × часы × ставка (− скидка)',
-      payMethod:'Способ оплаты',name:'Имя',phone:'Телефон',agree:'Ознакомлен с условиями',send:'Отправить',
-      goTomorrow:'Заказ на завтра →',goHome:'← На главную',firmsTitle:'Фирмы и организации'},
-  en:{heroTitle:'Need a quick service?',heroSub:'Cleaning, repair, moving and more — via nearby providers.',
-      ctaWorker:'Hire a worker',ctaWorkerSub:'Need someone now? Create a request.',
-      ctaFirm:'Browse companies',ctaFirmSub:'Directory and ratings.',
-      adText:'YOUR AD CAN APPEAR HERE',firmsTab:'Companies',logout:'Logout',
-      today:'Today',tomorrow:'Tomorrow',todayTitle:'Today — order worker',tomTitle:'Tomorrow — order worker',
-      serviceType:'Service type',howMany:'How many people',city:'City',date:'Date',address:'Address',time:'Time',
-      notes:'Job details',photos:'Photo(s)',limit:'Up to 8 files, ≤5MB each',getGps:'Get GPS',
-      rate:'Hourly rate (UZS)',hours:'Hours',promo:'Promo code',total:'Total',totalHelp:'Formula: people × hours × rate (− discount)',
-      payMethod:'Payment method',name:'Name',phone:'Phone',agree:'I accept the terms',send:'Submit request',
-      goTomorrow:'Order for tomorrow →',goHome:'← Home',firmsTitle:'Companies & organizations'}
-};
-const langBtns=document.querySelectorAll('.pill[data-lang]');
-let currentLang=localStorage.getItem('lang')||'uz';
-function applyLang(code){
-  currentLang=code; localStorage.setItem('lang',code);
-  langBtns.forEach(b=>b.classList.toggle('active',b.dataset.lang===code));
-  const t=dict[code]; document.querySelectorAll('[data-i]').forEach(el=>{const k=el.getAttribute('data-i'); if(t[k]) el.textContent=t[k];});
-  document.documentElement.lang=code==='uz'?'uz':code;
-}
-langBtns.forEach(b=>b.addEventListener('click',()=>applyLang(b.dataset.lang)));
-applyLang(currentLang);
+  // (ixtiyoriy) PWA service worker bor bo‘lsa, shu fayldan ham ro‘yxatdan o‘tkaza olasiz:
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
+  }
 </script>
 </body>
-  </html>
+</html>
